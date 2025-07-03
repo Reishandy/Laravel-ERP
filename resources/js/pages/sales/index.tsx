@@ -22,7 +22,7 @@ export default function Sales() {
             <Head title="Sales" />
 
             <div className="m-8">
-                <div className="flex flex-row items-center justify-between mb-8">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-0 mb-8">
                     <Heading title="Sales" description="Manage your sales transactions and records." />
 
                     <ActionButtons onExport={exportSalesToPDF} addHref="#" />

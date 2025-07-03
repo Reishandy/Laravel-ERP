@@ -20,17 +20,17 @@ export default function ActionButtons({
     AddIcon = Plus,
 }: ActionButtonsProps) {
     return (
-        <div className="flex flex-row items-center justify-center gap-x-4">
-            <Button variant="ghost" onClick={onExport} className="flex items-center gap-x-2 hover:cursor-pointer">
-                <ExportIcon className="size-5" />
-                {exportLabel}
-            </Button>
-
+        <div className="flex flex-row items-center sm:justify-center gap-x-4">
             <Button asChild>
                 <Link href={addHref} className="flex items-center gap-x-2">
                     <AddIcon className="size-5" />
                     {addLabel}
                 </Link>
+            </Button>
+
+            <Button variant="ghost" onClick={onExport} className="flex items-center gap-x-2 hover:cursor-pointer">
+                <ExportIcon className="size-5" />
+                {exportLabel}
             </Button>
         </div>
     );
