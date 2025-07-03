@@ -14,6 +14,10 @@ import SettingsLayout from '@/layouts/settings/layout';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
+        title: 'Settings',
+        href: '#',
+    },
+    {
         title: 'Profile settings',
         href: '/settings/profile',
     },
@@ -21,6 +25,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 type ProfileForm = {
     name: string;
+    company: string
     email: string;
 };
 
@@ -29,6 +34,7 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
 
     const { data, setData, patch, errors, processing, recentlySuccessful } = useForm<Required<ProfileForm>>({
         name: auth.user.name,
+        company: auth.user.company,
         email: auth.user.email,
     });
 
@@ -46,7 +52,7 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
 
             <SettingsLayout>
                 <div className="space-y-6">
-                    <HeadingSmall title="Profile information" description="Update your name and email address" />
+                    <HeadingSmall title="Profile information" description="Update your name, company name and email address" />
 
                     <form onSubmit={submit} className="space-y-6">
                         <div className="grid gap-2">
@@ -63,6 +69,22 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
                             />
 
                             <InputError className="mt-2" message={errors.name} />
+                        </div>
+
+                        <div className="grid gap-2">
+                            <Label htmlFor="company">Company name</Label>
+
+                            <Input
+                                id="company"
+                                className="mt-1 block w-full"
+                                value={data.company}
+                                onChange={(e) => setData('company', e.target.value)}
+                                required
+                                autoComplete="company"
+                                placeholder="Company name"
+                            />
+
+                            <InputError className="mt-2" message={errors.company} />
                         </div>
 
                         <div className="grid gap-2">

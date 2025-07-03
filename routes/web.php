@@ -22,8 +22,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 // TODO:
+//  - Modify landing page
 //  - Modify error pages
 //  - Pagination
+//  - Email template
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
