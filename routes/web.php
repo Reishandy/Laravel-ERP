@@ -11,6 +11,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
+
+    // TODO: change with resource controller
+    Route::get('sales', function () {
+        return Inertia::render('sales/index');
+    })->name('sales.index');
+    Route::get('inventory', function () {
+        return Inertia::render('inventory/index');
+    })->name('inventory.index');
 });
 
 // TODO:
