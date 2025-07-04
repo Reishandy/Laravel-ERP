@@ -1,6 +1,7 @@
 import { DataTable } from '@/components/data-table';
 import Heading from '@/components/heading';
 import ActionButtons from '@/components/heading-button';
+import { Badge, badgeVariants } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
@@ -8,15 +9,15 @@ import {
     DropdownMenuItem,
     DropdownMenuLabel,
     DropdownMenuSeparator,
-    DropdownMenuTrigger
+    DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem, Customer, Product, Sale } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
-import { ArrowUpDown, MoreHorizontal } from 'lucide-react';
-import { Badge, badgeVariants } from '@/components/ui/badge';
 import { VariantProps } from 'class-variance-authority';
+import { ArrowUpDown, Info, MoreHorizontal, SquarePen, Trash } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -25,9 +26,8 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-const exportSalesToPDF = () => {
-    // TODO: maybe just use form and handle it via PHP
-    // TODO: dont forget success feedback
+const exportSales = () => {
+    // TODO: export to CSV
 };
 
 // TODO: Replace with actual data
@@ -38,9 +38,9 @@ const data: Entry[] = [
         product_id: 101,
         customer_id: 201,
         quantity: 2,
-        price_at_sale: 100000,
-        total: 200000,
-        status: 'success',
+        price_at_sale: 120000,
+        total: 240000,
+        status: 'completed',
         product: {
             id: 101,
             product_number: 'P-0001',
@@ -91,8 +91,7 @@ const data: Entry[] = [
             user_id: 1,
             name: 'Tech Solutions Inc',
             email: 'orders@techsolutions.com',
-            type: 'company',
-            company: 'Tech Solutions Inc',
+            type: 'business',
             created_at: '2024-01-03T08:30:00Z',
             updated_at: '2024-01-18T10:15:00Z',
         },
@@ -140,7 +139,7 @@ const data: Entry[] = [
         quantity: 3,
         price_at_sale: 270000,
         total: 810000,
-        status: 'failed',
+        status: 'completed',
         product: {
             id: 104,
             product_number: 'P-0004',
@@ -158,8 +157,7 @@ const data: Entry[] = [
             user_id: 1,
             name: 'Global Retail Corp',
             email: 'purchasing@globalretail.com',
-            type: 'company',
-            company: 'Global Retail Corp',
+            type: 'business',
             created_at: '2024-01-01T10:00:00Z',
             updated_at: '2024-01-20T15:30:00Z',
         },
@@ -169,10 +167,9 @@ const data: Entry[] = [
 ];
 
 interface Entry extends Sale {
-    product: Product
-    customer: Customer
+    product: Product;
+    customer: Customer;
 }
-
 
 interface PageProps {
     app: {
@@ -186,16 +183,19 @@ interface PageProps {
 export default function Sales() {
     const { app } = usePage<PageProps>().props;
 
-    const columns: ColumnDef<Sale>[] = [
+    const columns: ColumnDef<Entry>[] = [
         {
             accessorKey: 'sale_number',
             header: ({ column }) => {
                 return (
                     <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-                        Sale ID
+                        ID
                         <ArrowUpDown className="h-4 w-4" />
                     </Button>
                 );
+            },
+            cell: ({ row }) => {
+                return <div className="text-center">{row.getValue('sale_number')}</div>;
             },
         },
         {
@@ -210,9 +210,13 @@ export default function Sales() {
             },
             cell: ({ row }) => {
                 const product: Product = row.getValue('product');
-                return <Button variant="link" asChild>
-                    <Link href="#">{product.product_number} - {product.name}</Link>
-                </Button>;
+                return (
+                    <Button variant="link" asChild>
+                        <Link href="#">
+                            {product.product_number} - {product.name}
+                        </Link>
+                    </Button>
+                );
             },
         },
         {
@@ -226,7 +230,7 @@ export default function Sales() {
                 );
             },
             cell: ({ row }) => {
-                return <div className="text-center">{row.getValue('quantity')}</div>;
+                return <div className="text-center font-bold">{row.getValue('quantity')}</div>;
             },
         },
         {
@@ -240,13 +244,54 @@ export default function Sales() {
                 );
             },
             cell: ({ row }) => {
+                const product: Product = row.getValue('product');
+                const quantity: number = row.getValue('quantity');
                 const total = parseFloat(row.getValue('total'));
                 const formatted = new Intl.NumberFormat(app.locale, {
                     style: 'currency',
                     currency: app.currency,
                 }).format(total);
 
-                return <div className="text-center font-medium">{formatted}</div>;
+                return (
+                    <div className="text-center font-medium">
+                        {total !== product.price * quantity ? (
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <span>
+                                        {formatted}
+                                        <span className="text-xl">*</span>
+                                    </span>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    <p>Product price has changed since sale.</p>
+                                </TooltipContent>
+                            </Tooltip>
+                        ) : (
+                            <span>{formatted}</span>
+                        )}
+                    </div>
+                );
+            },
+        },
+        {
+            accessorKey: 'customer',
+            header: ({ column }) => {
+                return (
+                    <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+                        Customer
+                        <ArrowUpDown className="h-4 w-4" />
+                    </Button>
+                );
+            },
+            cell: ({ row }) => {
+                const customer: Customer = row.getValue('customer');
+                return (
+                    <Button variant="link" asChild>
+                        <Link href="#">
+                            {customer.name}
+                        </Link>
+                    </Button>
+                );
             },
         },
         {
@@ -260,16 +305,20 @@ export default function Sales() {
                 );
             },
             cell: ({ row }) => {
-                const status: "pending" | "processing" | "success" | "failed" = row.getValue("status");
+                const status: 'pending' | 'processing' | 'completed' = row.getValue('status');
                 const variantMap: Record<Sale['status'], VariantProps<typeof badgeVariants>['variant']> = {
                     pending: 'outline',
                     processing: 'secondary',
-                    success: 'default',
-                    failed: 'destructive',
+                    completed: 'default',
                 };
 
                 return (
-                    <div className="flex flex-row items-center justify-start gap-x-2">
+                    <div className="flex flex-row items-center justify-end gap-x-2">
+                        <div className="w-full">
+                            <Badge variant={variantMap[status]} className="capitalize w-full">
+                                {status}
+                            </Badge>
+                        </div>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="ghost" className="h-8 w-8 p-0">
@@ -278,18 +327,16 @@ export default function Sales() {
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
-                                <DropdownMenuLabel><span className="font-bold">Change status</span></DropdownMenuLabel>
+                                <DropdownMenuLabel>
+                                    <span className="font-bold">Change status</span>
+                                </DropdownMenuLabel>
                                 <DropdownMenuSeparator />
-                                {/* TODO: proper button and icon*/}
-                                <DropdownMenuItem>Pending</DropdownMenuItem>
-                                <DropdownMenuItem>Processing</DropdownMenuItem>
-                                <DropdownMenuItem>Success</DropdownMenuItem>
-                                <DropdownMenuItem>Failed</DropdownMenuItem>
+                                {/* TODO: onclieck function*/}
+                                <DropdownMenuItem disabled={status === 'pending'}>Pending</DropdownMenuItem>
+                                <DropdownMenuItem disabled={status === 'processing'}>Processing</DropdownMenuItem>
+                                <DropdownMenuItem disabled={status === 'completed'}>Completed</DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
-                        <Badge variant={variantMap[status]} className="capitalize">
-                            {status}
-                        </Badge>
                     </div>
                 );
             },
@@ -298,16 +345,29 @@ export default function Sales() {
             id: 'actions',
             cell: () => {
                 return (
-                    <div className="flex flex-row items-center justify-center gap-x-2">
+                    <div className="flex flex-row items-center justify-center gap-x-0.5">
                         {/* TODO: proper button icon*/}
                         {/* TODO: details will contain all stuff like customer, price at sale, etc*/}
-                        <Button>Details</Button>
-                        <Button>Edit</Button>
-                        <Button>Delete</Button>
+                        <Button variant="ghost">
+                            <Info className="size-5" />
+                        </Button>
+                        <Button variant="ghost">
+                            <SquarePen className="size-5 text-muted-foreground" />
+                        </Button>
+                        <Button variant="ghost">
+                            <Trash className="size-5 text-destructive" />
+                        </Button>
                     </div>
                 );
             },
         },
+    ];
+
+    const filterableColumns = [
+        { value: "sale_number", label: "ID" },
+        { value: "product.name", label: "Product" },
+        { value: "customer.name", label: "Customer" },
+        { value: "status", label: "Status" },
     ];
 
     return (
@@ -318,11 +378,11 @@ export default function Sales() {
                 <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between sm:gap-0">
                     <Heading title="Sales" description="Manage your sales transactions and records." />
 
-                    <ActionButtons onExport={exportSalesToPDF} addHref="#" />
+                    <ActionButtons onExport={exportSales} addHref="#" />
                 </div>
 
                 <div>
-                    <DataTable columns={columns} data={data} />
+                    <DataTable columns={columns} data={data} filterableColumns={filterableColumns} />
                 </div>
             </div>
         </AppLayout>

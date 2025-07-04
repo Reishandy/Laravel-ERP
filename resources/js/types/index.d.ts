@@ -65,8 +65,7 @@ export interface Customer {
     name: string
     email: string
     avatar?: string
-    type: "individual" | "company"
-    company?: string
+    type: "individual" | "business"
     created_at: string;
     updated_at: string;
     [key: string]: unknown;
@@ -80,7 +79,7 @@ export interface Sale {
     quantity: number
     price_at_sale: number
     total: number
-    status: "pending" | "processing" | "success" | "failed"
+    status: "pending" | "processing" | "completed"
     created_at: string | Date
     updated_at: string | Date
     [key: string]: unknown;
