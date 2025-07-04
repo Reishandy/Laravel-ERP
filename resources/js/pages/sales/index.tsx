@@ -17,7 +17,7 @@ import { type BreadcrumbItem, Customer, Product, Sale } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
 import { VariantProps } from 'class-variance-authority';
-import { ArrowUpDown, Info, MoreHorizontal, SquarePen, Trash } from 'lucide-react';
+import { Info, MoreHorizontal, SquarePen, Trash } from 'lucide-react';
 
 interface Entry extends Sale {
     product: Product;
@@ -186,6 +186,7 @@ export default function Sales() {
 
     const columns: ColumnDef<Entry>[] = [
         {
+            id: 'sale_number',
             accessorKey: 'sale_number',
             header: () => <div className="text-center">ID</div>,
             cell: ({ row }) => {
@@ -195,7 +196,7 @@ export default function Sales() {
         {
             id: 'product.name_and_number',
             accessorKey: 'product.name_and_number',
-            header: () => <div className="text-left pl-4">Product</div>,
+            header: () => <div className="pl-4 text-left">Product</div>,
             accessorFn: (row) => row.product.product_number + ' - ' + row.product.name,
             cell: ({ row }) => {
                 return (
@@ -206,6 +207,7 @@ export default function Sales() {
             },
         },
         {
+            id: 'quantity',
             accessorKey: 'quantity',
             header: () => <div className="text-center">Quantity</div>,
             cell: ({ row }) => {
@@ -213,6 +215,7 @@ export default function Sales() {
             },
         },
         {
+            id: 'total',
             accessorKey: 'total',
             header: () => <div className="text-center">Total</div>,
             cell: ({ row }) => {
@@ -248,7 +251,7 @@ export default function Sales() {
         {
             id: 'customer.name',
             accessorKey: 'customer.name',
-            header: () => <div className="text-left pl-4">Customer</div>,
+            header: () => <div className="pl-4 text-left">Customer</div>,
             cell: ({ row }) => {
                 return (
                     <Button variant="link" asChild>
@@ -258,6 +261,7 @@ export default function Sales() {
             },
         },
         {
+            id: 'status',
             accessorKey: 'status',
             header: () => <div className="text-center">Status</div>,
             cell: ({ row }) => {
@@ -288,9 +292,15 @@ export default function Sales() {
                                 </DropdownMenuLabel>
                                 <DropdownMenuSeparator />
                                 {/* TODO: onclieck function*/}
-                                <DropdownMenuItem className="cursor-pointer" disabled={status === 'pending'}>Pending</DropdownMenuItem>
-                                <DropdownMenuItem className="cursor-pointer" disabled={status === 'processing'}>Processing</DropdownMenuItem>
-                                <DropdownMenuItem className="cursor-pointer" disabled={status === 'completed'}>Completed</DropdownMenuItem>
+                                <DropdownMenuItem className="cursor-pointer" disabled={status === 'pending'}>
+                                    Pending
+                                </DropdownMenuItem>
+                                <DropdownMenuItem className="cursor-pointer" disabled={status === 'processing'}>
+                                    Processing
+                                </DropdownMenuItem>
+                                <DropdownMenuItem className="cursor-pointer" disabled={status === 'completed'}>
+                                    Completed
+                                </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </div>
@@ -304,8 +314,8 @@ export default function Sales() {
                     <div className="flex flex-row items-center justify-center gap-x-2">
                         {/* TODO: proper button icon*/}
                         {/* TODO: details will contain all stuff like customer, price at sale, etc*/}
-                        <Info className="size-5 cursor-pointer hover:text-primary/70 text-primary" />
-                        <SquarePen className="size-5 cursor-pointer hover:text-primary/70 text-primary" />
+                        <Info className="size-5 cursor-pointer text-primary hover:text-primary/70" />
+                        <SquarePen className="size-5 cursor-pointer text-primary hover:text-primary/70" />
                         <Trash className="size-5 cursor-pointer text-destructive hover:text-destructive/70" />
                     </div>
                 );
@@ -320,6 +330,15 @@ export default function Sales() {
         { value: 'sale_number', label: 'ID' },
     ];
 
+    const sortableColumns = [
+        { value: 'sale_number', label: 'ID' },
+        { value: 'product.name_and_number', label: 'Product' },
+        { value: 'customer.name', label: 'Customer' },
+        { value: 'quantity', label: 'Quantity' },
+        { value: 'total', label: 'Total' },
+        { value: 'status', label: 'Status' },
+    ];
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Sales" />
@@ -332,7 +351,7 @@ export default function Sales() {
                 </div>
 
                 <div>
-                    <DataTable columns={columns} data={data} filterableColumns={filterableColumns} />
+                    <DataTable columns={columns} data={data} filterableColumns={filterableColumns} sortableColumns={sortableColumns} />
                 </div>
             </div>
         </AppLayout>

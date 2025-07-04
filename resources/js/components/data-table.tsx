@@ -23,22 +23,16 @@ interface FilterableColumn {
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
     data: TData[];
-    filterableColumns?: FilterableColumn[];
+    filterableColumns: FilterableColumn[];
+    sortableColumns: FilterableColumn[];
 }
 
-export function DataTable<TData, TValue>({ columns, data, filterableColumns = [] }: DataTableProps<TData, TValue>) {
+export function DataTable<TData, TValue>({ columns, data, filterableColumns, sortableColumns }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
     const [selectedColumn, setSelectedColumn] = React.useState<string>(filterableColumns[0]?.value || '');
     const [selectedSortColumn, setSelectedSortColumn] = React.useState<string>('');
     const [sortDirection, setSortDirection] = React.useState<'asc' | 'desc'>('asc');
-
-    const sortableColumns = columns
-        .filter((col) => col.accessorKey || col.accessorFn)
-        .map((col) => ({
-            value: (col.accessorKey as string) || (col.id as string),
-            label: typeof col.header === 'string' ? col.header : (col.id as string),
-        }));
 
     const table = useReactTable({
         data,
@@ -81,6 +75,7 @@ export function DataTable<TData, TValue>({ columns, data, filterableColumns = []
     return (
         <div>
             <div className="flex flex-row items-center justify-between pb-4">
+                {/* Filter */}
                 <div className="flex items-center space-x-2">
                     <Select value={selectedColumn} onValueChange={setSelectedColumn}>
                         <SelectTrigger className="w-48">
@@ -113,6 +108,8 @@ export function DataTable<TData, TValue>({ columns, data, filterableColumns = []
                         )}
                     </div>
                 </div>
+
+                {/* Sort */}
                 <div className="flex items-center space-x-2">
                     <Select
                         value={selectedSortColumn}
@@ -158,6 +155,8 @@ export function DataTable<TData, TValue>({ columns, data, filterableColumns = []
                     )}
                 </div>
             </div>
+
+            {/* Table */}
             <div className="rounded-md border">
                 <Table>
                     <TableHeader>
