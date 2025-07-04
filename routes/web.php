@@ -30,6 +30,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 //  - Pagination
 //  - Email template
 //  - avatar supports?
+//  - favicon
+//  - currency setting
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

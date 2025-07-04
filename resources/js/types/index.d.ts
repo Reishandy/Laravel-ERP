@@ -46,6 +46,8 @@ export interface User {
 // TODO: match actual database model
 export interface Product {
     id: number
+    product_number: string
+    user_id: string
     name: string
     description: string
     image?: string
@@ -58,6 +60,8 @@ export interface Product {
 
 export interface Customer {
     id: number
+    customer_number: string
+    user_id: number
     name: string
     email: string
     avatar?: string
@@ -70,13 +74,13 @@ export interface Customer {
 
 export interface Sale {
     id: number
+    sale_number: string
     product_id: number
     customer_id: number
     quantity: number
     price_at_sale: number
+    total: number
     status: "pending" | "processing" | "success" | "failed"
-    product?: Product
-    customer?: Customer
     created_at: string | Date
     updated_at: string | Date
     [key: string]: unknown;
