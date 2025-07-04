@@ -187,14 +187,7 @@ export default function Sales() {
     const columns: ColumnDef<Entry>[] = [
         {
             accessorKey: 'sale_number',
-            header: ({ column }) => {
-                return (
-                    <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-                        ID
-                        <ArrowUpDown className="h-4 w-4" />
-                    </Button>
-                );
-            },
+            header: () => <div className="text-center">ID</div>,
             cell: ({ row }) => {
                 return <div className="text-center">{row.getValue('sale_number')}</div>;
             },
@@ -202,49 +195,26 @@ export default function Sales() {
         {
             id: 'product.name_and_number',
             accessorKey: 'product.name_and_number',
-            header: ({ column }) => {
-                return (
-                    <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-                        Product
-                        <ArrowUpDown className="h-4 w-4" />
-                    </Button>
-                );
-            },
-            accessorFn: (row) => row.product.product_number + ' - ' + row.product.name ,
+            header: () => <div className="text-left pl-4">Product</div>,
+            accessorFn: (row) => row.product.product_number + ' - ' + row.product.name,
             cell: ({ row }) => {
                 return (
                     <Button variant="link" asChild>
-                        <Link href="#">
-                            {row.getValue('product.name_and_number')}
-                        </Link>
+                        <Link href="#">{row.getValue('product.name_and_number')}</Link>
                     </Button>
                 );
             },
         },
         {
             accessorKey: 'quantity',
-            header: ({ column }) => {
-                return (
-                    <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-                        Quantity
-                        <ArrowUpDown className="h-4 w-4" />
-                    </Button>
-                );
-            },
+            header: () => <div className="text-center">Quantity</div>,
             cell: ({ row }) => {
                 return <div className="text-center font-bold">{row.getValue('quantity')}</div>;
             },
         },
         {
             accessorKey: 'total',
-            header: ({ column }) => {
-                return (
-                    <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-                        Total
-                        <ArrowUpDown className="h-4 w-4" />
-                    </Button>
-                );
-            },
+            header: () => <div className="text-center">Total</div>,
             cell: ({ row }) => {
                 const price: number = row.original.product.price;
                 const quantity: number = row.getValue('quantity');
@@ -278,34 +248,18 @@ export default function Sales() {
         {
             id: 'customer.name',
             accessorKey: 'customer.name',
-            header: ({ column }) => {
-                return (
-                    <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-                        Customer
-                        <ArrowUpDown className="h-4 w-4" />
-                    </Button>
-                );
-            },
+            header: () => <div className="text-left pl-4">Customer</div>,
             cell: ({ row }) => {
                 return (
                     <Button variant="link" asChild>
-                        <Link href="#">
-                            {row.getValue('customer.name')}
-                        </Link>
+                        <Link href="#">{row.getValue('customer.name')}</Link>
                     </Button>
                 );
             },
         },
         {
             accessorKey: 'status',
-            header: ({ column }) => {
-                return (
-                    <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-                        Status
-                        <ArrowUpDown className="h-4 w-4" />
-                    </Button>
-                );
-            },
+            header: () => <div className="text-center">Status</div>,
             cell: ({ row }) => {
                 const status: 'pending' | 'processing' | 'completed' = row.getValue('status');
                 const variantMap: Record<Sale['status'], VariantProps<typeof badgeVariants>['variant']> = {
@@ -317,12 +271,12 @@ export default function Sales() {
                 return (
                     <div className="flex flex-row items-center justify-end gap-x-2">
                         <div className="w-full">
-                            <Badge variant={variantMap[status]} className="capitalize w-full">
+                            <Badge variant={variantMap[status]} className="w-full capitalize">
                                 {status}
                             </Badge>
                         </div>
                         <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
+                            <DropdownMenuTrigger className="cursor-pointer" asChild>
                                 <Button variant="ghost" className="h-8 w-8 p-0">
                                     <span className="sr-only">Open menu</span>
                                     <MoreHorizontal className="h-4 w-4" />
@@ -334,9 +288,9 @@ export default function Sales() {
                                 </DropdownMenuLabel>
                                 <DropdownMenuSeparator />
                                 {/* TODO: onclieck function*/}
-                                <DropdownMenuItem disabled={status === 'pending'}>Pending</DropdownMenuItem>
-                                <DropdownMenuItem disabled={status === 'processing'}>Processing</DropdownMenuItem>
-                                <DropdownMenuItem disabled={status === 'completed'}>Completed</DropdownMenuItem>
+                                <DropdownMenuItem className="cursor-pointer" disabled={status === 'pending'}>Pending</DropdownMenuItem>
+                                <DropdownMenuItem className="cursor-pointer" disabled={status === 'processing'}>Processing</DropdownMenuItem>
+                                <DropdownMenuItem className="cursor-pointer" disabled={status === 'completed'}>Completed</DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </div>
@@ -347,18 +301,12 @@ export default function Sales() {
             id: 'actions',
             cell: () => {
                 return (
-                    <div className="flex flex-row items-center justify-center gap-x-0.5">
+                    <div className="flex flex-row items-center justify-center gap-x-2">
                         {/* TODO: proper button icon*/}
                         {/* TODO: details will contain all stuff like customer, price at sale, etc*/}
-                        <Button variant="ghost">
-                            <Info className="size-5" />
-                        </Button>
-                        <Button variant="ghost">
-                            <SquarePen className="size-5 text-muted-foreground" />
-                        </Button>
-                        <Button variant="ghost">
-                            <Trash className="size-5 text-destructive" />
-                        </Button>
+                        <Info className="size-5 cursor-pointer hover:text-primary/70 text-primary" />
+                        <SquarePen className="size-5 cursor-pointer hover:text-primary/70 text-primary" />
+                        <Trash className="size-5 cursor-pointer text-destructive hover:text-destructive/70" />
                     </div>
                 );
             },
@@ -366,10 +314,10 @@ export default function Sales() {
     ];
 
     const filterableColumns = [
-        { value: "sale_number", label: "ID" },
-        { value: "product.name_and_number", label: "Product" },
-        { value: "customer.name", label: "Customer" },
-        { value: "status", label: "Status" },
+        { value: 'product.name_and_number', label: 'Product' },
+        { value: 'customer.name', label: 'Customer' },
+        { value: 'status', label: 'Status' },
+        { value: 'sale_number', label: 'ID' },
     ];
 
     return (
