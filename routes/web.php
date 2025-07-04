@@ -16,9 +16,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('sales', function () {
         return Inertia::render('sales/index');
     })->name('sales.index');
-    Route::get('inventory', function () {
-        return Inertia::render('inventory/index');
-    })->name('inventory.index');
+    Route::get('products', function () {
+        return Inertia::render('products/index');
+    })->name('products.index');
+    Route::get('customers', function () {
+        return Inertia::render('customers/index');
+    })->name('customers.index');
 });
 
 // TODO:
@@ -26,6 +29,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 //  - Modify error pages
 //  - Pagination
 //  - Email template
+//  - avatar supports?
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

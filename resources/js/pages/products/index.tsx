@@ -6,7 +6,7 @@ import Heading from '@/components/heading';
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Inventory',
-        href: '/inventory',
+        href: '/products',
     },
 ];
 
@@ -16,7 +16,7 @@ export default function Inventory() {
             <Head title="Inventory" />
 
             <div className="m-4">
-                <Heading title="Inventory" description="Manage your inventory items and stock levels." />
+                <Heading title="Inventory" description="Manage your products inventory and stock levels." />
 
             </div>
 

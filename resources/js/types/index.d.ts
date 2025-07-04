@@ -42,3 +42,42 @@ export interface User {
     updated_at: string;
     [key: string]: unknown; // This allows for additional properties...
 }
+
+// TODO: match actual database model
+export interface Product {
+    id: number
+    name: string
+    description: string
+    image?: string
+    price: number
+    stock: number
+    created_at: string;
+    updated_at: string;
+    [key: string]: unknown;
+}
+
+export interface Customer {
+    id: number
+    name: string
+    email: string
+    avatar?: string
+    type: "individual" | "company"
+    company?: string
+    created_at: string;
+    updated_at: string;
+    [key: string]: unknown;
+}
+
+export interface Sale {
+    id: number
+    product_id: number
+    customer_id: number
+    quantity: number
+    price_at_sale: number
+    status: "pending" | "processing" | "success" | "failed"
+    product?: Product
+    customer?: Customer
+    created_at: string | Date
+    updated_at: string | Date
+    [key: string]: unknown;
+}
