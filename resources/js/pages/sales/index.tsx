@@ -19,6 +19,20 @@ import { ColumnDef } from '@tanstack/react-table';
 import { VariantProps } from 'class-variance-authority';
 import { ArrowUpDown, Info, MoreHorizontal, SquarePen, Trash } from 'lucide-react';
 
+interface Entry extends Sale {
+    product: Product;
+    customer: Customer;
+}
+
+interface PageProps {
+    app: {
+        locale: string;
+        currency: string;
+    };
+
+    [key: string]: unknown;
+}
+
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Sales',
@@ -31,6 +45,7 @@ const exportSales = () => {
 };
 
 // TODO: Replace with actual data
+// TODO: make sure to add the product and customer data to the Sale model
 const data: Entry[] = [
     {
         id: 1,
@@ -166,20 +181,6 @@ const data: Entry[] = [
     },
 ];
 
-interface Entry extends Sale {
-    product: Product;
-    customer: Customer;
-}
-
-interface PageProps {
-    app: {
-        locale: string;
-        currency: string;
-    };
-
-    [key: string]: unknown;
-}
-
 export default function Sales() {
     const { app } = usePage<PageProps>().props;
 
@@ -199,7 +200,8 @@ export default function Sales() {
             },
         },
         {
-            accessorKey: 'product',
+            id: 'product.name_and_number',
+            accessorKey: 'product.name_and_number',
             header: ({ column }) => {
                 return (
                     <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
@@ -208,12 +210,12 @@ export default function Sales() {
                     </Button>
                 );
             },
+            accessorFn: (row) => row.product.product_number + ' - ' + row.product.name ,
             cell: ({ row }) => {
-                const product: Product = row.getValue('product');
                 return (
                     <Button variant="link" asChild>
                         <Link href="#">
-                            {product.product_number} - {product.name}
+                            {row.getValue('product.name_and_number')}
                         </Link>
                     </Button>
                 );
@@ -244,7 +246,7 @@ export default function Sales() {
                 );
             },
             cell: ({ row }) => {
-                const product: Product = row.getValue('product');
+                const price: number = row.original.product.price;
                 const quantity: number = row.getValue('quantity');
                 const total = parseFloat(row.getValue('total'));
                 const formatted = new Intl.NumberFormat(app.locale, {
@@ -254,7 +256,7 @@ export default function Sales() {
 
                 return (
                     <div className="text-center font-medium">
-                        {total !== product.price * quantity ? (
+                        {total !== price * quantity ? (
                             <Tooltip>
                                 <TooltipTrigger asChild>
                                     <span>
@@ -274,7 +276,8 @@ export default function Sales() {
             },
         },
         {
-            accessorKey: 'customer',
+            id: 'customer.name',
+            accessorKey: 'customer.name',
             header: ({ column }) => {
                 return (
                     <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
@@ -284,11 +287,10 @@ export default function Sales() {
                 );
             },
             cell: ({ row }) => {
-                const customer: Customer = row.getValue('customer');
                 return (
                     <Button variant="link" asChild>
                         <Link href="#">
-                            {customer.name}
+                            {row.getValue('customer.name')}
                         </Link>
                     </Button>
                 );
@@ -365,7 +367,7 @@ export default function Sales() {
 
     const filterableColumns = [
         { value: "sale_number", label: "ID" },
-        { value: "product.name", label: "Product" },
+        { value: "product.name_and_number", label: "Product" },
         { value: "customer.name", label: "Customer" },
         { value: "status", label: "Status" },
     ];
