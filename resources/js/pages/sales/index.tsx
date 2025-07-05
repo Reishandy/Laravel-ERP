@@ -24,7 +24,7 @@ interface Entry extends Sale {
     customer: Customer;
 }
 
-interface PageProps {
+interface SalesPageProps {
     app: {
         locale: string;
         currency: string;
@@ -182,7 +182,7 @@ const data: Entry[] = [
 ];
 
 export default function Sales() {
-    const { app } = usePage<PageProps>().props;
+    const { app } = usePage<SalesPageProps>().props;
 
     const columns: ColumnDef<Entry>[] = [
         {

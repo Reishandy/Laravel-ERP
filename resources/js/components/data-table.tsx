@@ -1,6 +1,5 @@
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { DataTableFilter } from '@/components/data-table-filter';
+import { DataTableSort } from '@/components/data-table-sort';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import {
     ColumnDef,
@@ -12,7 +11,6 @@ import {
     SortingState,
     useReactTable,
 } from '@tanstack/react-table';
-import { X } from 'lucide-react';
 import * as React from 'react';
 
 interface FilterableColumn {
@@ -58,11 +56,6 @@ export function DataTable<TData, TValue>({ columns, data, filterableColumns, sor
         table.getColumn(selectedColumn)?.setFilterValue('');
     };
 
-    const getPlaceholderText = () => {
-        const selectedColumnData = filterableColumns.find((col) => col.value === selectedColumn);
-        return `Filter ${selectedColumnData?.label.toLowerCase()}...`;
-    };
-
     const handleSortChange = (columnId: string, direction: 'asc' | 'desc') => {
         setSorting([{ id: columnId, desc: direction === 'desc' }]);
     };
@@ -74,86 +67,27 @@ export function DataTable<TData, TValue>({ columns, data, filterableColumns, sor
 
     return (
         <div>
-            <div className="flex flex-row items-center justify-between pb-4">
+            <div className="flex flex-col justify-between gap-y-2 pb-4 xl:flex-row xl:items-center xl:gap-y-0">
                 {/* Filter */}
-                <div className="flex items-center space-x-2">
-                    <Select value={selectedColumn} onValueChange={setSelectedColumn}>
-                        <SelectTrigger className="w-48">
-                            <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {filterableColumns.map((column) => (
-                                <SelectItem key={column.value} value={column.value}>
-                                    {column.label}
-                                </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
-                    <div className="relative">
-                        <Input
-                            placeholder={getPlaceholderText()}
-                            value={currentFilterValue}
-                            onChange={(event) => handleFilterChange(event.target.value)}
-                            className="max-w-sm pr-10"
-                        />
-                        {currentFilterValue && (
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                className="absolute top-0 right-0 h-full px-3 py-2 hover:bg-transparent"
-                                onClick={clearFilter}
-                            >
-                                <X className="h-4 w-4" />
-                            </Button>
-                        )}
-                    </div>
-                </div>
+                <DataTableFilter
+                    filterableColumns={filterableColumns}
+                    selectedColumn={selectedColumn}
+                    setSelectedColumn={setSelectedColumn}
+                    currentFilterValue={currentFilterValue}
+                    handleFilterChange={handleFilterChange}
+                    clearFilter={clearFilter}
+                />
 
                 {/* Sort */}
-                <div className="flex items-center space-x-2">
-                    <Select
-                        value={selectedSortColumn}
-                        onValueChange={(value) => {
-                            setSelectedSortColumn(value);
-                            handleSortChange(value, sortDirection);
-                        }}
-                    >
-                        <SelectTrigger className="w-48">
-                            <SelectValue placeholder="Sort by..." />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {sortableColumns.map((column) => (
-                                <SelectItem key={column.value} value={column.value}>
-                                    {column.label}
-                                </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
-
-                    <Select
-                        value={sortDirection}
-                        onValueChange={(value: 'asc' | 'desc') => {
-                            setSortDirection(value);
-                            if (selectedSortColumn) {
-                                handleSortChange(selectedSortColumn, value);
-                            }
-                        }}
-                    >
-                        <SelectTrigger className="w-32">
-                            <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="asc">Ascending</SelectItem>
-                            <SelectItem value="desc">Descending</SelectItem>
-                        </SelectContent>
-                    </Select>
-
-                    {selectedSortColumn && (
-                        <Button variant="ghost" size="sm" onClick={clearSort}>
-                            <X className="h-4 w-4" />
-                        </Button>
-                    )}
-                </div>
+                <DataTableSort
+                    sortableColumns={sortableColumns}
+                    selectedSortColumn={selectedSortColumn}
+                    setSelectedSortColumn={setSelectedSortColumn}
+                    sortDirection={sortDirection}
+                    setSortDirection={setSortDirection}
+                    handleSortChange={handleSortChange}
+                    clearSort={clearSort}
+                />
             </div>
 
             {/* Table */}
