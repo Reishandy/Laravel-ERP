@@ -46,7 +46,7 @@ export interface User {
 export interface Customer {
     id: number
     user_id: number
-    customer_number: number
+    customer_number: string
     name: string
     email: string
     avatar?: string
@@ -59,7 +59,7 @@ export interface Customer {
 export interface Product {
     id: number
     user_id: string
-    product_number: number
+    product_number: string
     name: string
     description?: string
     image?: string
@@ -75,7 +75,7 @@ export interface Sale {
     user_id: number
     product_id: number
     customer_id: number
-    sale_number: number
+    sale_number: string
     quantity: number
     price_at_sale: number
     total_price: number

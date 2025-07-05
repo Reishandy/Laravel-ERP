@@ -5,15 +5,22 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreCustomerRequest;
 use App\Http\Requests\UpdateCustomerRequest;
 use App\Models\Customer;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class CustomerController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): Response
     {
-        //
+        return Inertia::render('customers/index', [
+            'customers' => Customer::where('user_id', auth()->user()->id)
+                ->with('sales')
+                ->latest()
+                ->get(),
+        ]);
     }
 
     /**
@@ -35,9 +42,15 @@ class CustomerController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Customer $customer)
+    public function show(Customer $customer): Response
     {
-        //
+        return Inertia::render('customers/index', [
+            'customers' => Customer::where('user_id', auth()->user()->id)
+                ->with('sales')
+                ->latest()
+                ->get(),
+            'show' => $customer->customer_number
+        ]);
     }
 
     /**

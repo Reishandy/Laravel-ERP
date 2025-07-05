@@ -1,15 +1,16 @@
 import { DataTableFilter } from '@/components/data-table/data-table-filter';
+import DataTablePagination from '@/components/data-table/data-table-pagination';
 import { DataTableSort } from '@/components/data-table/data-table-sort';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import {
     ColumnDef,
-    ColumnFiltersState,
     flexRender,
     getCoreRowModel,
     getFilteredRowModel,
-    getSortedRowModel,
+    getPaginationRowModel,
+    getSortedRowModel, Row,
     SortingState,
-    useReactTable,
+    useReactTable
 } from '@tanstack/react-table';
 import * as React from 'react';
 
@@ -21,16 +22,22 @@ interface FilterableColumn {
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
     data: TData[];
-    filterableColumns: FilterableColumn[];
     sortableColumns: FilterableColumn[];
 }
 
-export function DataTable<TData, TValue>({ columns, data, filterableColumns, sortableColumns }: DataTableProps<TData, TValue>) {
+export function DataTable<TData, TValue>({ columns, data, sortableColumns }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = React.useState<SortingState>([]);
-    const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
-    const [selectedColumn, setSelectedColumn] = React.useState<string>(filterableColumns[0]?.value || '');
+    const [globalFilter, setGlobalFilter] = React.useState<string>('');
     const [selectedSortColumn, setSelectedSortColumn] = React.useState<string>('');
     const [sortDirection, setSortDirection] = React.useState<'asc' | 'desc'>('asc');
+    const [pagination, setPagination] = React.useState({
+        pageIndex: 0,
+        pageSize: 20,
+    });
+    const fuzzyFilter = (row: Row<TData>, columnId: string, filterValue: string) => {
+        const value = String(row.getValue(columnId)).toLowerCase();
+        return value.includes(String(filterValue).toLowerCase());
+    };
 
     const table = useReactTable({
         data,
@@ -38,23 +45,18 @@ export function DataTable<TData, TValue>({ columns, data, filterableColumns, sor
         getCoreRowModel: getCoreRowModel(),
         onSortingChange: setSorting,
         getSortedRowModel: getSortedRowModel(),
-        onColumnFiltersChange: setColumnFilters,
+        onGlobalFilterChange: setGlobalFilter,
         getFilteredRowModel: getFilteredRowModel(),
+        getPaginationRowModel: getPaginationRowModel(),
+        onPaginationChange: setPagination,
         state: {
             sorting,
-            columnFilters,
+            globalFilter,
+            pagination,
         },
+        filterFns: { fuzzy: fuzzyFilter },
+        globalFilterFn: fuzzyFilter,
     });
-
-    const currentFilterValue = (table.getColumn(selectedColumn)?.getFilterValue() as string) ?? '';
-
-    const handleFilterChange = (value: string) => {
-        table.getColumn(selectedColumn)?.setFilterValue(value);
-    };
-
-    const clearFilter = () => {
-        table.getColumn(selectedColumn)?.setFilterValue('');
-    };
 
     const handleSortChange = (columnId: string, direction: 'asc' | 'desc') => {
         setSorting([{ id: columnId, desc: direction === 'desc' }]);
@@ -70,12 +72,9 @@ export function DataTable<TData, TValue>({ columns, data, filterableColumns, sor
             <div className="flex flex-col justify-between gap-y-2 pb-4 lg:flex-row lg:items-center lg:gap-y-0">
                 {/* Filter */}
                 <DataTableFilter
-                    filterableColumns={filterableColumns}
-                    selectedColumn={selectedColumn}
-                    setSelectedColumn={setSelectedColumn}
-                    currentFilterValue={currentFilterValue}
-                    handleFilterChange={handleFilterChange}
-                    clearFilter={clearFilter}
+                    globalFilterValue={globalFilter}
+                    handleFilterChange={setGlobalFilter}
+                    clearFilter={() => setGlobalFilter('')}
                 />
 
                 {/* Sort */}
@@ -125,6 +124,27 @@ export function DataTable<TData, TValue>({ columns, data, filterableColumns, sor
                     </TableBody>
                 </Table>
             </div>
+
+            {/* Pagination */}
+            {table.getPageCount() > 0 && (
+                <DataTablePagination
+                    pagination={{
+                        pageIndex: pagination.pageIndex,
+                        pageSize: pagination.pageSize,
+                        pageCount: table.getPageCount(),
+                        canPreviousPage: table.getCanPreviousPage(),
+                        canNextPage: table.getCanNextPage(),
+                        getPageCount: table.getPageCount,
+                        getState: table.getState,
+                        getFilteredRowModel: table.getFilteredRowModel,
+                        setPageIndex: table.setPageIndex,
+                        previousPage: table.previousPage,
+                        nextPage: table.nextPage,
+                        getCanPreviousPage: table.getCanPreviousPage,
+                        getCanNextPage: table.getCanNextPage,
+                    }}
+                />
+            )}
         </div>
     );
 }

@@ -5,15 +5,22 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Models\Product;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): Response
     {
-        //
+        return Inertia::render('products/index', [
+            'products' => Product::where('user_id', auth()->user()->id)
+                ->with('sales')
+                ->latest()
+                ->get(),
+        ]);
     }
 
     /**
@@ -35,9 +42,15 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Product $product)
+    public function show(Product $product): Response
     {
-        //
+        return Inertia::render('products/index', [
+            'products' => Product::where('user_id', auth()->user()->id)
+                ->with('sales')
+                ->latest()
+                ->get(),
+            'show' => $product->product_number
+        ]);
     }
 
     /**

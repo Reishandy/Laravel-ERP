@@ -20,7 +20,7 @@ class ProductFactory extends Factory
 
         return [
             'user_id' => 1,
-            'product_number' => $productNumber++,
+            'product_number' => 'P-' . str_pad($productNumber++, 5, '0', STR_PAD_LEFT),
             'name' => $this->faker->word,
             'description' => $this->faker->sentence,
             'image' => $this->faker->imageUrl(512, 512, 'technics'),

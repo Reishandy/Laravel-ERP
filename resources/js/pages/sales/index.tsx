@@ -19,7 +19,6 @@ import { Head, Link, usePage } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
 import { VariantProps } from 'class-variance-authority';
 import { Info, MoreHorizontal, SquarePen, Trash } from 'lucide-react';
-import { Pagination } from '@/components/pagination';
 
 interface Entry extends Sale {
     product: Product;
@@ -31,20 +30,8 @@ interface SalesPageProps {
         locale: string;
         currency: string;
     };
-    sales: {
-        data: Entry[];
-        current_page: number;
-        last_page: number;
-        total: number;
-        per_page: number;
-        from: number;
-        to: number;
-        links: Array<{
-            url: string | null;
-            label: string;
-            active: boolean;
-        }>;
-    };
+    sales: Entry[];
+    show?: string;
     [key: string]: unknown;
 }
 
@@ -55,12 +42,10 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-const exportSales = () => {
-    // TODO: export to CSV
-};
-
-export default function Sales({ sales }: SalesPageProps) {
+export default function Sales({ sales, show }: SalesPageProps) {
     const { app } = usePage<SalesPageProps>().props;
+
+    const selectedSale = show ? sales.find((sale) => sale.sale_number === show) : undefined;
 
     const columns: ColumnDef<Entry>[] = [
         {
@@ -68,14 +53,14 @@ export default function Sales({ sales }: SalesPageProps) {
             accessorKey: 'sale_number',
             header: () => <div className="text-center">ID</div>,
             cell: ({ row }) => {
-                return <div className="text-center">{`S-${String(row.getValue('sale_number')).padStart(5, '0')}`}</div>;
+                return <div className="text-center">{row.getValue('sale_number')}</div>;
             },
         },
         {
             id: 'product.name_and_number',
             accessorKey: 'product.name_and_number',
             header: () => <div className="pl-4 text-left">Product</div>,
-            accessorFn: (row) => `P-${String(row.product.product_number).padStart(5, '0')}` + ' - ' + row.product.name,
+            accessorFn: (row) => row.product.product_number + ' - ' + row.product.name,
             cell: ({ row }) => {
                 return (
                     <Button variant="link" asChild>
@@ -107,7 +92,7 @@ export default function Sales({ sales }: SalesPageProps) {
 
                 return (
                     <div className="text-center font-medium">
-                        {total_price !== Math.round(((price * quantity) + Number.EPSILON) * 100) / 100 ? (
+                        {total_price !== Math.round((price * quantity + Number.EPSILON) * 100) / 100 ? (
                             <Tooltip>
                                 <TooltipTrigger asChild>
                                     <span>
@@ -207,13 +192,6 @@ export default function Sales({ sales }: SalesPageProps) {
         },
     ];
 
-    const filterableColumns = [
-        { value: 'product.name_and_number', label: 'Product' },
-        { value: 'customer.name', label: 'Customer' },
-        { value: 'status', label: 'Status' },
-        { value: 'sale_number', label: 'ID' },
-    ];
-
     const sortableColumns = [
         { value: 'sale_number', label: 'ID' },
         { value: 'product.name_and_number', label: 'Product' },
@@ -231,14 +209,20 @@ export default function Sales({ sales }: SalesPageProps) {
                 <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between sm:gap-0">
                     <Heading title="Sales" description="Manage your sales transactions and records." />
 
-                    <ActionButtons onExport={exportSales} addHref="#" />
+                    <ActionButtons onExport={() => {/*TODO*/}} addHref="#" />
                 </div>
 
+                {/*TODO: replace with show details dialog*/}
+                {selectedSale && (
+                    <div className="mb-4">
+                        <Badge variant="default" className="capitalize">
+                            {selectedSale?.sale_number}
+                        </Badge>
+                    </div>
+                )}
+
                 <div>
-                    <DataTable columns={columns} data={sales.data} filterableColumns={filterableColumns} sortableColumns={sortableColumns} />
-                    {sales.last_page > 1 && (
-                        <Pagination from={sales.from} to={sales.to} total={sales.total} links={sales.links} />
-                    )}
+                    <DataTable columns={columns} data={sales} sortableColumns={sortableColumns} />
                 </div>
             </div>
         </AppLayout>

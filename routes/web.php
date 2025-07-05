@@ -1,6 +1,8 @@
 <?php
 
-use App\Models\Sale;
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SaleController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -13,23 +15,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
 
-    // TODO: change with resource controller
-    Route::get('sales', function () {
-        return Inertia::render('sales/index', [
-            'sales' => Sale::where('user_id', auth()->user()->id)
-                ->with(['customer', 'product'])
-                ->paginate(1)
-                ->onEachSide(0),
-        ]);
-    })->name('sales.index');
+    Route::get('sales', [SaleController::class, 'index'])->name('sales.index');
+    Route::get('sales/{sale:sale_number}', [SaleController::class, 'show'])->name('sales.show');
 
-    Route::get('products', function () {
-        return Inertia::render('products/index');
-    })->name('products.index');
+    Route::get('products', [ProductController::class, 'index'])->name('products.index');
+    Route::get('products/{product:product_number}', [ProductController::class, 'show'])->name('products.show');
 
-    Route::get('customers', function () {
-        return Inertia::render('customers/index');
-    })->name('customers.index');
+    Route::get('customers', [CustomerController::class, 'index'])->name('customers.index');
+    Route::get('customers/{customer:customer_number}', [CustomerController::class, 'show'])->name('customers.show');
 });
 
 // TODO:

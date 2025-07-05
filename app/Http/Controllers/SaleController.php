@@ -5,15 +5,22 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreSaleRequest;
 use App\Http\Requests\UpdateSaleRequest;
 use App\Models\Sale;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class SaleController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): Response
     {
-        //
+        return Inertia::render('sales/index', [
+            'sales' => Sale::where('user_id', auth()->user()->id)
+                ->with(['customer', 'product'])
+                ->latest()
+                ->get(),
+        ]);
     }
 
     /**
@@ -35,9 +42,15 @@ class SaleController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Sale $sale)
+    public function show(Sale $sale): Response
     {
-        //
+        return Inertia::render('sales/index', [
+            'sales' => Sale::where('user_id', auth()->user()->id)
+                ->with(['customer', 'product'])
+                ->latest()
+                ->get(),
+            'show' => $sale->sale_number,
+        ]);
     }
 
     /**

@@ -26,7 +26,7 @@ class SaleFactory extends Factory
             'user_id' => 1,
             'product_id' => $product->id,
             'customer_id' => $customerId,
-            'sale_number' => $saleNumber++,
+            'sale_number' => 'S-' . str_pad($saleNumber++, 5, '0', STR_PAD_LEFT),
             'price_at_sale' => $this->faker->boolean(80) ? $product->price : ($product->price * $this->faker->randomFloat(2, 0.5, 1.5)),
             'quantity' => $this->faker->numberBetween(1, 10),
             'total_price' => function (array $attributes) {

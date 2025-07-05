@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('product_id')->nullable()->constrained('products')->nullOnDelete();
             $table->foreignId('customer_id')->nullable()->constrained('customers')->nullOnDelete();
-            $table->integer('sale_number');
+            $table->string('sale_number');
             $table->decimal('price_at_sale', 12);
             $table->integer('quantity')->default(0);
             $table->decimal('total_price', 12);
