@@ -15,8 +15,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // TODO: change with resource controller
     Route::get('sales', function () {
+        $user_id = auth()->user()->id;
         return Inertia::render('sales/index', [
-            'sales' => Sale::with(['customer', 'product'])->get()
+            'sales' => Sale::where('user_id', $user_id)->with(['customer', 'product'])->get()
         ]);
     })->name('sales.index');
     Route::get('products', function () {

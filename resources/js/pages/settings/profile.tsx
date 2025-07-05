@@ -26,23 +26,26 @@ const breadcrumbs: BreadcrumbItem[] = [
 type ProfileForm = {
     name: string;
     company: string
+    avatar?: File | null;
     email: string;
 };
 
 export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: boolean; status?: string }) {
     const { auth } = usePage<SharedData>().props;
 
-    const { data, setData, patch, errors, processing, recentlySuccessful } = useForm<Required<ProfileForm>>({
+    const { data, setData, post, errors, processing, recentlySuccessful } = useForm<Required<ProfileForm>>({
         name: auth.user.name,
         company: auth.user.company,
-        email: auth.user.email,
+        avatar: null,
+        email: auth.user.email
     });
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
 
-        patch(route('profile.update'), {
+        post(route('profile.update'), {
             preserveScroll: true,
+            forceFormData: true,
         });
     };
 
@@ -85,6 +88,19 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
                             />
 
                             <InputError className="mt-2" message={errors.company} />
+                        </div>
+
+                        <div className="grid gap-2">
+                            <Label htmlFor="avatar">Avatar</Label>
+                            <Input
+                                id="avatar"
+                                type="file"
+                                accept="image/*"
+                                tabIndex={3}
+                                onChange={e => setData('avatar', e.target.files ? e.target.files[0] : null)}
+                                disabled={processing}
+                            />
+                            <InputError message={errors.avatar} className="mt-2" />
                         </div>
 
                         <div className="grid gap-2">
