@@ -99,8 +99,9 @@ export default function Customers({ customers, show }: CustomersPageProps) {
     const sortableColumns = [
         { value: 'customer_number', label: 'ID' },
         { value: 'name', label: 'Customer Name' },
-        { value: 'price', label: 'Price' },
-        { value: 'quantity', label: 'Quantity' },
+        { value: 'email', label: 'Contact' },
+        { value: 'type', label: 'Type' },
+        { value: 'actions', label: 'Actions' },
     ];
 
     return (
