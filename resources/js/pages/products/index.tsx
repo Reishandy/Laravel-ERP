@@ -124,11 +124,15 @@ export default function Products({ products, show }: ProductsPageProps) {
         },
         {
             id: 'actions',
-            cell: () => {
+            cell: ({ row }) => {
+                const product = row.original;
+
                 return (
                     <div className="flex flex-row items-center justify-center gap-x-2">
                         <SquarePen className="size-5 cursor-pointer text-primary hover:text-primary/70" />
                         <DeleteDialog
+                            title={`Delete "${product.name}"?`}
+                            description={`Are you sure you want to delete ${product.product_number} "${product.name}"? This action cannot be undone. Related sales will not be deleted.`}
                             trigger={<Trash className="size-5 cursor-pointer text-destructive hover:text-destructive/70" />}
                             onDelete={
                                 () => {

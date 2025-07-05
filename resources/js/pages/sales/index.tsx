@@ -172,13 +172,17 @@ export default function Sales({ sales, show }: SalesPageProps) {
         },
         {
             id: 'actions',
-            cell: () => {
+            cell: ({ row }) => {
+                const sale = row.original;
+
                 return (
                     <div className="flex flex-row items-center justify-center gap-x-2">
                         <Info className="size-5 cursor-pointer text-primary hover:text-primary/70" />
                         <SquarePen className="size-5 cursor-pointer text-primary hover:text-primary/70" />
 
                         <DeleteDialog
+                            title="Delete Sale"
+                            description={`Are you sure you want to delete the sale with ID "${sale.sale_number}"? This action cannot be undone.`}
                             trigger={<Trash className="size-5 cursor-pointer text-destructive hover:text-destructive/70" />}
                             onDelete={
                                 () => {

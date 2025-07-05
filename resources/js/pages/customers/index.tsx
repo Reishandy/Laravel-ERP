@@ -104,11 +104,15 @@ export default function Customers({ customers, show }: CustomersPageProps) {
         },
         {
             id: 'actions',
-            cell: () => {
+            cell: ({ row }) => {
+                const customer = row.original;
+
                 return (
                     <div className="flex flex-row items-center justify-center gap-x-2">
                         <SquarePen className="size-5 cursor-pointer text-primary hover:text-primary/70" />
                         <DeleteDialog
+                            title={`Delete Customer "${customer.name}"?`}
+                            description={`Are you sure you want to delete ${customer.customer_number} "${customer.name}"? This action cannot be undone. Related sales will not be deleted.`}
                             trigger={<Trash className="size-5 cursor-pointer text-destructive hover:text-destructive/70" />}
                             onDelete={
                                 () => {

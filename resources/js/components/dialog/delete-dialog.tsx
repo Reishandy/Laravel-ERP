@@ -12,22 +12,25 @@ import {
 import { ReactNode } from 'react';
 
 interface DeleteDialogProps {
-    trigger: ReactNode,
+    title?: string;
+    description?: string;
+    trigger: ReactNode;
     onDelete: () => void;
 }
 
-export function DeleteDialog({ trigger, onDelete }: DeleteDialogProps) {
+export function DeleteDialog({
+    title = 'Do you want to delete this entry?',
+    description = 'This action will permanently delete the entry and cannot be undone.',
+    trigger,
+    onDelete,
+}: DeleteDialogProps) {
     return (
         <AlertDialog>
-            <AlertDialogTrigger asChild>
-                {trigger}
-            </AlertDialogTrigger>
+            <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>
             <AlertDialogContent>
                 <AlertDialogHeader>
-                    <AlertDialogTitle>Do you want to delete this entry?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                        This action will permanently delete the entry and cannot be undone.
-                    </AlertDialogDescription>
+                    <AlertDialogTitle>{title}</AlertDialogTitle>
+                    <AlertDialogDescription>{description}</AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
