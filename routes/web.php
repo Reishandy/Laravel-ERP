@@ -16,7 +16,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // TODO: change with resource controller
     Route::get('sales', function () {
         return Inertia::render('sales/index', [
-            'sales' => Sale::with(['customer', 'product'])->get()
+            'sales' => Sale::where('user_id', auth()->user()->id)->with(['customer', 'product'])->get() // TODO: paginate
         ]);
     })->name('sales.index');
     Route::get('products', function () {
@@ -31,8 +31,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 //  - Modify landing page
 //  - Modify error pages
 //  - Pagination
-//  - Email template
-//  - avatar supports?
+//  - Email verification and reset pass template change
 //  - favicon
 //  - export to CSV
 

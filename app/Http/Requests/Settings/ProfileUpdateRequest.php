@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\File;
 
 class ProfileUpdateRequest extends FormRequest
 {
@@ -18,6 +19,7 @@ class ProfileUpdateRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
+            'avatar' => ['nullable', File::image()->max(1024)], // 1MB max
 
             'email' => [
                 'required',

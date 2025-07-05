@@ -8,6 +8,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -29,10 +30,21 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $validatedData = $request->validated();
+        unset($validatedData['avatar']);
+        $request->user()->fill($validatedData);
 
         if ($request->user()->isDirty('email')) {
             $request->user()->email_verified_at = null;
+        }
+
+        if ($request->hasFile('avatar') && $request->file('avatar') !== null) {
+            // Delete the old avatar if it exists
+            if ($request->user()->avatar) {
+                Storage::disk('public')->delete($request->user()->avatar);
+            }
+
+            $request->user()->avatar = $request->file('avatar')->store('avatars', 'public');
         }
 
         $request->user()->save();

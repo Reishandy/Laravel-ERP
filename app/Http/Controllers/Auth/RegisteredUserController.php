@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
+use Illuminate\Validation\Rules\File;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -31,6 +32,7 @@ class RegisteredUserController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
+            'avatar' => ['nullable', File::image()->max(1024)], // 1MB max
             'name' => 'required|string|max:255',
             'company' => 'required|string|max:255',
             'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
@@ -44,7 +46,10 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        //TODO: avatar support
+        if ($request->hasFile('avatar')) {
+            $user->avatar = $request->file('avatar')->store('avatars', 'public');
+            $user->save();
+        }
 
         event(new Registered($user));
 
