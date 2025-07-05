@@ -27,7 +27,7 @@ class SaleFactory extends Factory
             'product_id' => $product->id,
             'customer_id' => $customerId,
             'sale_number' => $saleNumber++,
-            'price_at_sale' => $product->price,
+            'price_at_sale' => $this->faker->boolean(80) ? $product->price : ($product->price * $this->faker->randomFloat(2, 0.5, 1.5)),
             'quantity' => $this->faker->numberBetween(1, 10),
             'total_price' => function (array $attributes) {
                 return $attributes['price_at_sale'] * $attributes['quantity'];

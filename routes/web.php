@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Sale;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -14,7 +15,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // TODO: change with resource controller
     Route::get('sales', function () {
-        return Inertia::render('sales/index');
+        return Inertia::render('sales/index', [
+            'sales' => Sale::with(['customer', 'product'])->get()
+        ]);
     })->name('sales.index');
     Route::get('products', function () {
         return Inertia::render('products/index');

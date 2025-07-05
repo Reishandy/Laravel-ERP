@@ -1,4 +1,5 @@
 import { DataTable } from '@/components/data-table/data-table';
+import { DeleteDialog } from '@/components/dialog/delete-dialog';
 import Heading from '@/components/heading';
 import ActionButtons from '@/components/heading-button';
 import { Badge, badgeVariants } from '@/components/ui/badge';
@@ -18,7 +19,6 @@ import { Head, Link, usePage } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
 import { VariantProps } from 'class-variance-authority';
 import { Info, MoreHorizontal, SquarePen, Trash } from 'lucide-react';
-import { DeleteDialog } from '@/components/dialog/delete-dialog';
 
 interface Entry extends Sale {
     product: Product;
@@ -30,6 +30,7 @@ interface SalesPageProps {
         locale: string;
         currency: string;
     };
+    sales: Entry[];
 
     [key: string]: unknown;
 }
@@ -45,148 +46,7 @@ const exportSales = () => {
     // TODO: export to CSV
 };
 
-// TODO: Replace with actual data
-// TODO: make sure to add the product and customer data to the Sale model
-const data: Entry[] = [
-    {
-        id: 1,
-        sale_number: 1,
-        user_id: 1,
-        product_id: 101,
-        customer_id: 201,
-        quantity: 2,
-        price_at_sale: 120000,
-        total_price: 240000,
-        status: 'completed',
-        product: {
-            id: 101,
-            product_number: 1,
-            user_id: '1',
-            name: 'Wireless Headphones',
-            description: 'High-quality wireless headphones with noise cancellation',
-            price: 100000,
-            quantity: 15,
-            created_at: '2024-01-10T10:00:00Z',
-            updated_at: '2024-01-15T14:30:00Z',
-        },
-        customer: {
-            id: 201,
-            customer_number: 1,
-            user_id: 1,
-            name: 'John Doe',
-            email: 'john.doe@example.com',
-            type: 'individual',
-            created_at: '2024-01-05T09:15:00Z',
-            updated_at: '2024-01-05T09:15:00Z',
-        },
-        created_at: '2024-01-20T15:30:00Z',
-        updated_at: '2024-01-20T15:30:00Z',
-    },
-    {
-        id: 2,
-        sale_number: 2,
-        user_id: 1,
-        product_id: 102,
-        customer_id: 202,
-        quantity: 5,
-        price_at_sale: 30000,
-        total_price: 150000,
-        status: 'processing',
-        product: {
-            id: 102,
-            product_number: 2,
-            user_id: '1',
-            name: 'USB Cable',
-            description: 'Premium USB-C charging cable',
-            price: 30000,
-            quantity: 50,
-            created_at: '2024-01-08T11:20:00Z',
-            updated_at: '2024-01-12T16:45:00Z',
-        },
-        customer: {
-            id: 202,
-            customer_number: 2,
-            user_id: 1,
-            name: 'Tech Solutions Inc',
-            email: 'orders@techsolutions.com',
-            type: 'business',
-            created_at: '2024-01-03T08:30:00Z',
-            updated_at: '2024-01-18T10:15:00Z',
-        },
-        created_at: '2024-01-21T09:45:00Z',
-        updated_at: '2024-01-21T11:20:00Z',
-    },
-    {
-        id: 3,
-        sale_number: 3,
-        user_id: 1,
-        product_number: 103,
-        customer_number: 203,
-        quantity: 1,
-        price_at_sale: 350000,
-        total_price: 350000,
-        status: 'pending',
-        product: {
-            id: 103,
-            product_number: 3,
-            user_id: '1',
-            name: 'Smart Watch',
-            description: 'Fitness tracking smartwatch with heart rate monitor',
-            price: 350000,
-            quantity: 8,
-            created_at: '2024-01-12T14:00:00Z',
-            updated_at: '2024-01-19T12:30:00Z',
-        },
-        customer: {
-            id: 203,
-            customer_number: 3,
-            user_id: 1,
-            name: 'Sarah Johnson',
-            email: 'sarah.johnson@gmail.com',
-            type: 'individual',
-            created_at: '2024-01-15T13:20:00Z',
-            updated_at: '2024-01-15T13:20:00Z',
-        },
-        created_at: '2024-01-22T14:15:00Z',
-        updated_at: '2024-01-22T14:15:00Z',
-    },
-    {
-        id: 4,
-        sale_number: 4,
-        user_id: 1,
-        product_number: 104,
-        customer_number: 204,
-        quantity: 3,
-        price_at_sale: 270000,
-        total_price: 810000,
-        status: 'completed',
-        product: {
-            id: 104,
-            product_number: 4,
-            user_id: '1',
-            name: 'Bluetooth Speaker',
-            description: 'Portable wireless speaker with deep bass',
-            price: 270000,
-            quantity: 12,
-            created_at: '2024-01-09T16:30:00Z',
-            updated_at: '2024-01-14T09:45:00Z',
-        },
-        customer: {
-            id: 204,
-            customer_number: 4,
-            user_id: 1,
-            name: 'Global Retail Corp',
-            email: 'purchasing@globalretail.com',
-            type: 'business',
-            created_at: '2024-01-01T10:00:00Z',
-            updated_at: '2024-01-20T15:30:00Z',
-        },
-        created_at: '2024-01-23T11:00:00Z',
-        updated_at: '2024-01-23T11:00:00Z',
-    },
-];
-
-export default function Sales() {
+export default function Sales({ sales }: SalesPageProps) {
     const { app } = usePage<SalesPageProps>().props;
 
     const columns: ColumnDef<Entry>[] = [
@@ -234,7 +94,7 @@ export default function Sales() {
 
                 return (
                     <div className="text-center font-medium">
-                        {total_price !== price * quantity ? (
+                        {total_price !== Math.round(((price * quantity) + Number.EPSILON) * 100) / 100 ? (
                             <Tooltip>
                                 <TooltipTrigger asChild>
                                     <span>
@@ -322,7 +182,11 @@ export default function Sales() {
 
                         <DeleteDialog
                             trigger={<Trash className="size-5 cursor-pointer text-destructive hover:text-destructive/70" />}
-                            onDelete={() => {alert('Delete action triggered');} /* TODO: Implement delete action */}
+                            onDelete={
+                                () => {
+                                    alert('Delete action triggered');
+                                } /* TODO: Implement delete action */
+                            }
                         />
                     </div>
                 );
@@ -358,7 +222,7 @@ export default function Sales() {
                 </div>
 
                 <div>
-                    <DataTable columns={columns} data={data} filterableColumns={filterableColumns} sortableColumns={sortableColumns} />
+                    <DataTable columns={columns} data={sales} filterableColumns={filterableColumns} sortableColumns={sortableColumns} />
                 </div>
             </div>
         </AppLayout>

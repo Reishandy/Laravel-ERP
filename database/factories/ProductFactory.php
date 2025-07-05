@@ -16,7 +16,7 @@ class ProductFactory extends Factory
      */
     public function definition(): array
     {
-        $productNumber = 1;
+        static $productNumber = 1;
 
         return [
             'user_id' => 1,
