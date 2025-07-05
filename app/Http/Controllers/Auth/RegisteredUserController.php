@@ -44,6 +44,8 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        //TODO: avatar support
+
         event(new Registered($user));
 
         Auth::login($user);

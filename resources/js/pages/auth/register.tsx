@@ -33,6 +33,8 @@ export default function Register() {
         });
     };
 
+    //TODO: avatar upload
+
     return (
         <AuthLayout title="Create an account" description="Enter your details below to create your account">
             <Head title="Register" />

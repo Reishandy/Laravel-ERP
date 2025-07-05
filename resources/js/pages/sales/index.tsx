@@ -50,27 +50,28 @@ const exportSales = () => {
 const data: Entry[] = [
     {
         id: 1,
-        sale_number: 'S-0001',
+        sale_id: 'S-0001',
+        user_id: 1,
         product_id: 101,
         customer_id: 201,
         quantity: 2,
         price_at_sale: 120000,
-        total: 240000,
+        total_price: 240000,
         status: 'completed',
         product: {
             id: 101,
-            product_number: 'P-0001',
+            product_id: 'P-0001',
             user_id: '1',
             name: 'Wireless Headphones',
             description: 'High-quality wireless headphones with noise cancellation',
             price: 100000,
-            stock: 15,
+            quantity: 15,
             created_at: '2024-01-10T10:00:00Z',
             updated_at: '2024-01-15T14:30:00Z',
         },
         customer: {
             id: 201,
-            customer_number: 'C-0001',
+            customer_id: 'C-0001',
             user_id: 1,
             name: 'John Doe',
             email: 'john.doe@example.com',
@@ -83,27 +84,28 @@ const data: Entry[] = [
     },
     {
         id: 2,
-        sale_number: 'S-0002',
+        sale_id: 'S-0002',
+        user_id: 1,
         product_id: 102,
         customer_id: 202,
         quantity: 5,
         price_at_sale: 30000,
-        total: 150000,
+        total_price: 150000,
         status: 'processing',
         product: {
             id: 102,
-            product_number: 'P-0002',
+            product_id: 'P-0002',
             user_id: '1',
             name: 'USB Cable',
             description: 'Premium USB-C charging cable',
             price: 30000,
-            stock: 50,
+            quantity: 50,
             created_at: '2024-01-08T11:20:00Z',
             updated_at: '2024-01-12T16:45:00Z',
         },
         customer: {
             id: 202,
-            customer_number: 'C-0002',
+            customer_id: 'C-0002',
             user_id: 1,
             name: 'Tech Solutions Inc',
             email: 'orders@techsolutions.com',
@@ -116,27 +118,28 @@ const data: Entry[] = [
     },
     {
         id: 3,
-        sale_number: 'S-0003',
+        sale_id: 'S-0003',
+        user_id: 1,
         product_id: 103,
         customer_id: 203,
         quantity: 1,
         price_at_sale: 350000,
-        total: 350000,
+        total_price: 350000,
         status: 'pending',
         product: {
             id: 103,
-            product_number: 'P-0003',
+            product_id: 'P-0003',
             user_id: '1',
             name: 'Smart Watch',
             description: 'Fitness tracking smartwatch with heart rate monitor',
             price: 350000,
-            stock: 8,
+            quantity: 8,
             created_at: '2024-01-12T14:00:00Z',
             updated_at: '2024-01-19T12:30:00Z',
         },
         customer: {
             id: 203,
-            customer_number: 'C-0003',
+            customer_id: 'C-0003',
             user_id: 1,
             name: 'Sarah Johnson',
             email: 'sarah.johnson@gmail.com',
@@ -149,27 +152,28 @@ const data: Entry[] = [
     },
     {
         id: 4,
-        sale_number: 'S-0004',
+        sale_id: 'S-0004',
+        user_id: 1,
         product_id: 104,
         customer_id: 204,
         quantity: 3,
         price_at_sale: 270000,
-        total: 810000,
+        total_price: 810000,
         status: 'completed',
         product: {
             id: 104,
-            product_number: 'P-0004',
+            product_id: 'P-0004',
             user_id: '1',
             name: 'Bluetooth Speaker',
             description: 'Portable wireless speaker with deep bass',
             price: 270000,
-            stock: 12,
+            quantity: 12,
             created_at: '2024-01-09T16:30:00Z',
             updated_at: '2024-01-14T09:45:00Z',
         },
         customer: {
             id: 204,
-            customer_number: 'C-0004',
+            customer_id: 'C-0004',
             user_id: 1,
             name: 'Global Retail Corp',
             email: 'purchasing@globalretail.com',
@@ -187,18 +191,18 @@ export default function Sales() {
 
     const columns: ColumnDef<Entry>[] = [
         {
-            id: 'sale_number',
-            accessorKey: 'sale_number',
+            id: 'sale_id',
+            accessorKey: 'sale_id',
             header: () => <div className="text-center">ID</div>,
             cell: ({ row }) => {
-                return <div className="text-center">{row.getValue('sale_number')}</div>;
+                return <div className="text-center">{row.getValue('sale_id')}</div>;
             },
         },
         {
             id: 'product.name_and_number',
             accessorKey: 'product.name_and_number',
             header: () => <div className="pl-4 text-left">Product</div>,
-            accessorFn: (row) => row.product.product_number + ' - ' + row.product.name,
+            accessorFn: (row) => row.product.product_id + ' - ' + row.product.name,
             cell: ({ row }) => {
                 return (
                     <Button variant="link" asChild>
@@ -216,21 +220,21 @@ export default function Sales() {
             },
         },
         {
-            id: 'total',
-            accessorKey: 'total',
+            id: 'total_price',
+            accessorKey: 'total_price',
             header: () => <div className="text-center">Total</div>,
             cell: ({ row }) => {
                 const price: number = row.original.product.price;
                 const quantity: number = row.getValue('quantity');
-                const total = parseFloat(row.getValue('total'));
+                const total_price = parseFloat(row.getValue('total_price'));
                 const formatted = new Intl.NumberFormat(app.locale, {
                     style: 'currency',
                     currency: app.currency,
-                }).format(total);
+                }).format(total_price);
 
                 return (
                     <div className="text-center font-medium">
-                        {total !== price * quantity ? (
+                        {total_price !== price * quantity ? (
                             <Tooltip>
                                 <TooltipTrigger asChild>
                                     <span>
@@ -330,15 +334,15 @@ export default function Sales() {
         { value: 'product.name_and_number', label: 'Product' },
         { value: 'customer.name', label: 'Customer' },
         { value: 'status', label: 'Status' },
-        { value: 'sale_number', label: 'ID' },
+        { value: 'sale_id', label: 'ID' },
     ];
 
     const sortableColumns = [
-        { value: 'sale_number', label: 'ID' },
+        { value: 'sale_id', label: 'ID' },
         { value: 'product.name_and_number', label: 'Product' },
         { value: 'customer.name', label: 'Customer' },
         { value: 'quantity', label: 'Quantity' },
-        { value: 'total', label: 'Total' },
+        { value: 'total_price', label: 'Total' },
         { value: 'status', label: 'Status' },
     ];
 
