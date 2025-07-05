@@ -16,12 +16,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // TODO: change with resource controller
     Route::get('sales', function () {
         return Inertia::render('sales/index', [
-            'sales' => Sale::where('user_id', auth()->user()->id)->with(['customer', 'product'])->get() // TODO: paginate
+            'sales' => Sale::where('user_id', auth()->user()->id)
+                ->with(['customer', 'product'])
+                ->paginate(1)
+                ->onEachSide(0),
         ]);
     })->name('sales.index');
+
     Route::get('products', function () {
         return Inertia::render('products/index');
     })->name('products.index');
+
     Route::get('customers', function () {
         return Inertia::render('customers/index');
     })->name('customers.index');

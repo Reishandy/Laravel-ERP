@@ -19,6 +19,7 @@ import { Head, Link, usePage } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
 import { VariantProps } from 'class-variance-authority';
 import { Info, MoreHorizontal, SquarePen, Trash } from 'lucide-react';
+import { Pagination } from '@/components/pagination';
 
 interface Entry extends Sale {
     product: Product;
@@ -30,8 +31,20 @@ interface SalesPageProps {
         locale: string;
         currency: string;
     };
-    sales: Entry[];
-
+    sales: {
+        data: Entry[];
+        current_page: number;
+        last_page: number;
+        total: number;
+        per_page: number;
+        from: number;
+        to: number;
+        links: Array<{
+            url: string | null;
+            label: string;
+            active: boolean;
+        }>;
+    };
     [key: string]: unknown;
 }
 
@@ -222,7 +235,10 @@ export default function Sales({ sales }: SalesPageProps) {
                 </div>
 
                 <div>
-                    <DataTable columns={columns} data={sales} filterableColumns={filterableColumns} sortableColumns={sortableColumns} />
+                    <DataTable columns={columns} data={sales.data} filterableColumns={filterableColumns} sortableColumns={sortableColumns} />
+                    {sales.last_page > 1 && (
+                        <Pagination from={sales.from} to={sales.to} total={sales.total} links={sales.links} />
+                    )}
                 </div>
             </div>
         </AppLayout>

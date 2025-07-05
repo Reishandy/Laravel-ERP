@@ -67,7 +67,7 @@ export function DataTable<TData, TValue>({ columns, data, filterableColumns, sor
 
     return (
         <div>
-            <div className="flex flex-col justify-between gap-y-2 pb-4 xl:flex-row xl:items-center xl:gap-y-0">
+            <div className="flex flex-col justify-between gap-y-2 pb-4 lg:flex-row lg:items-center lg:gap-y-0">
                 {/* Filter */}
                 <DataTableFilter
                     filterableColumns={filterableColumns}
