@@ -1,4 +1,4 @@
-# Laravel ERP
+# Rei's Simple ERP
 
 TODO
 
