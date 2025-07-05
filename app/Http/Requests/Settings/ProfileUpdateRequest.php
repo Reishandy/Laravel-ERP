@@ -19,6 +19,7 @@ class ProfileUpdateRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
+            'company' => ['required', 'string', 'max:255'],
             'avatar' => ['nullable', File::image()->max(1024)], // 1MB max
 
             'email' => [

@@ -45,6 +45,7 @@ export default function Products({ products, show }: ProductsPageProps) {
             accessorKey: 'name',
             header: () => <div className="text-left">Product Name</div>,
             cell: ({ row }) => {
+                // TODO: Image
                 return <div className="text-start font-medium">{row.getValue('name')}</div>;
             },
         },
