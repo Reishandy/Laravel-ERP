@@ -45,6 +45,7 @@ export default function Products({ products, show }: ProductsPageProps) {
             accessorKey: 'name',
             header: () => <div className="text-left">Product Name</div>,
             cell: ({ row }) => {
+                // TODO: Image
                 return <div className="text-start font-medium">{row.getValue('name')}</div>;
             },
         },
@@ -58,7 +59,6 @@ export default function Products({ products, show }: ProductsPageProps) {
                         {row.getValue('description')}
                     </div>
                 );
-                // return <div className="max-w-xs sm:max-w-md md:max-w-lg break-words whitespace-pre-line text-justify font-medium">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc volutpat vulputate arcu commodo ultrices. Duis erat tellus, pretium eu justo eget, dapibus rutrum est. Praesent urna ligula, blandit et vehicula ut, iaculis at justo. Nulla laoreet mattis lectus, sit amet tempor odio. Duis risus quam, vestibulum sit amet mi nec, mattis finibus enim. Nam sodales est vitae est tempus aliquet. Sed a lacinia felis. Vivamus at imperdiet sapien. Vestibulum quis magna vel odio condimentum sodales eget sit amet ipsum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Ut leo nibh, suscipit ac nibh id, finibus imperdiet dui. Vivamus sed lacus est. In hac habitasse platea dictumst. Duis eu massa at arcu semper accumsan ultricies sit amet libero.</div>;
             },
         },
         {

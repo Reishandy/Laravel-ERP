@@ -43,6 +43,7 @@ export default function Customers({ customers, show }: CustomersPageProps) {
             accessorKey: 'name',
             header: () => <div className="text-start">Customer Name</div>,
             cell: ({ row }) => {
+                // TODO: Avatar
                 return <div className="text-start font-medium">{row.getValue('name')}</div>;
             },
         },
