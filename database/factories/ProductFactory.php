@@ -16,8 +16,16 @@ class ProductFactory extends Factory
      */
     public function definition(): array
     {
+        $productNumber = 1;
+
         return [
-            //
+            'user_id' => 1,
+            'product_number' => $productNumber++,
+            'name' => $this->faker->word,
+            'description' => $this->faker->sentence,
+            'image' => $this->faker->imageUrl(512, 512, 'technics'),
+            'price' => $this->faker->randomFloat(2, 10, 1000),
+            'quantity' => $this->faker->numberBetween(1, 100),
         ];
     }
 }

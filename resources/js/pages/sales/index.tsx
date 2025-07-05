@@ -50,7 +50,7 @@ const exportSales = () => {
 const data: Entry[] = [
     {
         id: 1,
-        sale_id: 'S-0001',
+        sale_number: 1,
         user_id: 1,
         product_id: 101,
         customer_id: 201,
@@ -60,7 +60,7 @@ const data: Entry[] = [
         status: 'completed',
         product: {
             id: 101,
-            product_id: 'P-0001',
+            product_number: 1,
             user_id: '1',
             name: 'Wireless Headphones',
             description: 'High-quality wireless headphones with noise cancellation',
@@ -71,7 +71,7 @@ const data: Entry[] = [
         },
         customer: {
             id: 201,
-            customer_id: 'C-0001',
+            customer_number: 1,
             user_id: 1,
             name: 'John Doe',
             email: 'john.doe@example.com',
@@ -84,7 +84,7 @@ const data: Entry[] = [
     },
     {
         id: 2,
-        sale_id: 'S-0002',
+        sale_number: 2,
         user_id: 1,
         product_id: 102,
         customer_id: 202,
@@ -94,7 +94,7 @@ const data: Entry[] = [
         status: 'processing',
         product: {
             id: 102,
-            product_id: 'P-0002',
+            product_number: 2,
             user_id: '1',
             name: 'USB Cable',
             description: 'Premium USB-C charging cable',
@@ -105,7 +105,7 @@ const data: Entry[] = [
         },
         customer: {
             id: 202,
-            customer_id: 'C-0002',
+            customer_number: 2,
             user_id: 1,
             name: 'Tech Solutions Inc',
             email: 'orders@techsolutions.com',
@@ -118,17 +118,17 @@ const data: Entry[] = [
     },
     {
         id: 3,
-        sale_id: 'S-0003',
+        sale_number: 3,
         user_id: 1,
-        product_id: 103,
-        customer_id: 203,
+        product_number: 103,
+        customer_number: 203,
         quantity: 1,
         price_at_sale: 350000,
         total_price: 350000,
         status: 'pending',
         product: {
             id: 103,
-            product_id: 'P-0003',
+            product_number: 3,
             user_id: '1',
             name: 'Smart Watch',
             description: 'Fitness tracking smartwatch with heart rate monitor',
@@ -139,7 +139,7 @@ const data: Entry[] = [
         },
         customer: {
             id: 203,
-            customer_id: 'C-0003',
+            customer_number: 3,
             user_id: 1,
             name: 'Sarah Johnson',
             email: 'sarah.johnson@gmail.com',
@@ -152,17 +152,17 @@ const data: Entry[] = [
     },
     {
         id: 4,
-        sale_id: 'S-0004',
+        sale_number: 4,
         user_id: 1,
-        product_id: 104,
-        customer_id: 204,
+        product_number: 104,
+        customer_number: 204,
         quantity: 3,
         price_at_sale: 270000,
         total_price: 810000,
         status: 'completed',
         product: {
             id: 104,
-            product_id: 'P-0004',
+            product_number: 4,
             user_id: '1',
             name: 'Bluetooth Speaker',
             description: 'Portable wireless speaker with deep bass',
@@ -173,7 +173,7 @@ const data: Entry[] = [
         },
         customer: {
             id: 204,
-            customer_id: 'C-0004',
+            customer_number: 4,
             user_id: 1,
             name: 'Global Retail Corp',
             email: 'purchasing@globalretail.com',
@@ -191,18 +191,18 @@ export default function Sales() {
 
     const columns: ColumnDef<Entry>[] = [
         {
-            id: 'sale_id',
-            accessorKey: 'sale_id',
+            id: 'sale_number',
+            accessorKey: 'sale_number',
             header: () => <div className="text-center">ID</div>,
             cell: ({ row }) => {
-                return <div className="text-center">{row.getValue('sale_id')}</div>;
+                return <div className="text-center">{`S-${String(row.getValue('sale_number')).padStart(5, '0')}`}</div>;
             },
         },
         {
             id: 'product.name_and_number',
             accessorKey: 'product.name_and_number',
             header: () => <div className="pl-4 text-left">Product</div>,
-            accessorFn: (row) => row.product.product_id + ' - ' + row.product.name,
+            accessorFn: (row) => `P-${String(row.product.product_number).padStart(5, '0')}` + ' - ' + row.product.name,
             cell: ({ row }) => {
                 return (
                     <Button variant="link" asChild>
@@ -334,11 +334,11 @@ export default function Sales() {
         { value: 'product.name_and_number', label: 'Product' },
         { value: 'customer.name', label: 'Customer' },
         { value: 'status', label: 'Status' },
-        { value: 'sale_id', label: 'ID' },
+        { value: 'sale_number', label: 'ID' },
     ];
 
     const sortableColumns = [
-        { value: 'sale_id', label: 'ID' },
+        { value: 'sale_number', label: 'ID' },
         { value: 'product.name_and_number', label: 'Product' },
         { value: 'customer.name', label: 'Customer' },
         { value: 'quantity', label: 'Quantity' },

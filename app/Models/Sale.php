@@ -17,10 +17,11 @@ class Sale extends Model
      * @var list<string>
      */
     protected $fillable = [
-        'sale_id',
         'user_id',
         'product_id',
         'customer_id',
+        'sale_number',
+        'price_at_sale',
         'quantity',
         'total_price',
         'status',

@@ -18,8 +18,8 @@ class Product extends Model
      * @var list<string>
      */
     protected $fillable = [
-        'product_id',
         'user_id',
+        'product_number',
         'name',
         'description',
         'image',

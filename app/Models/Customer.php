@@ -18,8 +18,8 @@ class Customer extends Model
      * @var list<string>
      */
     protected $fillable = [
-        'customer_id',
         'user_id',
+        'customer_number',
         'name',
         'email',
         'avatar',

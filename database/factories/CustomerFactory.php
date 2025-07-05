@@ -16,9 +16,11 @@ class CustomerFactory extends Factory
      */
     public function definition(): array
     {
+        static $customerNumber = 1;
+
         return [
-            'customer_id' => $this->faker->unique()->uuid,
             'user_id' => 1,
+            'customer_number' => $customerNumber++,
             'name' => $this->faker->name,
             'email' => $this->faker->unique()->safeEmail,
             'avatar' => $this->faker->imageUrl(100, 100, 'people'),
