@@ -27,8 +27,12 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->respond(function (Response $response, Throwable $exception, Request $request) {
-            return Inertia::render('error-page', ['status' => $response->getStatusCode()])
-                ->toResponse($request)
-                ->setStatusCode($response->getStatusCode());
+            if (! app()->environment(['local', 'testing'])) {
+                return Inertia::render('error-page', ['status' => $response->getStatusCode()])
+                    ->toResponse($request)
+                    ->setStatusCode($response->getStatusCode());
+            }
+
+            return $response;
         });
     })->create();

@@ -10,6 +10,8 @@ import { ColumnDef } from '@tanstack/react-table';
 import { VariantProps } from 'class-variance-authority';
 import { SquarePen, Trash } from 'lucide-react';
 import { useEffect } from 'react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useInitials } from '@/hooks/use-initials';
 
 interface ProductsPageProps {
     app: {
@@ -31,6 +33,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 export default function Products({ products, show }: ProductsPageProps) {
     const { app } = usePage<ProductsPageProps>().props;
+    const getInitials = useInitials();
 
     useEffect(() => {
         if (show) {
@@ -56,8 +59,18 @@ export default function Products({ products, show }: ProductsPageProps) {
             accessorKey: 'name',
             header: () => <div className="text-left">Product Name</div>,
             cell: ({ row }) => {
-                // TODO: Image
-                return <div className="text-start font-medium">{row.getValue('name')}</div>;
+                const product = row.original;
+                return (
+                    <div className="flex flex-row items-center gap-x-2">
+                        <Avatar className="h-8 w-8 overflow-hidden">
+                            <AvatarImage src={'/storage/' + product.image} alt={product.name} />
+                            <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
+                                {getInitials(product.name)}
+                            </AvatarFallback>
+                        </Avatar>
+                        <div className="text-start font-medium">{product.name}</div>
+                    </div>
+                );
             },
         },
         {

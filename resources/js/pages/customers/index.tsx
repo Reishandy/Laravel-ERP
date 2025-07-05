@@ -10,6 +10,8 @@ import { ColumnDef } from '@tanstack/react-table';
 import { SquarePen, Trash } from 'lucide-react';
 import { VariantProps } from 'class-variance-authority';
 import { useEffect } from 'react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useInitials } from '@/hooks/use-initials';
 
 interface CustomersPageProps {
     app: {
@@ -30,6 +32,8 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Customers({ customers, show }: CustomersPageProps) {
+    const getInitials = useInitials();
+
     useEffect(() => {
         if (show) {
             router.visit('/customers', {
@@ -54,8 +58,18 @@ export default function Customers({ customers, show }: CustomersPageProps) {
             accessorKey: 'name',
             header: () => <div className="text-start">Customer Name</div>,
             cell: ({ row }) => {
-                // TODO: Avatar
-                return <div className="text-start font-medium">{row.getValue('name')}</div>;
+                const customer = row.original;
+                return (
+                    <div className="flex flex-row items-center gap-x-2">
+                        <Avatar className="h-8 w-8 overflow-hidden">
+                            <AvatarImage src={'/storage/' + customer.image} alt={customer.name} />
+                            <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
+                                {getInitials(customer.name)}
+                            </AvatarFallback>
+                        </Avatar>
+                        <div className="text-start font-medium">{customer.name}</div>
+                    </div>
+                );
             },
         },
         {

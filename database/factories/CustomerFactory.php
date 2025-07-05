@@ -23,7 +23,7 @@ class CustomerFactory extends Factory
             'customer_number' => 'C-' . str_pad($customerNumber++, 5, '0', STR_PAD_LEFT),
             'name' => $this->faker->name,
             'email' => $this->faker->unique()->safeEmail,
-            'avatar' => $this->faker->imageUrl(100, 100, 'people'),
+            'avatar' => null,
             'type' => $this->faker->randomElement(['individual', 'business']),
         ];
     }

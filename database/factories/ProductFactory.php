@@ -23,7 +23,7 @@ class ProductFactory extends Factory
             'product_number' => 'P-' . str_pad($productNumber++, 5, '0', STR_PAD_LEFT),
             'name' => $this->faker->word,
             'description' => $this->faker->sentence,
-            'image' => $this->faker->imageUrl(512, 512, 'technics'),
+            'image' => null,
             'price' => $this->faker->randomFloat(2, 10, 1000),
             'quantity' => $this->faker->numberBetween(1, 100),
         ];
