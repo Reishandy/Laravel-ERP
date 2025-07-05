@@ -139,6 +139,7 @@ export function DataTable<TData, TValue>({ columns, data, sortableColumns, show 
                         getState: table.getState,
                         getFilteredRowModel: table.getFilteredRowModel,
                         setPageIndex: table.setPageIndex,
+                        setPageSize: table.setPageSize,
                         previousPage: table.previousPage,
                         nextPage: table.nextPage,
                         getCanPreviousPage: table.getCanPreviousPage,

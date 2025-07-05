@@ -2,8 +2,15 @@ import { Button } from '@/components/ui/button';
 import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight } from 'lucide-react';
 import { RowModel } from '@tanstack/react-table';
 import { useState, useEffect } from 'react';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select';
 
-interface Pagination {
+interface Pagination<T> {
     pageIndex: number;
     pageSize: number;
     pageCount: number;
@@ -16,22 +23,24 @@ interface Pagination {
             pageSize: number;
         };
     };
-    getFilteredRowModel: () => RowModel<any>;
+    getFilteredRowModel: () => RowModel<T>;
     setPageIndex: (index: number) => void;
+    setPageSize: (size: number) => void;
     previousPage: () => void;
     nextPage: () => void;
     getCanPreviousPage: () => boolean;
     getCanNextPage: () => boolean;
 }
 
-interface DataTablePaginationProps {
-    pagination: Pagination;
+interface DataTablePaginationProps<T> {
+    pagination: Pagination<T>;
 }
 
-export default function DataTablePagination({ pagination }: DataTablePaginationProps) {
+export default function DataTablePagination<T>({ pagination }: DataTablePaginationProps<T>) {
     const windowSize = useWindowSize();
     const totalPages = pagination.getPageCount();
     const currentPage = pagination.getState().pagination.pageIndex;
+    const pageSize = pagination.getState().pagination.pageSize;
     const pages = [];
 
     let leadingPages = 2;
@@ -44,15 +53,36 @@ export default function DataTablePagination({ pagination }: DataTablePaginationP
         surroundingPages = 1;
     }
 
+    const handlePageSizeChange = (value: string) => {
+        pagination.setPageSize(Number(value));
+    };
+
     return (
         <div className="mt-6 flex flex-col items-center justify-between gap-y-4 lg:flex-row lg:gap-y-0">
-            <div className="text-sm">
-                Showing {pagination.getState().pagination.pageIndex * pagination.getState().pagination.pageSize + 1} to{' '}
-                {Math.min(
-                    (pagination.getState().pagination.pageIndex + 1) * pagination.getState().pagination.pageSize,
-                    pagination.getFilteredRowModel().rows.length,
-                )}{' '}
-                of {pagination.getFilteredRowModel().rows.length} results
+            <div className="flex flex-col lg:flex-row items-center gap-x-4 gap-y-4 lg:gap-y-0">
+                <div className="text-sm">
+                    Showing {pagination.getState().pagination.pageIndex * pagination.getState().pagination.pageSize + 1} to{' '}
+                    {Math.min(
+                        (pagination.getState().pagination.pageIndex + 1) * pagination.getState().pagination.pageSize,
+                        pagination.getFilteredRowModel().rows.length,
+                    )}{' '}
+                    of {pagination.getFilteredRowModel().rows.length} results
+                </div>
+                <div className="flex items-center gap-x-2">
+                    <span className="text-sm">Show</span>
+                    <Select value={pageSize.toString()} onValueChange={handlePageSizeChange}>
+                        <SelectTrigger className="h-8 w-[70px]">
+                            <SelectValue placeholder={pageSize.toString()} />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="10">10</SelectItem>
+                            <SelectItem value="20">20</SelectItem>
+                            <SelectItem value="50">50</SelectItem>
+                            <SelectItem value="100">100</SelectItem>
+                        </SelectContent>
+                    </Select>
+                    <span className="text-sm">per page</span>
+                </div>
             </div>
             <div className="flex items-center gap-x-1">
                 <Button
