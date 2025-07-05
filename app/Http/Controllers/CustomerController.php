@@ -42,14 +42,14 @@ class CustomerController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Customer $customer): Response
+    public function show(String $customer_number): Response
     {
         return Inertia::render('customers/index', [
             'customers' => Customer::where('user_id', auth()->user()->id)
                 ->with('sales')
                 ->latest()
                 ->get(),
-            'show' => $customer->customer_number
+            'show' => $customer_number
         ]);
     }
 

@@ -138,7 +138,7 @@ export default function Sales({ sales, show }: SalesPageProps) {
                 return (
                     <div className="flex flex-row items-center justify-end gap-x-2">
                         <div className="w-full">
-                            <Badge variant={variantMap[status]} className="w-full capitalize font-medium text-md">
+                            <Badge variant={variantMap[status]} className="text-md w-full font-medium capitalize">
                                 {status}
                             </Badge>
                         </div>
@@ -209,10 +209,16 @@ export default function Sales({ sales, show }: SalesPageProps) {
                 <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between sm:gap-0">
                     <Heading title="Sales" description="Manage your sales transactions and records." />
 
-                    <ActionButtons onExport={() => {/*TODO*/}} addHref="#" />
+                    <ActionButtons
+                        onExport={() => {
+                            /*TODO*/
+                        }}
+                        addHref="#"
+                    />
                 </div>
 
                 {/*TODO: replace with show details dialog*/}
+                {/*TODO: make sure to handle not exist properly*/}
                 {selectedSale && (
                     <div className="mb-4">
                         <Badge variant="default" className="capitalize">

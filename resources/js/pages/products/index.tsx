@@ -5,10 +5,11 @@ import ActionButtons from '@/components/heading-button';
 import { Badge, badgeVariants } from '@/components/ui/badge';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem, Product } from '@/types';
-import { Head, usePage } from '@inertiajs/react';
+import { Head, usePage, router } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
 import { VariantProps } from 'class-variance-authority';
 import { SquarePen, Trash } from 'lucide-react';
+import { useEffect } from 'react';
 
 interface ProductsPageProps {
     app: {
@@ -30,6 +31,16 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 export default function Products({ products, show }: ProductsPageProps) {
     const { app } = usePage<ProductsPageProps>().props;
+
+    useEffect(() => {
+        if (show) {
+            router.visit('/products', {
+                replace: true,
+                preserveScroll: true,
+                preserveState: true
+            });
+        }
+    }, [show]);
 
     const columns: ColumnDef<Product>[] = [
         {

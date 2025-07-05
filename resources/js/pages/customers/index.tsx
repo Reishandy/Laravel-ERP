@@ -5,10 +5,11 @@ import ActionButtons from '@/components/heading-button';
 import { Badge, badgeVariants } from '@/components/ui/badge';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem, Customer } from '@/types';
-import { Head } from '@inertiajs/react';
+import { Head, router } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
-import { Info, SquarePen, Trash } from 'lucide-react';
+import { SquarePen, Trash } from 'lucide-react';
 import { VariantProps } from 'class-variance-authority';
+import { useEffect } from 'react';
 
 interface CustomersPageProps {
     app: {
@@ -29,6 +30,16 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Customers({ customers, show }: CustomersPageProps) {
+    useEffect(() => {
+        if (show) {
+            router.visit('/customers', {
+                replace: true,
+                preserveScroll: true,
+                preserveState: true,
+            });
+        }
+    }, [show]);
+
     const columns: ColumnDef<Customer>[] = [
         {
             id: 'customer_number',

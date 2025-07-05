@@ -42,14 +42,14 @@ class SaleController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Sale $sale): Response
+    public function show(String $sale_number): Response
     {
         return Inertia::render('sales/index', [
             'sales' => Sale::where('user_id', auth()->user()->id)
                 ->with(['customer', 'product'])
                 ->latest()
                 ->get(),
-            'show' => $sale->sale_number,
+            'show' => $sale_number,
         ]);
     }
 

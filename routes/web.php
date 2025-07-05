@@ -16,14 +16,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
 
     Route::get('sales', [SaleController::class, 'index'])->name('sales.index');
-    Route::get('sales/{sale:sale_number}', [SaleController::class, 'show'])->name('sales.show');
-    // TODO: change so that when returning not found it is not directed to the error page
+    Route::get('sales/{sale_number}', [SaleController::class, 'show'])->name('sales.show');
 
     Route::get('products', [ProductController::class, 'index'])->name('products.index');
-    Route::get('products/{product:product_number}', [ProductController::class, 'show'])->name('products.show');
+    Route::get('products/{product_number}', [ProductController::class, 'show'])->name('products.show');
 
     Route::get('customers', [CustomerController::class, 'index'])->name('customers.index');
-    Route::get('customers/{customer:customer_number}', [CustomerController::class, 'show'])->name('customers.show');
+    Route::get('customers/{customer_number}', [CustomerController::class, 'show'])->name('customers.show');
 });
 
 // TODO:

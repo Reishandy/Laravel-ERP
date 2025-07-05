@@ -42,14 +42,14 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Product $product): Response
+    public function show(String $product_number): Response
     {
         return Inertia::render('products/index', [
             'products' => Product::where('user_id', auth()->user()->id)
                 ->with('sales')
                 ->latest()
                 ->get(),
-            'show' => $product->product_number
+            'show' => $product_number
         ]);
     }
 
