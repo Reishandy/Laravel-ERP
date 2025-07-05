@@ -17,6 +17,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('sales', [SaleController::class, 'index'])->name('sales.index');
     Route::get('sales/{sale:sale_number}', [SaleController::class, 'show'])->name('sales.show');
+    // TODO: change so that when returning not found it is not directed to the error page
 
     Route::get('products', [ProductController::class, 'index'])->name('products.index');
     Route::get('products/{product:product_number}', [ProductController::class, 'show'])->name('products.show');
@@ -27,8 +28,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 // TODO:
 //  - Modify landing page
-//  - Modify error pages
-//  - Pagination
 //  - Email verification and reset pass template change
 //  - favicon
 //  - export to CSV
