@@ -1,4 +1,4 @@
-import { DataTable } from '@/components/data-table';
+import { DataTable } from '@/components/data-table/data-table';
 import Heading from '@/components/heading';
 import ActionButtons from '@/components/heading-button';
 import { Badge, badgeVariants } from '@/components/ui/badge';
@@ -18,6 +18,7 @@ import { Head, Link, usePage } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
 import { VariantProps } from 'class-variance-authority';
 import { Info, MoreHorizontal, SquarePen, Trash } from 'lucide-react';
+import { DeleteDialog } from '@/components/dialog/delete-dialog';
 
 interface Entry extends Sale {
     product: Product;
@@ -291,7 +292,7 @@ export default function Sales() {
                                     <span className="font-bold">Change status</span>
                                 </DropdownMenuLabel>
                                 <DropdownMenuSeparator />
-                                {/* TODO: onclieck function*/}
+                                {/* TODO: onclick function*/}
                                 <DropdownMenuItem className="cursor-pointer" disabled={status === 'pending'}>
                                     Pending
                                 </DropdownMenuItem>
@@ -312,11 +313,13 @@ export default function Sales() {
             cell: () => {
                 return (
                     <div className="flex flex-row items-center justify-center gap-x-2">
-                        {/* TODO: proper button icon*/}
-                        {/* TODO: details will contain all stuff like customer, price at sale, etc*/}
                         <Info className="size-5 cursor-pointer text-primary hover:text-primary/70" />
                         <SquarePen className="size-5 cursor-pointer text-primary hover:text-primary/70" />
-                        <Trash className="size-5 cursor-pointer text-destructive hover:text-destructive/70" />
+
+                        <DeleteDialog
+                            trigger={<Trash className="size-5 cursor-pointer text-destructive hover:text-destructive/70" />}
+                            onDelete={() => {alert('Delete action triggered');} /* TODO: Implement delete action */}
+                        />
                     </div>
                 );
             },

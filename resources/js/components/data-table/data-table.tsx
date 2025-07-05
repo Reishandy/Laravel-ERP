@@ -1,5 +1,5 @@
-import { DataTableFilter } from '@/components/data-table-filter';
-import { DataTableSort } from '@/components/data-table-sort';
+import { DataTableFilter } from '@/components/data-table/data-table-filter';
+import { DataTableSort } from '@/components/data-table/data-table-sort';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import {
     ColumnDef,
