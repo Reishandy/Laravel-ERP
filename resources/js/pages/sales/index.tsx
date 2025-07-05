@@ -64,7 +64,7 @@ export default function Sales({ sales, show }: SalesPageProps) {
             cell: ({ row }) => {
                 return (
                     <Button variant="link" asChild>
-                        <Link href="#">{row.getValue('product.name_and_number')}</Link>
+                        <Link href={route('products.show', row.original.product.product_number)}>{row.getValue('product.name_and_number')}</Link>
                     </Button>
                 );
             },
@@ -118,7 +118,7 @@ export default function Sales({ sales, show }: SalesPageProps) {
             cell: ({ row }) => {
                 return (
                     <Button variant="link" asChild>
-                        <Link href="#">{row.getValue('customer.name')}</Link>
+                        <Link href={route('customers.show', row.original.customer.customer_number)}>{row.getValue('customer.name')}</Link>
                     </Button>
                 );
             },
@@ -138,7 +138,7 @@ export default function Sales({ sales, show }: SalesPageProps) {
                 return (
                     <div className="flex flex-row items-center justify-end gap-x-2">
                         <div className="w-full">
-                            <Badge variant={variantMap[status]} className="w-full capitalize">
+                            <Badge variant={variantMap[status]} className="w-full capitalize font-medium text-md">
                                 {status}
                             </Badge>
                         </div>

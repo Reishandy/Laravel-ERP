@@ -12,7 +12,7 @@ type ActionButtonsProps = {
 };
 
 export default function ActionButtons({
-    exportLabel = 'Export All',
+    exportLabel = 'Export',
     addLabel = 'Add New',
     onExport,
     addHref,

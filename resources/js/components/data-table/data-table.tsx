@@ -23,11 +23,12 @@ interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
     data: TData[];
     sortableColumns: FilterableColumn[];
+    show?: string;
 }
 
-export function DataTable<TData, TValue>({ columns, data, sortableColumns }: DataTableProps<TData, TValue>) {
+export function DataTable<TData, TValue>({ columns, data, sortableColumns, show }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = React.useState<SortingState>([]);
-    const [globalFilter, setGlobalFilter] = React.useState<string>('');
+    const [globalFilter, setGlobalFilter] = React.useState<string>(show ? show : '');
     const [selectedSortColumn, setSelectedSortColumn] = React.useState<string>('');
     const [sortDirection, setSortDirection] = React.useState<'asc' | 'desc'>('asc');
     const [pagination, setPagination] = React.useState({
