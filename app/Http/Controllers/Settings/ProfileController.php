@@ -32,6 +32,7 @@ class ProfileController extends Controller
     {
         $validatedData = $request->validated();
         unset($validatedData['avatar']);
+        unset($validatedData['remote_avatar']);
         $request->user()->fill($validatedData);
 
         if ($request->user()->isDirty('email')) {
@@ -45,6 +46,13 @@ class ProfileController extends Controller
             }
 
             $request->user()->avatar = $request->file('avatar')->store('avatars', 'public');
+        }
+
+        if ($request->boolean('remove_avatar')) {
+            if ($request->user()->avatar) {
+                Storage::disk('public')->delete($request->user()->avatar);
+            }
+            $request->user()->avatar = null;
         }
 
         $request->user()->save();

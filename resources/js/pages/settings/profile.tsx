@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/app-layout';
 import SettingsLayout from '@/layouts/settings/layout';
+import { Checkbox } from '@/components/ui/checkbox';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -27,6 +28,7 @@ type ProfileForm = {
     name: string;
     company: string
     avatar?: File | null;
+    remove_avatar?: boolean;
     email: string;
 };
 
@@ -37,6 +39,7 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
         name: auth.user.name,
         company: auth.user.company,
         avatar: null,
+        remove_avatar: false,
         email: auth.user.email
     });
 
@@ -98,9 +101,23 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
                                 accept="image/*"
                                 tabIndex={3}
                                 onChange={e => setData('avatar', e.target.files ? e.target.files[0] : null)}
-                                disabled={processing}
+                                disabled={processing || data.remove_avatar}
                             />
-                            <InputError message={errors.avatar} className="mt-2" />
+                            <InputError message={errors.remove_avatar} className="mt-2" />
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                            <Checkbox
+                                id="remove_avatar"
+                                name="remove_avatar"
+                                checked={data.remove_avatar}
+                                onClick={() => {
+                                    setData('avatar', null);
+                                    setData('remove_avatar', !data.remove_avatar);
+                                }}
+                                tabIndex={3}
+                            />
+                            <Label htmlFor="remove_avatar">Remove avatar</Label>
                         </div>
 
                         <div className="grid gap-2">

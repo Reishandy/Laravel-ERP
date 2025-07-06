@@ -14,6 +14,7 @@ type EditCustomerForm = {
     name: string;
     email: string;
     avatar?: File | null;
+    remove_avatar?: boolean;
     type: string;
 };
 
@@ -22,6 +23,7 @@ export default function EditCustomerForm({ customer, children, open, setOpen }: 
         name: customer.name,
         email: customer.email,
         avatar: null,
+        remove_avatar: false,
         type: customer.type,
     });
 
@@ -30,6 +32,7 @@ export default function EditCustomerForm({ customer, children, open, setOpen }: 
             name: customer.name,
             email: customer.email,
             avatar: null,
+            remove_avatar: false,
             type: customer.type,
         });
     }, [customer]);
@@ -46,6 +49,7 @@ export default function EditCustomerForm({ customer, children, open, setOpen }: 
                     name: '',
                     email: '',
                     avatar: null,
+                    remove_avatar: false,
                     type: 'individual',
                 });
             },

@@ -6,6 +6,7 @@ use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -70,8 +71,30 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request, Product $product): RedirectResponse
     {
-        //
-        dd($request->all());
+        $validated = $request->validated();
+        unset($validated['image']);
+        unset($validated['remote_image']);
+        $product->fill($validated);
+
+        if ($request->hasFile('image') && $request->file('image') !== null) {
+            // Delete the old image if it exists
+            if ($product->image) {
+                Storage::disk('public')->delete($product->image);
+            }
+
+            $product->image = $request->file('image')->store('images', 'public');
+        }
+
+        if ($request->boolean('remove_image')) {
+            if ($product->image) {
+                Storage::disk('public')->delete($product->image);
+            }
+            $product->image = null;
+        }
+
+        $product->save();
+
+        return redirect()->route('products.index')->with('success', 'Customer updated successfully.');
     }
 
     /**
@@ -79,7 +102,12 @@ class ProductController extends Controller
      */
     public function destroy(Product $product): RedirectResponse
     {
-        //
-        dd($product->product_number);
+        if ($product->image) {
+            Storage::disk('public')->delete($product->image);
+        }
+
+        $product->delete();
+
+        return redirect()->route('products.index')->with('success', 'Customer deleted successfully.');
     }
 }

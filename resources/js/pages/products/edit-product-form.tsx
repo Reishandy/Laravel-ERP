@@ -16,6 +16,7 @@ type EditProductForm = {
     price: number;
     quantity: number;
     image?: File | null;
+    remove_image?: boolean;
 };
 
 export default function EditProductForm({ product, children, open, setOpen }: EditProductFormProps) {
@@ -25,6 +26,7 @@ export default function EditProductForm({ product, children, open, setOpen }: Ed
         price: product.price,
         quantity: product.quantity,
         image: null,
+        remove_image: false,
     });
 
     useEffect(() => {
@@ -34,6 +36,7 @@ export default function EditProductForm({ product, children, open, setOpen }: Ed
             price: product.price,
             quantity: product.quantity,
             image: null,
+            remove_image: false,
         });
     }, [product]);
 
@@ -51,6 +54,7 @@ export default function EditProductForm({ product, children, open, setOpen }: Ed
                     price: 0,
                     quantity: 0,
                     image: null,
+                    remove_image: false,
                 });
             },
         });

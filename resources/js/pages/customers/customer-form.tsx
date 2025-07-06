@@ -6,12 +6,14 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { LoaderCircle } from 'lucide-react';
 import { FormEventHandler, ReactNode } from 'react';
+import { Checkbox } from '@/components/ui/checkbox';
 
 interface CustomerFormProps {
     data: {
         name: string;
         email: string;
         avatar?: File | null;
+        remove_avatar?: boolean;
         type: string;
     };
     setData: (key: string, value: unknown) => void;
@@ -20,6 +22,7 @@ interface CustomerFormProps {
         name?: string;
         email?: string;
         avatar?: string;
+        remove_avatar?: string;
         type?: string;
     };
     submit: FormEventHandler;
@@ -76,9 +79,23 @@ export default function CustomerForm({ data, setData, processing, errors, submit
                                 type="file"
                                 accept="image/*"
                                 onChange={(e) => setData('avatar', e.target.files ? e.target.files[0] : null)}
-                                disabled={processing}
+                                disabled={processing || data.remove_avatar}
                             />
                             <InputError message={errors.avatar} />
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                            <Checkbox
+                                id="remove_avatar"
+                                name="remove_avatar"
+                                checked={data.remove_avatar}
+                                onClick={() => {
+                                    setData('avatar', null);
+                                    setData('remove_avatar', !data.remove_avatar);
+                                }}
+                                tabIndex={3}
+                            />
+                            <Label htmlFor="remove_avatar">Remove avatar</Label>
                         </div>
 
                         <div className="grid gap-2">

@@ -68,9 +68,9 @@ class CustomerController extends Controller
      */
     public function update(UpdateCustomerRequest $request, Customer $customer): RedirectResponse
     {
-        dd($request->all());
         $validated = $request->validated();
         unset($validated['avatar']);
+        unset($validated['remote_avatar']);
         $customer->fill($validated);
 
         if ($request->hasFile('avatar') && $request->file('avatar') !== null) {
@@ -80,6 +80,13 @@ class CustomerController extends Controller
             }
 
             $customer->avatar = $request->file('avatar')->store('avatars', 'public');
+        }
+
+        if ($request->boolean('remove_avatar')) {
+            if ($customer->avatar) {
+                Storage::disk('public')->delete($customer->avatar);
+            }
+            $customer->avatar = null;
         }
 
         $customer->save();
@@ -92,7 +99,12 @@ class CustomerController extends Controller
      */
     public function destroy(Customer $customer): RedirectResponse
     {
-        //
-        dd($customer->customer_number);
+        if ($customer->avatar) {
+            Storage::disk('public')->delete($customer->avatar);
+        }
+
+        $customer->delete();
+
+        return redirect()->route('customers.index')->with('success', 'Customer deleted successfully.');
     }
 }

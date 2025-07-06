@@ -20,6 +20,7 @@ class UpdateProductRequest extends FormRequest
             'price' => ['required', 'numeric', 'min:0'],
             'quantity' => ['required', 'integer', 'min:0'],
             'image' => ['nullable', File::image()->max(1024)], // 1MB max
+            'remove_image' => ['boolean'],
         ];
     }
 }

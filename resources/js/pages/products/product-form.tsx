@@ -8,6 +8,7 @@ import InputError from '@/components/input-error';
 import { Textarea } from '@/components/ui/textarea';
 import QuickAdd from '@/components/quick-add';
 import { FormEventHandler, ReactNode } from 'react';
+import { Checkbox } from '@/components/ui/checkbox';
 
 interface ProductFormProps {
     app?: {
@@ -20,6 +21,7 @@ interface ProductFormProps {
         price: number;
         quantity: number;
         image?: File | null;
+        remove_image?: boolean;
     };
     setData: (key: string, value: unknown) => void;
     processing: boolean;
@@ -29,6 +31,7 @@ interface ProductFormProps {
         price?: string;
         quantity?: string;
         image?: string;
+        remove_image?: string;
     };
     submit: FormEventHandler;
     trigger: ReactNode;
@@ -86,9 +89,23 @@ export default function ProductForm({ data, setData, processing, errors, submit,
                                 type="file"
                                 accept="image/*"
                                 onChange={(e) => setData('image', e.target.files ? e.target.files[0] : null)}
-                                disabled={processing}
+                                disabled={processing || data.remove_image}
                             />
                             <InputError message={errors.image} />
+                        </div>
+
+                        <div className="flex items-center gap-2">
+                            <Checkbox
+                                id="remove_image"
+                                name="remove_image"
+                                checked={data.remove_image}
+                                onClick={() => {
+                                    setData('image', null);
+                                    setData('remove_image', !data.remove_image);
+                                }}
+                                tabIndex={3}
+                            />
+                            <Label htmlFor="remove_image">Remove image</Label>
                         </div>
 
                         <div className="grid gap-2">

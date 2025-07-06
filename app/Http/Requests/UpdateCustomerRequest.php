@@ -25,6 +25,7 @@ class UpdateCustomerRequest extends FormRequest
                 Rule::unique('customers', 'email')->ignore($this->customer)
             ],
             'avatar' => ['nullable', File::image()->max(1024)], // 1MB max
+            'remove_avatar' => ['boolean'],
             'type' => ['required', 'string', 'in:individual,business'],
         ];
     }
