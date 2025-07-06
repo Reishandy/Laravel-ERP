@@ -15,6 +15,7 @@ import { VariantProps } from 'class-variance-authority';
 import { Download, Plus, SquarePen } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import EditCustomerForm from './edit-customer-form';
+import { toast } from 'sonner';
 
 interface CustomersPageProps {
     app: {
@@ -22,6 +23,11 @@ interface CustomersPageProps {
         currency: string;
         timezone: string;
     };
+    flash: {
+        success?: string;
+        error?: string;
+        description?: string;
+    }
     customers: Customer[];
     show?: string;
 
@@ -36,7 +42,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Customers({ customers, show }: CustomersPageProps) {
-    const { app } = usePage<CustomersPageProps>().props;
+    const { app, flash } = usePage<CustomersPageProps>().props;
     const getInitials = useInitials();
 
     const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
@@ -56,6 +62,20 @@ export default function Customers({ customers, show }: CustomersPageProps) {
             });
         }
     }, [show]);
+
+    useEffect(() => {
+        if (flash.success) {
+            toast.success(flash.success, {
+                description: flash.description,
+            });
+        }
+
+        if (flash.error) {
+            toast.error(flash.error, {
+                description: flash.description,
+            });
+        }
+    }, [flash.success, flash.error, flash.description]);
 
     const columns: ColumnDef<Customer>[] = [
         {

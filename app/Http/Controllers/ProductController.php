@@ -49,7 +49,8 @@ class ProductController extends Controller
             $product->save();
         }
 
-        return redirect()->route('products.index')->with('success', 'Customer created successfully.');
+        return redirect()->route('products.index')->with('success', 'Product created successfully.')
+            ->with('description', $formattedNumber . ' has been created.');
     }
 
     /**
@@ -94,7 +95,8 @@ class ProductController extends Controller
 
         $product->save();
 
-        return redirect()->route('products.index')->with('success', 'Customer updated successfully.');
+        return redirect()->route('products.index')->with('success', 'Product updated successfully.')
+            ->with('description', $product->product_number . ' has been updated.');
     }
 
     /**
@@ -108,6 +110,7 @@ class ProductController extends Controller
 
         $product->delete();
 
-        return redirect()->route('products.index')->with('success', 'Customer deleted successfully.');
+        return redirect()->route('products.index')->with('success', 'Product deleted successfully.')
+            ->with('description', $product->product_number . ' has been deleted.');
     }
 }

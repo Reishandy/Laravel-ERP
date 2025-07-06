@@ -15,6 +15,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import { VariantProps } from 'class-variance-authority';
 import { Download, Plus, SquarePen } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 interface ProductsPageProps {
     app: {
@@ -22,6 +23,11 @@ interface ProductsPageProps {
         currency: string;
         timezone: string;
     };
+    flash: {
+        success?: string;
+        error?: string;
+        description?: string;
+    }
     products: Product[];
     show?: string;
 
@@ -36,7 +42,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Products({ products, show }: ProductsPageProps) {
-    const { app } = usePage<ProductsPageProps>().props;
+    const { app, flash } = usePage<ProductsPageProps>().props;
     const getInitials = useInitials();
 
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -56,6 +62,20 @@ export default function Products({ products, show }: ProductsPageProps) {
             });
         }
     }, [show]);
+
+    useEffect(() => {
+        if (flash.success) {
+            toast.success(flash.success, {
+                description: flash.description,
+            });
+        }
+
+        if (flash.error) {
+            toast.error(flash.error, {
+                description: flash.description,
+            });
+        }
+    }, [flash.success, flash.error, flash.description]);
 
     const columns: ColumnDef<Product>[] = [
         {

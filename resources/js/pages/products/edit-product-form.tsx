@@ -44,7 +44,6 @@ export default function EditProductForm({ product, children, open, setOpen }: Ed
         e.preventDefault();
         post(route('products.update', product.product_number), {
             preserveScroll: true,
-            preserveState: true,
             forceFormData: true,
             onSuccess: () => {
                 setOpen(false);

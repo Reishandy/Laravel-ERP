@@ -24,7 +24,6 @@ export default function DeleteSaleForm({ sale }: DeleteSaleFormProps) {
         e.preventDefault();
         destroy(route('sales.destroy', sale.sale_number), {
             preserveScroll: true,
-            preserveState: true,
             forceFormData: true,
             onSuccess: () => setOpen(false),
         });

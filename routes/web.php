@@ -37,7 +37,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 // TODO:
 //  - Modify landing page
 //  - Email verification and reset pass template change
-//  - favicon
 //  - export to CSV
 
 require __DIR__.'/settings.php';

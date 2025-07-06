@@ -47,7 +47,8 @@ class CustomerController extends Controller
             $customers->save();
         }
 
-        return redirect()->route('customers.index')->with('success', 'Customer created successfully.');
+        return redirect()->route('customers.index')->with('success', 'Customer created successfully.')
+            ->with('description', $formattedNumber . ' has been created.');
     }
 
     /**
@@ -91,7 +92,8 @@ class CustomerController extends Controller
 
         $customer->save();
 
-        return redirect()->route('customers.index')->with('success', 'Customer updated successfully.');
+        return redirect()->route('customers.index')->with('success', 'Customer updated successfully.')
+            ->with('description', $customer->customer_number . ' has been updated.');
     }
 
     /**
@@ -105,6 +107,7 @@ class CustomerController extends Controller
 
         $customer->delete();
 
-        return redirect()->route('customers.index')->with('success', 'Customer deleted successfully.');
+        return redirect()->route('customers.index')->with('success', 'Customer deleted successfully.')
+            ->with('description', $customer->customer_number . ' has been deleted.');
     }
 }

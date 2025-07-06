@@ -22,6 +22,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import { VariantProps } from 'class-variance-authority';
 import { Download, MoreHorizontal, Plus, SquarePen } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 export interface Entry extends Sale {
     product: Product;
@@ -33,6 +34,11 @@ interface SalesPageProps {
         locale: string;
         currency: string;
         timezone: string;
+    };
+    flash: {
+        success?: string;
+        error?: string;
+        description?: string;
     };
     sales: Entry[];
     products: Product[];
@@ -50,7 +56,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Sales({ sales, products, customers, show }: SalesPageProps) {
-    const { app } = usePage<SalesPageProps>().props;
+    const { app, flash } = usePage<SalesPageProps>().props;
 
     const [selectedSale, setSelectedSale] = useState<Entry | null>(null);
     const [editDialogOpen, setEditDialogOpen] = useState(false);
@@ -69,6 +75,20 @@ export default function Sales({ sales, products, customers, show }: SalesPagePro
             });
         }
     }, [show]);
+
+    useEffect(() => {
+        if (flash.success) {
+            toast.success(flash.success, {
+                description: flash.description,
+            });
+        }
+
+        if (flash.error) {
+            toast.error(flash.error, {
+                description: flash.description,
+            });
+        }
+    }, [flash.success, flash.error, flash.description]);
 
     const columns: ColumnDef<Entry>[] = [
         {

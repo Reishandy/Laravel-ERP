@@ -41,7 +41,6 @@ export default function EditCustomerForm({ customer, children, open, setOpen }: 
         e.preventDefault();
         post(route('customers.update', customer.customer_number), {
             preserveScroll: true,
-            preserveState: true,
             forceFormData: true,
             onSuccess: () => {
                 setOpen(false);

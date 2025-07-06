@@ -26,7 +26,6 @@ export default function AddCustomerForm({ children }: AddCustomerFormProps) {
         e.preventDefault();
         post(route('customers.store'), {
             preserveScroll: true,
-            preserveState: true,
             forceFormData: true,
             onSuccess: () => {
                 setOpen(false)

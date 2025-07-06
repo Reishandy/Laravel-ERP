@@ -49,12 +49,14 @@ class SaleController extends Controller
 
         // Check if the product or customer exists
         if (!$product || !$customer) {
-            return redirect()->route('sales.index')->with('error', 'Product or Customer not found.');
+            return redirect()->route('sales.index')->with('error', 'Product or Customer not found.')
+                ->with('description', 'Please check the product and customer numbers.');
         }
 
         // Check if the product has enough stock
         if ($product->quantity < $request->quantity) {
-            return redirect()->route('sales.index')->with('error', 'Stock out of stock.');
+            return redirect()->route('sales.index')->with('error', 'Not enough stock available.')
+                ->with('description', 'Only ' . $product->quantity . ' items available.');
         }
 
         // Update product stock
@@ -76,7 +78,8 @@ class SaleController extends Controller
             'total_price' => $productPrice * $request->quantity,
         ])->all());
 
-        return redirect()->route('sales.index')->with('success', 'Sale created successfully.');
+        return redirect()->route('sales.index')->with('success', 'Sale created successfully.')
+            ->with('description', $formattedNumber . ' has been created.');
     }
 
     /**
@@ -126,7 +129,7 @@ class SaleController extends Controller
 
             // Check if new product has enough stock
             if ($product->quantity < $request->quantity) {
-                return redirect()->route('sales.index')->with('error', 'Not enough stock available.');
+                return redirect()->route('sales.index')->with('error', 'Not enough stock available.')->with('description', 'Only ' . $product->quantity . ' items available.');
             }
 
             // Deduct from new product's stock
@@ -138,7 +141,7 @@ class SaleController extends Controller
 
             // Check if there's enough stock for an increase
             if ($quantityDifference > 0 && $product->quantity < $quantityDifference) {
-                return redirect()->route('sales.index')->with('error', 'Not enough stock available.');
+                return redirect()->route('sales.index')->with('error', 'Not enough stock available.')->with('description', 'Only ' . $product->quantity . ' items available.');
             }
 
             // Update stock by the difference (will subtract if positive, add if negative)
@@ -156,7 +159,7 @@ class SaleController extends Controller
             'total_price' => ($productChanged ? $product->price : $sale->price_at_sale) * $request->quantity,
         ]);
 
-        return redirect()->route('sales.index')->with('success', 'Sale updated successfully.');
+        return redirect()->route('sales.index')->with('success', 'Sale updated successfully.')->with('description', $sale->sale_number . ' has been updated.');
     }
 
     /**
@@ -172,6 +175,6 @@ class SaleController extends Controller
 
         $sale->delete();
 
-        return redirect()->route('sales.index')->with('success', 'Sale deleted successfully and product stock restored.');
+        return redirect()->route('sales.index')->with('success', 'Sale deleted successfully')->with('description', $sale->sale_number . ' has been deleted. and stock has been restored.');
     }
 }
