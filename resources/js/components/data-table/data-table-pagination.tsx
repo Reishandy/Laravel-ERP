@@ -1,7 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { ChevronFirst, ChevronLast, ChevronLeft, ChevronRight } from 'lucide-react';
 import { RowModel } from '@tanstack/react-table';
-import { useState, useEffect } from 'react';
 import {
     Select,
     SelectContent,
@@ -9,6 +8,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
+import { useMediaQuery } from '@/hooks/use-media-query';
 
 interface Pagination<T> {
     pageIndex: number;
@@ -37,7 +37,7 @@ interface DataTablePaginationProps<T> {
 }
 
 export default function DataTablePagination<T>({ pagination }: DataTablePaginationProps<T>) {
-    const windowSize = useWindowSize();
+    const isDesktop = useMediaQuery('(min-width: 640px)');
     const totalPages = pagination.getPageCount();
     const currentPage = pagination.getState().pagination.pageIndex;
     const pageSize = pagination.getState().pagination.pageSize;
@@ -47,7 +47,7 @@ export default function DataTablePagination<T>({ pagination }: DataTablePaginati
     let trailingPages = 2;
     let surroundingPages = 2;
 
-    if (windowSize.width < 640) {
+    if (!isDesktop) {
         leadingPages = 0;
         trailingPages = 0;
         surroundingPages = 1;
@@ -202,27 +202,4 @@ export default function DataTablePagination<T>({ pagination }: DataTablePaginati
             </div>
         </div>
     );
-}
-
-function useWindowSize() {
-    const [windowSize, setWindowSize] = useState({
-        width: typeof window !== 'undefined' ? window.innerWidth : 0,
-        height: typeof window !== 'undefined' ? window.innerHeight : 0,
-    });
-
-    useEffect(() => {
-        const handleResize = () => {
-            setWindowSize({
-                width: window.innerWidth,
-                height: window.innerHeight,
-            });
-        };
-
-        window.addEventListener('resize', handleResize);
-        handleResize();
-
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
-
-    return windowSize;
 }
