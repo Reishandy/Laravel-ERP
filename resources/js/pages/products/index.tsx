@@ -13,6 +13,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useInitials } from '@/hooks/use-initials';
 import { Button } from '@/components/ui/button';
 import AddProductForm from '@/pages/products/add-product-form';
+import EditProductForm from '@/pages/products/edit-product-form';
 
 interface ProductsPageProps {
     app: {
@@ -130,7 +131,9 @@ export default function Products({ products, show }: ProductsPageProps) {
 
                 return (
                     <div className="flex flex-row items-center justify-center gap-x-2">
-                        <SquarePen className="size-5 cursor-pointer text-primary hover:text-primary/70" />
+                        <EditProductForm product={product}>
+                            <SquarePen className="size-5 cursor-pointer text-primary hover:text-primary/70" />
+                        </EditProductForm>
                         <DeleteDialog
                             title={`Delete "${product.name}"?`}
                             description={`Are you sure you want to delete ${product.product_number} "${product.name}"? This action cannot be undone. Related sales will not be deleted.`}
@@ -163,14 +166,19 @@ export default function Products({ products, show }: ProductsPageProps) {
                     <Heading title="Inventory" description="Manage your products and inventory." />
 
                     <div className="flex flex-row items-center gap-x-4 sm:justify-center">
-                        <AddProductForm />
+                        <AddProductForm>
+                            <Button className="flex items-center gap-x-2">
+                                <Plus className="size-5" />
+                                Add New
+                            </Button>
+                        </AddProductForm>
 
                         <Button
                             variant="ghost"
                             onClick={() => {
                                 alert('TODO');
                             }}
-                            className="flex items-center gap-x-2 hover:cursor-pointer"
+                            className="flex items-center gap-x-2"
                         >
                             <Download className="size-5" />
                             Export

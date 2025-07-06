@@ -23,13 +23,6 @@ class ProductController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -37,6 +30,7 @@ class ProductController extends Controller
     public function store(StoreProductRequest $request)
     {
         //
+        dd($request->all());
     }
 
     /**
@@ -54,19 +48,12 @@ class ProductController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Product $product)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(UpdateProductRequest $request, Product $product)
     {
         //
+        dd($request->all());
     }
 
     /**
@@ -75,5 +62,6 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         //
+        dd($product->product_number);
     }
 }

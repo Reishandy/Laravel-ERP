@@ -156,4 +156,47 @@
     body {
         @apply bg-background text-foreground;
     }
+
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: var(--muted);
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: var(--muted-foreground);
+        border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--foreground);
+    }
+
+    /* Firefox */
+    * {
+        scrollbar-width: thin;
+        scrollbar-color: var(--muted-foreground) var(--muted);
+    }
+
+    /* For when Firefox supports ::-webkit-scrollbar */
+    @supports (scrollbar-color: auto) {
+        * {
+            scrollbar-color: var(--muted-foreground) var(--muted);
+        }
+    }
+}
+
+@layer utilities {
+    .no-number-arrows::-webkit-outer-spin-button,
+    .no-number-arrows::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    .no-number-arrows {
+        -moz-appearance: textfield;
+    }
 }

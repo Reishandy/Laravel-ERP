@@ -224,7 +224,7 @@ export default function Sales({ sales, show }: SalesPageProps) {
                             onClick={() => {
                                 alert('TODO');
                             }}
-                            className="flex items-center gap-x-2 hover:cursor-pointer"
+                            className="flex items-center gap-x-2 "
                         >
                             <Download className="size-5" />
                             Export

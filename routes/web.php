@@ -20,6 +20,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('products', [ProductController::class, 'index'])->name('products.index');
     Route::get('products/{product_number}', [ProductController::class, 'show'])->name('products.show');
+    Route::post('products', [ProductController::class, 'store'])->name('products.store');
+    Route::post('products/{product:product_number}', [ProductController::class, 'update'])->name('products.update');
+    Route::delete('products/{product:product_number}', [ProductController::class, 'destroy'])->name('products.destroy');
 
     Route::get('customers', [CustomerController::class, 'index'])->name('customers.index');
     Route::get('customers/{customer_number}', [CustomerController::class, 'show'])->name('customers.show');

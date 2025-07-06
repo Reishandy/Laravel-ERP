@@ -153,7 +153,7 @@ export default function Customers({ customers, show }: CustomersPageProps) {
                             onClick={() => {
                                 alert('TODO');
                             }}
-                            className="flex items-center gap-x-2 hover:cursor-pointer"
+                            className="flex items-center gap-x-2"
                         >
                             <Download className="size-5" />
                             Export
