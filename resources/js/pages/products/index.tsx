@@ -19,6 +19,7 @@ interface ProductsPageProps {
     app: {
         locale: string;
         currency: string;
+        timezone: string;
     };
     products: Product[];
     show?: string;
@@ -124,7 +125,6 @@ export default function Products({ products, show }: ProductsPageProps) {
                 );
             },
         },
-        // TODO: Add total sold column
         {
             id: 'actions',
             cell: ({ row }) => {

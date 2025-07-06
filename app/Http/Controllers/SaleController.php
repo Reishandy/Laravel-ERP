@@ -17,9 +17,13 @@ class SaleController extends Controller
     public function index(): Response
     {
         return Inertia::render('sales/index', [
-            'sales' => Sale::where('user_id', auth()->user()->id)
+            'sales' => auth()->user()->sales()
                 ->with(['customer', 'product'])
                 ->latest()
+                ->get(),
+            'products' => auth()->user()->products()
+                ->get(),
+            'customers' => auth()->user()->customers()
                 ->get(),
         ]);
     }
@@ -40,9 +44,13 @@ class SaleController extends Controller
     public function show(String $sale_number): Response
     {
         return Inertia::render('sales/index', [
-            'sales' => Sale::where('user_id', auth()->user()->id)
+            'sales' => auth()->user()->sales()
                 ->with(['customer', 'product'])
                 ->latest()
+                ->get(),
+            'products' => auth()->user()->products()
+                ->get(),
+            'customers' => auth()->user()->customers()
                 ->get(),
             'show' => $sale_number,
         ]);

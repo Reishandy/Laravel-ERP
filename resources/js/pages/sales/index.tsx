@@ -12,14 +12,17 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import AppLayout from '@/layouts/app-layout';
+import AddSaleForm from '@/pages/sales/add-sale-form';
+import DeleteSaleForm from '@/pages/sales/delete-sale-form';
+import EditSaleForm from '@/pages/sales/edit-sale-form';
 import { type BreadcrumbItem, Customer, Product, Sale } from '@/types';
-import { Head, Link, usePage } from '@inertiajs/react';
+import { Head, Link, router, usePage } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
 import { VariantProps } from 'class-variance-authority';
-import { Download, Info, MoreHorizontal, Plus, SquarePen } from 'lucide-react';
-import DeleteSaleForm from '@/pages/sales/delete-sale-form';
+import { Download, MoreHorizontal, Plus, SquarePen } from 'lucide-react';
+import { useEffect } from 'react';
 
-interface Entry extends Sale {
+export interface Entry extends Sale {
     product: Product;
     customer: Customer;
 }
@@ -28,8 +31,11 @@ interface SalesPageProps {
     app: {
         locale: string;
         currency: string;
+        timezone: string;
     };
     sales: Entry[];
+    products: Product[];
+    customers: Customer[];
     show?: string;
 
     [key: string]: unknown;
@@ -42,10 +48,18 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function Sales({ sales, show }: SalesPageProps) {
+export default function Sales({ sales, products, customers, show }: SalesPageProps) {
     const { app } = usePage<SalesPageProps>().props;
 
-    const selectedSale = show ? sales.find((sale) => sale.sale_number === show) : undefined;
+    useEffect(() => {
+        if (show) {
+            router.visit('/sales', {
+                replace: true,
+                preserveScroll: true,
+                preserveState: true,
+            });
+        }
+    }, [show]);
 
     const columns: ColumnDef<Entry>[] = [
         {
@@ -82,6 +96,7 @@ export default function Sales({ sales, show }: SalesPageProps) {
             accessorKey: 'total_price',
             header: () => <div className="text-center">Total</div>,
             cell: ({ row }) => {
+                const price_at_sale: number = row.original.price_at_sale;
                 const price: number = row.original.product.price;
                 const quantity: number = row.getValue('quantity');
                 const total_price = parseFloat(row.getValue('total_price'));
@@ -102,6 +117,20 @@ export default function Sales({ sales, show }: SalesPageProps) {
                                 </TooltipTrigger>
                                 <TooltipContent>
                                     <p>Product price has changed since sale.</p>
+                                    <p>
+                                        Price at sale time:{' '}
+                                        {new Intl.NumberFormat(app.locale, {
+                                            style: 'currency',
+                                            currency: app.currency,
+                                        }).format(Math.round((price_at_sale + Number.EPSILON) * 100) / 100)}
+                                    </p>
+                                    <p>
+                                        Current price:{' '}
+                                        {new Intl.NumberFormat(app.locale, {
+                                            style: 'currency',
+                                            currency: app.currency,
+                                        }).format(price)}
+                                    </p>
                                 </TooltipContent>
                             </Tooltip>
                         ) : (
@@ -120,6 +149,54 @@ export default function Sales({ sales, show }: SalesPageProps) {
                     <Button variant="link" asChild>
                         <Link href={route('customers.show', row.original.customer.customer_number)}>{row.getValue('customer.name')}</Link>
                     </Button>
+                );
+            },
+        },
+        {
+            id: 'created_at',
+            accessorKey: 'created_at',
+            header: () => <div className="text-center">Date</div>,
+            cell: ({ row }) => {
+                const date = new Date(row.getValue('created_at'));
+                const options: Intl.DateTimeFormatOptions = {
+                    timeZone: app.timezone,
+                    timeZoneName: 'short',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                };
+                const formattedTime = date.toLocaleTimeString(app.locale, options);
+                const match = formattedTime.match(/\b([A-Z]{2,5})\b$/);
+                const abbreviation = match ? match[1] : '';
+
+                return (
+                    <div className="text-center">
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <div className="flex flex-row items-center justify-center gap-x-2">
+                                    <span className="ml-2">
+                                        {date.toLocaleDateString(app.locale, {
+                                            weekday: 'long',
+                                            year: 'numeric',
+                                            month: 'long',
+                                            day: 'numeric',
+                                        })}
+                                    </span>
+                                    -
+                                    <span>
+                                        {date.toLocaleTimeString(app.locale, {
+                                            timeZone: app.timezone,
+                                            hour: '2-digit',
+                                            minute: '2-digit',
+                                        })}{' '}
+                                        {abbreviation}
+                                    </span>
+                                </div>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <p>Last updated on {date.toLocaleString(app.locale)}</p>
+                            </TooltipContent>
+                        </Tooltip>
+                    </div>
                 );
             },
         },
@@ -150,9 +227,7 @@ export default function Sales({ sales, show }: SalesPageProps) {
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
-                                <DropdownMenuLabel>
-                                    <span className="font-bold">Change status</span>
-                                </DropdownMenuLabel>
+                                <DropdownMenuLabel className="text-muted-foreground">Change Status</DropdownMenuLabel>
                                 <DropdownMenuSeparator />
                                 {/* TODO: onclick function*/}
                                 <DropdownMenuItem className="cursor-pointer" disabled={status === 'pending'}>
@@ -177,8 +252,9 @@ export default function Sales({ sales, show }: SalesPageProps) {
 
                 return (
                     <div className="flex flex-row items-center justify-center gap-x-2">
-                        <Info className="size-5 cursor-pointer text-primary hover:text-primary/70" />
-                        <SquarePen className="size-5 cursor-pointer text-primary hover:text-primary/70" />
+                        <EditSaleForm sale={sale} products={products} customers={customers}>
+                            <SquarePen className="size-5 cursor-pointer text-primary hover:text-primary/70" />
+                        </EditSaleForm>
 
                         <DeleteSaleForm sale={sale} />
                     </div>
@@ -191,6 +267,7 @@ export default function Sales({ sales, show }: SalesPageProps) {
         { value: 'sale_number', label: 'ID' },
         { value: 'product.name_and_number', label: 'Product' },
         { value: 'customer.name', label: 'Customer' },
+        { value: 'created_at', label: 'Date' },
         { value: 'quantity', label: 'Quantity' },
         { value: 'total_price', label: 'Total' },
         { value: 'status', label: 'Status' },
@@ -205,10 +282,12 @@ export default function Sales({ sales, show }: SalesPageProps) {
                     <Heading title="Sales" description="Manage your sales transactions and records." />
 
                     <div className="flex flex-row items-center gap-x-4 sm:justify-center">
-                        <Button className="flex items-center gap-x-2">
-                            <Plus className="size-5" />
-                            Add New
-                        </Button>
+                        <AddSaleForm products={products} customers={customers}>
+                            <Button className="flex items-center gap-x-2">
+                                <Plus className="size-5" />
+                                Add New
+                            </Button>
+                        </AddSaleForm>
 
                         <Button
                             variant="ghost"
@@ -223,18 +302,8 @@ export default function Sales({ sales, show }: SalesPageProps) {
                     </div>
                 </div>
 
-                {/*TODO: replace with show details dialog*/}
-                {/*TODO: make sure to handle not exist properly*/}
-                {selectedSale && (
-                    <div className="mb-4">
-                        <Badge variant="default" className="capitalize">
-                            {selectedSale?.sale_number}
-                        </Badge>
-                    </div>
-                )}
-
                 <div>
-                    <DataTable columns={columns} data={sales} sortableColumns={sortableColumns} />
+                    <DataTable columns={columns} data={sales} sortableColumns={sortableColumns} show={show} />
                 </div>
             </div>
         </AppLayout>

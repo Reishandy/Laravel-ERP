@@ -5,18 +5,21 @@ import { Badge, badgeVariants } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useInitials } from '@/hooks/use-initials';
 import AppLayout from '@/layouts/app-layout';
+import AddCustomerForm from '@/pages/customers/add-customer-form';
+import DeleteCustomerForm from '@/pages/customers/delete-customer-form';
 import { type BreadcrumbItem, Customer } from '@/types';
 import { Head, router } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
 import { VariantProps } from 'class-variance-authority';
 import { Download, Plus, SquarePen } from 'lucide-react';
 import { useEffect } from 'react';
-import DeleteCustomerForm from '@/pages/customers/delete-product-form';
+import EditCustomerForm from './edit-customer-form';
 
 interface CustomersPageProps {
     app: {
         locale: string;
         currency: string;
+        timezone: string;
     };
     customers: Customer[];
     show?: string;
@@ -102,7 +105,6 @@ export default function Customers({ customers, show }: CustomersPageProps) {
                 );
             },
         },
-        // TODO: Add total sales column
         {
             id: 'actions',
             cell: ({ row }) => {
@@ -110,7 +112,9 @@ export default function Customers({ customers, show }: CustomersPageProps) {
 
                 return (
                     <div className="flex flex-row items-center justify-center gap-x-2">
-                        <SquarePen className="size-5 cursor-pointer text-primary hover:text-primary/70" />
+                        <EditCustomerForm customer={customer}>
+                            <SquarePen className="size-5 cursor-pointer text-primary hover:text-primary/70" />
+                        </EditCustomerForm>
                         <DeleteCustomerForm customer={customer} />
                     </div>
                 );
@@ -135,10 +139,12 @@ export default function Customers({ customers, show }: CustomersPageProps) {
                     <Heading title="Customers" description="Manage your customers and their details." />
 
                     <div className="flex flex-row items-center gap-x-4 sm:justify-center">
-                        <Button className="flex items-center gap-x-2">
-                            <Plus className="size-5" />
-                            Add New
-                        </Button>
+                        <AddCustomerForm>
+                            <Button className="flex items-center gap-x-2">
+                                <Plus className="size-5" />
+                                Add New
+                            </Button>
+                        </AddCustomerForm>
 
                         <Button
                             variant="ghost"

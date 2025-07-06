@@ -1,7 +1,7 @@
 import ProductForm from '@/pages/products/product-form';
 import { Product } from '@/types';
 import { useForm } from '@inertiajs/react';
-import { ReactNode, FormEventHandler } from 'react';
+import { FormEventHandler, ReactNode } from 'react';
 
 interface EditProductFormProps {
     product: Product;
@@ -34,14 +34,5 @@ export default function EditProductForm({ product, children }: EditProductFormPr
         });
     };
 
-    return (
-        <ProductForm
-            data={data}
-            setData={setData}
-            processing={processing}
-            errors={errors}
-            submit={submit}
-            trigger={children}
-        />
-    );
+    return <ProductForm data={data} setData={setData} processing={processing} errors={errors} submit={submit} trigger={children} />;
 }
