@@ -84,10 +84,13 @@ export default function SaleForm({ products, customers, data, setData, processin
                                     type="number"
                                     required
                                     autoComplete="quantity"
-                                    value={data.quantity}
-                                    onChange={(e) => setData('quantity', Number(e.target.value))}
+                                    value={data.quantity === 0 ? '' : data.quantity}
+                                    onChange={(e) => {
+                                        const value = e.target.value === '' ? 0 : Number(e.target.value);
+                                        setData('quantity', value);
+                                    }}
                                     disabled={processing}
-                                    placeholder="Product quantity"
+                                    placeholder="0"
                                     className="no-number-arrows mx-1 flex-1"
                                 />
                             </QuickAdd>

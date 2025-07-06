@@ -117,10 +117,13 @@ export default function ProductForm({ data, setData, processing, errors, submit,
                                     type="number"
                                     required
                                     autoComplete="price"
-                                    value={data.price}
-                                    onChange={(e) => setData('price', Number(e.target.value))}
+                                    value={data.price === 0 ? '' : data.price}
+                                    onChange={(e) => {
+                                        const value = e.target.value === '' ? 0 : Number(e.target.value);
+                                        setData('price', value);
+                                    }}
                                     disabled={processing}
-                                    placeholder="Product price"
+                                    placeholder="0"
                                     className="no-number-arrows"
                                 />
                             </div>
@@ -135,10 +138,13 @@ export default function ProductForm({ data, setData, processing, errors, submit,
                                     type="number"
                                     required
                                     autoComplete="quantity"
-                                    value={data.quantity}
-                                    onChange={(e) => setData('quantity', Number(e.target.value))}
+                                    value={data.quantity === 0 ? '' : data.quantity}
+                                    onChange={(e) => {
+                                        const value = e.target.value === '' ? 0 : Number(e.target.value);
+                                        setData('quantity', value);
+                                    }}
                                     disabled={processing}
-                                    placeholder="Product quantity"
+                                    placeholder="0"
                                     className="no-number-arrows mx-1 flex-1"
                                 />
                             </QuickAdd>
