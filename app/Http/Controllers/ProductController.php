@@ -37,7 +37,7 @@ class ProductController extends Controller
         $latestProduct = $user->products()
             ->orderBy('product_number', 'desc')
             ->first();
-        $number = (int) explode('-', $latestProduct->product_number)[1] ?? 0;
+        $number = (int)explode('-', $latestProduct->product_number)[1] ?? 0;
         $formattedNumber = 'P-' . str_pad($number + 1, 5, '0', STR_PAD_LEFT);
 
         $product = $user->products()->create($request->merge([
@@ -55,7 +55,7 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(String $product_number): Response
+    public function show(string $product_number): Response
     {
         return Inertia::render('products/index', [
             'products' => Product::where('user_id', auth()->user()->id)
@@ -73,7 +73,7 @@ class ProductController extends Controller
     {
         $validated = $request->validated();
         unset($validated['image']);
-        unset($validated['remote_image']);
+        unset($validated['remove_image']);
         $product->fill($validated);
 
         if ($request->hasFile('image') && $request->file('image') !== null) {

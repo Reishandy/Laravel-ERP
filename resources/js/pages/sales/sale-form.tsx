@@ -5,7 +5,7 @@ import QuickAdd from '@/components/quick-add';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select-dialog';
 import { Customer, Product } from '@/types';
 import { LoaderCircle } from 'lucide-react';
 import { FormEventHandler, ReactNode } from 'react';
@@ -22,8 +22,8 @@ interface SaleFormProps {
     setData: (key: string, value: unknown) => void;
     processing: boolean;
     errors: {
-        product?: string;
-        customer?: string;
+        product_number?: string;
+        customer_number?: string;
         quantity?: string;
         status?: string;
     };
@@ -62,7 +62,7 @@ export default function SaleForm({ products, customers, data, setData, processin
                                 onChange={(value) => setData('product_number', value)}
                                 value={data.product_number}
                             />
-                            <InputError message={errors.product} />
+                            <InputError message={errors.product_number} />
                         </div>
 
                         <div className="grid gap-2">
@@ -73,7 +73,7 @@ export default function SaleForm({ products, customers, data, setData, processin
                                 onChange={(value) => setData('customer_number', value)}
                                 value={data.customer_number}
                             />
-                            <InputError message={errors.customer} />
+                            <InputError message={errors.customer_number} />
                         </div>
 
                         <div className="grid gap-2">

@@ -33,7 +33,7 @@ export default function DeleteSaleForm({ sale }: DeleteSaleFormProps) {
     return (
         <DeleteDialog
             title={`Delete "${sale.name}"?`}
-            description={`Are you sure you want to delete ${sale.sale_number} "${sale.name}"? This action cannot be undone. Related sales will not be deleted.`}
+            description={`Are you sure you want to delete ${sale.sale_number} "${sale.name}"? This action cannot be undone. Related sales will not be deleted. The stock will be updated accordingly.`}
             trigger={<Trash className="size-5 cursor-pointer text-destructive hover:text-destructive/70" />}
             onDelete={submit}
             processing={processing}

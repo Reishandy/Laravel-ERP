@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreSaleRequest;
 use App\Http\Requests\UpdateSaleRequest;
+use App\Models\Product;
 use App\Models\Sale;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
 use function Symfony\Component\String\s;
@@ -32,16 +34,55 @@ class SaleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreSaleRequest $request)
+    public function store(StoreSaleRequest $request): RedirectResponse
     {
-        // TODO: validate in StoreSaleRequest
-        dd(request()->all());
+        $user = auth()->user();
+
+        // Get product and customer
+        $product = $user->products()
+            ->where('product_number', $request->product_number)
+            ->firstOrFail();
+        $customer = $user->customers()
+            ->where('customer_number', $request->customer_number)
+            ->firstOrFail();
+        $productPrice = $product->price;
+
+        // Check if the product or customer exists
+        if (!$product || !$customer) {
+            return redirect()->route('sales.index')->with('error', 'Product or Customer not found.');
+        }
+
+        // Check if the product has enough stock
+        if ($product->quantity < $request->quantity) {
+            return redirect()->route('sales.index')->with('error', 'Stock out of stock.');
+        }
+
+        // Update product stock
+        $product->quantity -= $request->quantity;
+        $product->save();
+
+        // Get latest sale number
+        $latestSale = $user->sales()
+            ->orderBy('sale_number', 'desc')
+            ->first();
+        $number = (int)explode('-', $latestSale->sale_number)[1] ?? 0;
+        $formattedNumber = 'S-' . str_pad($number + 1, 5, '0', STR_PAD_LEFT);
+
+        $user->sales()->create($request->merge([
+            'product_id' => $product->id,
+            'customer_id' => $customer->id,
+            'sale_number' => $formattedNumber,
+            'price_at_sale' => $productPrice,
+            'total_price' => $productPrice * $request->quantity,
+        ])->all());
+
+        return redirect()->route('sales.index')->with('success', 'Sale created successfully.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(String $sale_number): Response
+    public function show(string $sale_number): Response
     {
         return Inertia::render('sales/index', [
             'sales' => auth()->user()->sales()
@@ -60,18 +101,77 @@ class SaleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateSaleRequest $request, Sale $sale)
+    public function update(UpdateSaleRequest $request, Sale $sale): RedirectResponse
     {
-        //
-        dd(request()->all());
+        $user = auth()->user();
+
+        $sale->load('product');
+        $originalQuantity = $sale->quantity;
+        $originalProductId = $sale->product_id;
+
+        $product = $user->products()
+            ->where('product_number', $request->product_number)
+            ->firstOrFail();
+        $customer = $user->customers()
+            ->where('customer_number', $request->customer_number)
+            ->firstOrFail();
+
+        $productChanged = $originalProductId != $product->id;
+
+        // Handle stock updates
+        if ($productChanged) {
+            // Restore stock to original product
+            $sale->product->quantity += $originalQuantity;
+            $sale->product->save();
+
+            // Check if new product has enough stock
+            if ($product->quantity < $request->quantity) {
+                return redirect()->route('sales.index')->with('error', 'Not enough stock available.');
+            }
+
+            // Deduct from new product's stock
+            $product->quantity -= $request->quantity;
+            $product->save();
+        } elseif ($originalQuantity != $request->quantity) {
+            // Only quantity changed - calculate the difference
+            $quantityDifference = $request->quantity - $originalQuantity;
+
+            // Check if there's enough stock for an increase
+            if ($quantityDifference > 0 && $product->quantity < $quantityDifference) {
+                return redirect()->route('sales.index')->with('error', 'Not enough stock available.');
+            }
+
+            // Update stock by the difference (will subtract if positive, add if negative)
+            $product->quantity -= $quantityDifference;
+            $product->save();
+        }
+
+        $sale->update([
+            'product_id' => $product->id,
+            'customer_id' => $customer->id,
+            'quantity' => $request->quantity,
+            'status' => $request->status,
+            // If product changed, update price_at_sale, otherwise keep existing
+            'price_at_sale' => $productChanged ? $product->price : $sale->price_at_sale,
+            'total_price' => ($productChanged ? $product->price : $sale->price_at_sale) * $request->quantity,
+        ]);
+
+        return redirect()->route('sales.index')->with('success', 'Sale updated successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Sale $sale)
+    public function destroy(Sale $sale): RedirectResponse
     {
-        //
-        dd($sale->sale_number);
+        $sale->load('product');
+
+        // Restore product stock
+        $sale->product->quantity += $sale->quantity;
+        $sale->product->save();
+
+        $sale->delete();
+
+        return redirect()->route('sales.index')->with('success', 'Sale deleted successfully and product stock restored.');
     }
 }

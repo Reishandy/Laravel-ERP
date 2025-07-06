@@ -52,10 +52,10 @@ const breadcrumbs: BreadcrumbItem[] = [
 export default function Sales({ sales, products, customers, show }: SalesPageProps) {
     const { app } = usePage<SalesPageProps>().props;
 
-    const [selectedSale, setSelectedSale] = useState<Sale | null>(null);
+    const [selectedSale, setSelectedSale] = useState<Entry | null>(null);
     const [editDialogOpen, setEditDialogOpen] = useState(false);
 
-    const openEditDialog = (sale: Sale) => {
+    const openEditDialog = (sale: Entry) => {
         setSelectedSale(sale);
         setEditDialogOpen(true);
     };

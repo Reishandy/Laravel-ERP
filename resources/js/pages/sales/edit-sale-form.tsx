@@ -39,7 +39,7 @@ export default function AddSaleForm({ products, customers, sale, children, open,
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
-        post(route('sales.store'), {
+        post(route('sales.update', sale.sale_number), {
             preserveScroll: true,
             preserveState: true,
             forceFormData: true,
