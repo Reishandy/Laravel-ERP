@@ -24,11 +24,13 @@ interface CustomerFormProps {
     };
     submit: FormEventHandler;
     trigger: ReactNode;
+    open: boolean;
+    setOpen: (open: boolean) => void;
 
     [key: string]: unknown;
 }
 
-export default function CustomerForm({ data, setData, processing, errors, submit, trigger }: CustomerFormProps) {
+export default function CustomerForm({ data, setData, processing, errors, submit, trigger, open, setOpen }: CustomerFormProps) {
     return (
         <form>
             <FormDialog
@@ -49,7 +51,7 @@ export default function CustomerForm({ data, setData, processing, errors, submit
                                 disabled={processing}
                                 placeholder="Customer name"
                             />
-                            <InputError message={errors.name} className="mt-2" />
+                            <InputError message={errors.name} />
                         </div>
 
                         <div className="grid gap-2">
@@ -64,7 +66,7 @@ export default function CustomerForm({ data, setData, processing, errors, submit
                                 disabled={processing}
                                 placeholder="Customer email"
                             />
-                            <InputError message={errors.email} className="mt-2" />
+                            <InputError message={errors.email} />
                         </div>
 
                         <div className="grid gap-2">
@@ -76,7 +78,7 @@ export default function CustomerForm({ data, setData, processing, errors, submit
                                 onChange={(e) => setData('avatar', e.target.files ? e.target.files[0] : null)}
                                 disabled={processing}
                             />
-                            <InputError message={errors.avatar} className="mt-2" />
+                            <InputError message={errors.avatar} />
                         </div>
 
                         <div className="grid gap-2">
@@ -97,7 +99,7 @@ export default function CustomerForm({ data, setData, processing, errors, submit
                                     </SelectGroup>
                                 </SelectContent>
                             </Select>
-                            <InputError message={errors.type} className="mt-2" />
+                            <InputError message={errors.type} />
                         </div>
                     </div>
                 }
@@ -107,6 +109,8 @@ export default function CustomerForm({ data, setData, processing, errors, submit
                         Save Customer
                     </Button>
                 }
+                open={open}
+                setOpen={setOpen}
             />
         </form>
     );

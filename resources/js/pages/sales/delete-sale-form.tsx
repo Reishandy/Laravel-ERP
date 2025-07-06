@@ -2,7 +2,7 @@ import { DeleteDialog } from '@/components/dialog/delete-dialog';
 import { Sale } from '@/types';
 import { useForm } from '@inertiajs/react';
 import { Trash } from 'lucide-react';
-import { FormEventHandler } from 'react';
+import { FormEventHandler, useState } from 'react';
 
 interface DeleteSaleFormProps {
     sale: Sale;
@@ -17,6 +17,7 @@ type EditSaleForm = {
 };
 
 export default function DeleteSaleForm({ sale }: DeleteSaleFormProps) {
+    const [open, setOpen] = useState(false);
     const { delete: destroy, processing } = useForm<Required<EditSaleForm>>();
 
     const submit: FormEventHandler = (e) => {
@@ -25,6 +26,7 @@ export default function DeleteSaleForm({ sale }: DeleteSaleFormProps) {
             preserveScroll: true,
             preserveState: true,
             forceFormData: true,
+            onSuccess: () => setOpen(false),
         });
     };
 
@@ -35,6 +37,8 @@ export default function DeleteSaleForm({ sale }: DeleteSaleFormProps) {
             trigger={<Trash className="size-5 cursor-pointer text-destructive hover:text-destructive/70" />}
             onDelete={submit}
             processing={processing}
+            open={open}
+            setOpen={setOpen}
         />
     );
 }

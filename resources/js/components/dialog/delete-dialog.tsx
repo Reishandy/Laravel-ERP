@@ -29,6 +29,8 @@ interface DeleteDialogProps {
     trigger: ReactNode;
     onDelete: FormEventHandler;
     processing: boolean;
+    open: boolean;
+    setOpen: (open: boolean) => void;
 }
 
 export function DeleteDialog({
@@ -37,8 +39,9 @@ export function DeleteDialog({
     trigger,
     onDelete,
     processing,
+    open,
+    setOpen,
 }: DeleteDialogProps) {
-    const [open, setOpen] = useState(false);
     const isDesktop = useMediaQuery('(min-width: 640px)');
 
     if (isDesktop) {

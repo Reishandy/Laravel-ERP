@@ -1,6 +1,6 @@
 import CustomerForm from '@/pages/customers/customer-form';
 import { useForm } from '@inertiajs/react';
-import { FormEventHandler, ReactNode } from 'react';
+import { FormEventHandler, ReactNode, useState } from 'react';
 
 interface AddCustomerFormProps {
     children: ReactNode;
@@ -14,6 +14,7 @@ type AddCustomerForm = {
 };
 
 export default function AddCustomerForm({ children }: AddCustomerFormProps) {
+    const [open, setOpen] = useState(false);
     const { data, setData, post, processing, errors } = useForm<Required<AddCustomerForm>>({
         name: '',
         email: '',
@@ -23,12 +24,24 @@ export default function AddCustomerForm({ children }: AddCustomerFormProps) {
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
-        post(route('products.store'), {
+        post(route('customers.store'), {
             preserveScroll: true,
             preserveState: true,
             forceFormData: true,
+            onSuccess: () => setOpen(false),
         });
     };
 
-    return <CustomerForm data={data} setData={setData} processing={processing} errors={errors} submit={submit} trigger={children} />;
+    return (
+        <CustomerForm
+            data={data}
+            setData={setData}
+            processing={processing}
+            errors={errors}
+            submit={submit}
+            trigger={children}
+            open={open}
+            setOpen={setOpen}
+        />
+    );
 }

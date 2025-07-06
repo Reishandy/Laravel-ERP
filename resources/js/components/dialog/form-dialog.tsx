@@ -28,10 +28,13 @@ interface FormDialogProps {
     trigger: ReactNode;
     formContent: ReactNode;
     formButton: ReactNode;
+    open: boolean;
+    setOpen: (open: boolean) => void;
+
+    [key: string]: unknown;
 }
 
-export default function FormDialog({ title, description, trigger, formContent, formButton }: FormDialogProps) {
-    const [open, setOpen] = useState(false);
+export default function FormDialog({ title, description, trigger, formContent, formButton, open, setOpen }: FormDialogProps) {
     const isDesktop = useMediaQuery('(min-width: 640px)');
 
     if (isDesktop) {

@@ -1,6 +1,6 @@
 import ProductForm from '@/pages/products/product-form';
 import { useForm } from '@inertiajs/react';
-import { FormEventHandler, ReactNode } from 'react';
+import { FormEventHandler, ReactNode, useState } from 'react';
 
 interface AddProductFormProps {
     children: ReactNode;
@@ -15,6 +15,7 @@ type AddProductForm = {
 };
 
 export default function AddProductForm({ children }: AddProductFormProps) {
+    const [open, setOpen] = useState(false);
     const { data, setData, post, processing, errors } = useForm<Required<AddProductForm>>({
         name: '',
         description: '',
@@ -29,8 +30,20 @@ export default function AddProductForm({ children }: AddProductFormProps) {
             preserveScroll: true,
             preserveState: true,
             forceFormData: true,
+            onSuccess: () => setOpen(false),
         });
     };
 
-    return <ProductForm data={data} setData={setData} processing={processing} errors={errors} submit={submit} trigger={children} />;
+    return (
+        <ProductForm
+            data={data}
+            setData={setData}
+            processing={processing}
+            errors={errors}
+            submit={submit}
+            trigger={children}
+            open={open}
+            setOpen={setOpen}
+        />
+    );
 }

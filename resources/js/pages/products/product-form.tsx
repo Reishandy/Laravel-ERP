@@ -32,10 +32,13 @@ interface ProductFormProps {
     };
     submit: FormEventHandler;
     trigger: ReactNode;
+    open: boolean
+    setOpen: (open: boolean) => void;
+
     [key: string]: unknown;
 }
 
-export default function ProductForm({ data, setData, processing, errors, submit, trigger }: ProductFormProps) {
+export default function ProductForm({ data, setData, processing, errors, submit, trigger, open, setOpen }: ProductFormProps) {
     const { app } = usePage<ProductFormProps>().props;
 
     return (
@@ -58,7 +61,7 @@ export default function ProductForm({ data, setData, processing, errors, submit,
                                 disabled={processing}
                                 placeholder="Product name"
                             />
-                            <InputError message={errors.name} className="mt-2" />
+                            <InputError message={errors.name} />
                         </div>
 
                         <div className="grid gap-2">
@@ -73,7 +76,7 @@ export default function ProductForm({ data, setData, processing, errors, submit,
                                 placeholder="Product description"
                                 className="max-h-10 overflow-y-auto sm:max-h-64"
                             />
-                            <InputError message={errors.description} className="mt-2" />
+                            <InputError message={errors.description} />
                         </div>
 
                         <div className="grid gap-2">
@@ -85,7 +88,7 @@ export default function ProductForm({ data, setData, processing, errors, submit,
                                 onChange={(e) => setData('image', e.target.files ? e.target.files[0] : null)}
                                 disabled={processing}
                             />
-                            <InputError message={errors.image} className="mt-2" />
+                            <InputError message={errors.image} />
                         </div>
 
                         <div className="grid gap-2">
@@ -104,7 +107,7 @@ export default function ProductForm({ data, setData, processing, errors, submit,
                                     className="no-number-arrows"
                                 />
                             </div>
-                            <InputError message={errors.price} className="mt-2" />
+                            <InputError message={errors.price} />
                         </div>
 
                         <div className="grid gap-2">
@@ -122,7 +125,7 @@ export default function ProductForm({ data, setData, processing, errors, submit,
                                     className="no-number-arrows mx-1 flex-1"
                                 />
                             </QuickAdd>
-                            <InputError message={errors.quantity} className="mt-2" />
+                            <InputError message={errors.quantity} />
                         </div>
                     </div>
                 }
@@ -132,6 +135,8 @@ export default function ProductForm({ data, setData, processing, errors, submit,
                         Save Product
                     </Button>
                 }
+                open={open}
+                setOpen={setOpen}
             />
         </form>
     );

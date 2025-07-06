@@ -1,7 +1,7 @@
 import SaleForm from '@/pages/sales/sale-form';
 import { Customer, Product } from '@/types';
 import { useForm } from '@inertiajs/react';
-import { FormEventHandler, ReactNode } from 'react';
+import { FormEventHandler, ReactNode, useState } from 'react';
 import { Entry } from '@/pages/sales/index';
 
 interface AddSaleFormProps {
@@ -19,6 +19,7 @@ type AddSaleForm = {
 };
 
 export default function AddSaleForm({ products, customers, sale, children }: AddSaleFormProps) {
+    const [open, setOpen] = useState(false);
     const { data, setData, post, processing, errors } = useForm<Required<AddSaleForm>>({
         product_number: sale.product.product_number,
         customer_number: sale.customer.customer_number,
@@ -28,10 +29,11 @@ export default function AddSaleForm({ products, customers, sale, children }: Add
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
-        post(route('products.store'), {
+        post(route('sales.store'), {
             preserveScroll: true,
             preserveState: true,
             forceFormData: true,
+            onSuccess: () => setOpen(false),
         });
     };
 
@@ -45,6 +47,8 @@ export default function AddSaleForm({ products, customers, sale, children }: Add
             errors={errors}
             submit={submit}
             trigger={children}
+            open={open}
+            setOpen={setOpen}
         />
     );
 }

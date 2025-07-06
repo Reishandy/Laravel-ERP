@@ -29,11 +29,13 @@ interface SaleFormProps {
     };
     submit: FormEventHandler;
     trigger: ReactNode;
+    open: boolean;
+    setOpen: (open: boolean) => void;
 
     [key: string]: unknown;
 }
 
-export default function SaleForm({ products, customers, data, setData, processing, errors, submit, trigger }: SaleFormProps) {
+export default function SaleForm({ products, customers, data, setData, processing, errors, submit, trigger, open, setOpen }: SaleFormProps) {
     const productOptions = products.map((product) => ({
         value: product.product_number,
         label: `${product.product_number} - ${product.name}`,
@@ -60,7 +62,7 @@ export default function SaleForm({ products, customers, data, setData, processin
                                 onChange={(value) => setData('product_number', value)}
                                 value={data.product_number}
                             />
-                            <InputError message={errors.product} className="mt-2" />
+                            <InputError message={errors.product} />
                         </div>
 
                         <div className="grid gap-2">
@@ -71,7 +73,7 @@ export default function SaleForm({ products, customers, data, setData, processin
                                 onChange={(value) => setData('customer_number', value)}
                                 value={data.customer_number}
                             />
-                            <InputError message={errors.customer} className="mt-2" />
+                            <InputError message={errors.customer} />
                         </div>
 
                         <div className="grid gap-2">
@@ -89,7 +91,7 @@ export default function SaleForm({ products, customers, data, setData, processin
                                     className="no-number-arrows mx-1 flex-1"
                                 />
                             </QuickAdd>
-                            <InputError message={errors.quantity} className="mt-2" />
+                            <InputError message={errors.quantity} />
                         </div>
 
                         <div className="grid gap-2">
@@ -107,7 +109,7 @@ export default function SaleForm({ products, customers, data, setData, processin
                                     </SelectGroup>
                                 </SelectContent>
                             </Select>
-                            <InputError message={errors.status} className="mt-2" />
+                            <InputError message={errors.status} />
                         </div>
                     </div>
                 }
@@ -117,6 +119,8 @@ export default function SaleForm({ products, customers, data, setData, processin
                         Save Sale
                     </Button>
                 }
+                open={open}
+                setOpen={setOpen}
             />
         </form>
     );
