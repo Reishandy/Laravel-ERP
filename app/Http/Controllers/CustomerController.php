@@ -24,19 +24,12 @@ class CustomerController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(StoreCustomerRequest $request)
     {
-        //
+        // TODO: Validate in StoreCustomerRequest
+        dd($request->all());
     }
 
     /**
@@ -54,19 +47,12 @@ class CustomerController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Customer $customer)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
     public function update(UpdateCustomerRequest $request, Customer $customer)
     {
         //
+        dd($request->all());
     }
 
     /**
@@ -75,5 +61,6 @@ class CustomerController extends Controller
     public function destroy(Customer $customer)
     {
         //
+        dd($customer->customer_number);
     }
 }

@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateSaleRequest;
 use App\Models\Sale;
 use Inertia\Inertia;
 use Inertia\Response;
+use function Symfony\Component\String\s;
 
 class SaleController extends Controller
 {
@@ -23,20 +24,14 @@ class SaleController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(StoreSaleRequest $request)
     {
-        //
+        // TODO: validate in StoreSaleRequest
+        dd(request()->all());
     }
 
     /**
@@ -53,13 +48,6 @@ class SaleController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Sale $sale)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -67,6 +55,7 @@ class SaleController extends Controller
     public function update(UpdateSaleRequest $request, Sale $sale)
     {
         //
+        dd(request()->all());
     }
 
     /**
@@ -75,5 +64,6 @@ class SaleController extends Controller
     public function destroy(Sale $sale)
     {
         //
+        dd($sale->sale_number);
     }
 }

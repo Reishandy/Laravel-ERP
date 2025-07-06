@@ -17,6 +17,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('sales', [SaleController::class, 'index'])->name('sales.index');
     Route::get('sales/{sale_number}', [SaleController::class, 'show'])->name('sales.show');
+    Route::post('sales', [SaleController::class, 'store'])->name('sales.store');
+    Route::post('sales/{sale:sale_number}', [SaleController::class, 'update'])->name('sales.update');
+    Route::delete('sales/{sale:sale_number}', [SaleController::class, 'destroy'])->name('sales.destroy');
 
     Route::get('products', [ProductController::class, 'index'])->name('products.index');
     Route::get('products/{product_number}', [ProductController::class, 'show'])->name('products.show');
@@ -26,6 +29,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('customers', [CustomerController::class, 'index'])->name('customers.index');
     Route::get('customers/{customer_number}', [CustomerController::class, 'show'])->name('customers.show');
+    Route::post('customers', [CustomerController::class, 'store'])->name('customers.store');
+    Route::post('customers/{customer:customer_number}', [CustomerController::class, 'update'])->name('customers.update');
+    Route::delete('customers/{customer:customer_number}', [CustomerController::class, 'destroy'])->name('customers.destroy');
 });
 
 // TODO:

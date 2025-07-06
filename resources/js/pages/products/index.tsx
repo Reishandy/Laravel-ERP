@@ -1,5 +1,4 @@
 import { DataTable } from '@/components/data-table/data-table';
-import { DeleteDialog } from '@/components/dialog/delete-dialog';
 import Heading from '@/components/heading';
 import { Badge, badgeVariants } from '@/components/ui/badge';
 import AppLayout from '@/layouts/app-layout';
@@ -7,7 +6,7 @@ import { type BreadcrumbItem, Product } from '@/types';
 import { Head, router, usePage } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
 import { VariantProps } from 'class-variance-authority';
-import { Download, Plus, SquarePen, Trash } from 'lucide-react';
+import { Download, Plus, SquarePen } from 'lucide-react';
 import { useEffect } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useInitials } from '@/hooks/use-initials';
@@ -125,6 +124,7 @@ export default function Products({ products, show }: ProductsPageProps) {
                 );
             },
         },
+        // TODO: Add total sold column
         {
             id: 'actions',
             cell: ({ row }) => {

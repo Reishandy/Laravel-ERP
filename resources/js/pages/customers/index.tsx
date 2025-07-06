@@ -1,5 +1,4 @@
 import { DataTable } from '@/components/data-table/data-table';
-import { DeleteDialog } from '@/components/dialog/delete-dialog';
 import Heading from '@/components/heading';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge, badgeVariants } from '@/components/ui/badge';
@@ -10,8 +9,9 @@ import { type BreadcrumbItem, Customer } from '@/types';
 import { Head, router } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
 import { VariantProps } from 'class-variance-authority';
-import { Download, Plus, SquarePen, Trash } from 'lucide-react';
+import { Download, Plus, SquarePen } from 'lucide-react';
 import { useEffect } from 'react';
+import DeleteCustomerForm from '@/pages/customers/delete-product-form';
 
 interface CustomersPageProps {
     app: {
@@ -102,6 +102,7 @@ export default function Customers({ customers, show }: CustomersPageProps) {
                 );
             },
         },
+        // TODO: Add total sales column
         {
             id: 'actions',
             cell: ({ row }) => {
@@ -110,16 +111,7 @@ export default function Customers({ customers, show }: CustomersPageProps) {
                 return (
                     <div className="flex flex-row items-center justify-center gap-x-2">
                         <SquarePen className="size-5 cursor-pointer text-primary hover:text-primary/70" />
-                        <DeleteDialog
-                            title={`Delete Customer "${customer.name}"?`}
-                            description={`Are you sure you want to delete ${customer.customer_number} "${customer.name}"? This action cannot be undone. Related sales will not be deleted.`}
-                            trigger={<Trash className="size-5 cursor-pointer text-destructive hover:text-destructive/70" />}
-                            onDelete={
-                                () => {
-                                    alert('Delete action triggered');
-                                } /* TODO: Implement delete action */
-                            }
-                        />
+                        <DeleteCustomerForm customer={customer} />
                     </div>
                 );
             },
