@@ -4,12 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreSaleRequest;
 use App\Http\Requests\UpdateSaleRequest;
-use App\Models\Product;
 use App\Models\Sale;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
-use function Symfony\Component\String\s;
 
 class SaleController extends Controller
 {
@@ -176,5 +175,20 @@ class SaleController extends Controller
         $sale->delete();
 
         return redirect()->route('sales.index')->with('success', 'Sale deleted successfully')->with('description', $sale->sale_number . ' has been deleted. and stock has been restored.');
+    }
+
+    /**
+     * Update the status of the specified sale.
+     */
+    public function status(Request $request, Sale $sale): RedirectResponse
+    {
+        $request->validate([
+            'status' => 'required|in:pending,processing,completed',
+        ]);
+
+        $sale->update(['status' => $request->status]);
+
+        return redirect()->route('sales.index')->with('success', 'Sale status updated successfully.')
+            ->with('description', $sale->sale_number . ' status has been updated to ' . ucfirst($request->status) . '.');
     }
 }

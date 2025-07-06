@@ -24,8 +24,6 @@ export default function DeleteCustomerForm({ customer }: DeleteCustomerFormProps
         e.preventDefault();
         destroy(route('customers.destroy', customer.customer_number), {
             preserveScroll: true,
-
-            forceFormData: true,
             onSuccess: () => setOpen(false),
         });
     };

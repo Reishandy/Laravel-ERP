@@ -24,7 +24,6 @@ export default function DeleteProductForm({ product }: DeleteProductFormProps) {
         e.preventDefault();
         destroy(route('products.destroy', product.product_number), {
             preserveScroll: true,
-            forceFormData: true,
             onSuccess: () => setOpen(false),
         });
     };

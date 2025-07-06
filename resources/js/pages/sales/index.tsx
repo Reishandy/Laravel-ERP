@@ -2,16 +2,7 @@ import { DataTable } from '@/components/data-table/data-table';
 import Heading from '@/components/heading';
 import PriceCell from '@/components/price-cell';
 import TimestampCell from '@/components/timestamp-cell';
-import { Badge, badgeVariants } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import AppLayout from '@/layouts/app-layout';
 import AddSaleForm from '@/pages/sales/add-sale-form';
 import DeleteSaleForm from '@/pages/sales/delete-sale-form';
@@ -19,10 +10,10 @@ import EditSaleForm from '@/pages/sales/edit-sale-form';
 import { type BreadcrumbItem, Customer, Product, Sale } from '@/types';
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
-import { VariantProps } from 'class-variance-authority';
-import { Download, MoreHorizontal, Plus, SquarePen } from 'lucide-react';
+import { Download, Plus, SquarePen } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
+import ChangeStatusForm from '@/pages/sales/change-status-form';
 
 export interface Entry extends Sale {
     product: Product;
@@ -176,44 +167,9 @@ export default function Sales({ sales, products, customers, show }: SalesPagePro
             accessorKey: 'status',
             header: () => <div className="text-center">Status</div>,
             cell: ({ row }) => {
-                const status: 'pending' | 'processing' | 'completed' = row.getValue('status');
-                const variantMap: Record<Sale['status'], VariantProps<typeof badgeVariants>['variant']> = {
-                    pending: 'outline',
-                    processing: 'secondary',
-                    completed: 'default',
-                };
+                const sale = row.original;
 
-                return (
-                    <div className="flex flex-row items-center justify-end gap-x-2">
-                        <div className="w-full">
-                            <Badge variant={variantMap[status]} className="text-md w-full font-medium capitalize">
-                                {status}
-                            </Badge>
-                        </div>
-                        <DropdownMenu>
-                            <DropdownMenuTrigger className="cursor-pointer" asChild>
-                                <Button variant="ghost" className="h-8 w-8 p-0">
-                                    <span className="sr-only">Open menu</span>
-                                    <MoreHorizontal className="h-4 w-4" />
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                                <DropdownMenuLabel className="text-muted-foreground">Change Status</DropdownMenuLabel>
-                                <DropdownMenuSeparator />
-                                {/* TODO: onclick function*/}
-                                <DropdownMenuItem className="cursor-pointer" disabled={status === 'pending'}>
-                                    Pending
-                                </DropdownMenuItem>
-                                <DropdownMenuItem className="cursor-pointer" disabled={status === 'processing'}>
-                                    Processing
-                                </DropdownMenuItem>
-                                <DropdownMenuItem className="cursor-pointer" disabled={status === 'completed'}>
-                                    Completed
-                                </DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                    </div>
-                );
+                return <ChangeStatusForm sale={sale} />;
             },
         },
         {

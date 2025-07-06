@@ -8,7 +8,7 @@ interface DeleteSaleFormProps {
     sale: Sale;
 }
 
-type EditSaleForm = {
+type DeleteSaleForm = {
     name: string;
     description: string;
     price: number;
@@ -18,13 +18,12 @@ type EditSaleForm = {
 
 export default function DeleteSaleForm({ sale }: DeleteSaleFormProps) {
     const [open, setOpen] = useState(false);
-    const { delete: destroy, processing } = useForm<Required<EditSaleForm>>();
+    const { delete: destroy, processing } = useForm<Required<DeleteSaleForm>>();
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
         destroy(route('sales.destroy', sale.sale_number), {
             preserveScroll: true,
-            forceFormData: true,
             onSuccess: () => setOpen(false),
         });
     };

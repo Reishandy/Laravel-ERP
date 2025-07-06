@@ -41,7 +41,6 @@ export default function AddSaleForm({ products, customers, sale, children, open,
         e.preventDefault();
         post(route('sales.update', sale.sale_number), {
             preserveScroll: true,
-            forceFormData: true,
             onSuccess: () => {
                 setOpen(false);
                 setData({

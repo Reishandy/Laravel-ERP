@@ -29,7 +29,6 @@ export default function AddSaleForm({ products, customers, children }: AddSaleFo
         e.preventDefault();
         post(route('sales.store'), {
             preserveScroll: true,
-            forceFormData: true,
             onSuccess: () => {
                 setOpen(false);
                 setData({

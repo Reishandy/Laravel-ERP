@@ -19,6 +19,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('sales/{sale_number}', [SaleController::class, 'show'])->name('sales.show');
     Route::post('sales', [SaleController::class, 'store'])->name('sales.store');
     Route::post('sales/{sale:sale_number}', [SaleController::class, 'update'])->name('sales.update');
+    Route::post('sales/{sale:sale_number}/status', [SaleController::class, 'status'])->name('sales.status');
     Route::delete('sales/{sale:sale_number}', [SaleController::class, 'destroy'])->name('sales.destroy');
 
     Route::get('products', [ProductController::class, 'index'])->name('products.index');
