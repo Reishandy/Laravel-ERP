@@ -1,11 +1,13 @@
 import ProductForm from '@/pages/products/product-form';
 import { Product } from '@/types';
 import { useForm } from '@inertiajs/react';
-import { FormEventHandler, ReactNode, useState } from 'react';
+import { FormEventHandler, ReactNode, useEffect } from 'react';
 
 interface EditProductFormProps {
     product: Product;
-    children: ReactNode;
+    children?: ReactNode;
+    open: boolean;
+    setOpen: (open: boolean) => void;
 }
 
 type EditProductForm = {
@@ -16,8 +18,7 @@ type EditProductForm = {
     image?: File | null;
 };
 
-export default function EditProductForm({ product, children }: EditProductFormProps) {
-    const [open, setOpen] = useState(false);
+export default function EditProductForm({ product, children, open, setOpen }: EditProductFormProps) {
     const { data, setData, post, processing, errors } = useForm<Required<EditProductForm>>({
         name: product.name,
         description: product.description || '',
@@ -26,13 +27,32 @@ export default function EditProductForm({ product, children }: EditProductFormPr
         image: null,
     });
 
+    useEffect(() => {
+        setData({
+            name: product.name,
+            description: product.description || '',
+            price: product.price,
+            quantity: product.quantity,
+            image: null,
+        });
+    }, [product]);
+
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
         post(route('products.update', product.product_number), {
             preserveScroll: true,
             preserveState: true,
             forceFormData: true,
-            onSuccess: () => setOpen(false),
+            onSuccess: () => {
+                setOpen(false);
+                setData({
+                    name: '',
+                    description: '',
+                    price: 0,
+                    quantity: 0,
+                    image: null,
+                });
+            },
         });
     };
 

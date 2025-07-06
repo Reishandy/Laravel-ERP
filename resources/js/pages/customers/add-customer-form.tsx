@@ -28,7 +28,15 @@ export default function AddCustomerForm({ children }: AddCustomerFormProps) {
             preserveScroll: true,
             preserveState: true,
             forceFormData: true,
-            onSuccess: () => setOpen(false),
+            onSuccess: () => {
+                setOpen(false)
+                setData({
+                    name: '',
+                    email: '',
+                    avatar: null,
+                    type: 'individual',
+                });
+            }
         });
     };
 

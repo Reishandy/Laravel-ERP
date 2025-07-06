@@ -30,7 +30,16 @@ export default function AddProductForm({ children }: AddProductFormProps) {
             preserveScroll: true,
             preserveState: true,
             forceFormData: true,
-            onSuccess: () => setOpen(false),
+            onSuccess: () => {
+                setOpen(false);
+                setData({
+                    name: '',
+                    description: '',
+                    price: 0,
+                    quantity: 0,
+                    image: null,
+                });
+            }
         });
     };
 

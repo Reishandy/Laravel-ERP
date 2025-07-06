@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreCustomerRequest;
 use App\Http\Requests\UpdateCustomerRequest;
 use App\Models\Customer;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -17,7 +19,6 @@ class CustomerController extends Controller
     {
         return Inertia::render('customers/index', [
             'customers' => Customer::where('user_id', auth()->user()->id)
-                ->with('sales')
                 ->latest()
                 ->get(),
         ]);
@@ -26,10 +27,27 @@ class CustomerController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCustomerRequest $request)
+    public function store(StoreCustomerRequest $request): RedirectResponse
     {
-        // TODO: Validate in StoreCustomerRequest
-        dd($request->all());
+        $user = auth()->user();
+
+        // Get latest customer number
+        $latestCustomer = $user->customers()
+            ->orderBy('customer_number', 'desc')
+            ->first();
+        $number = (int) explode('-', $latestCustomer->customer_number)[1] ?? 0;
+        $formattedNumber = 'C-' . str_pad($number + 1, 5, '0', STR_PAD_LEFT);
+
+        $customers = $user->customers()->create($request->merge([
+            'customer_number' => $formattedNumber,
+        ])->all());
+
+        if ($request->hasFile('avatar')) {
+            $customers->avatar = $request->file('avatar')->store('avatars', 'public');
+            $customers->save();
+        }
+
+        return redirect()->route('customers.index')->with('success', 'Customer created successfully.');
     }
 
     /**
@@ -39,7 +57,6 @@ class CustomerController extends Controller
     {
         return Inertia::render('customers/index', [
             'customers' => Customer::where('user_id', auth()->user()->id)
-                ->with('sales')
                 ->latest()
                 ->get(),
             'show' => $customer_number
@@ -49,16 +66,31 @@ class CustomerController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCustomerRequest $request, Customer $customer)
+    public function update(UpdateCustomerRequest $request, Customer $customer): RedirectResponse
     {
-        //
         dd($request->all());
+        $validated = $request->validated();
+        unset($validated['avatar']);
+        $customer->fill($validated);
+
+        if ($request->hasFile('avatar') && $request->file('avatar') !== null) {
+            // Delete the old avatar if it exists
+            if ($customer->avatar) {
+                Storage::disk('public')->delete($customer->avatar);
+            }
+
+            $customer->avatar = $request->file('avatar')->store('avatars', 'public');
+        }
+
+        $customer->save();
+
+        return redirect()->route('customers.index')->with('success', 'Customer updated successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Customer $customer)
+    public function destroy(Customer $customer): RedirectResponse
     {
         //
         dd($customer->customer_number);

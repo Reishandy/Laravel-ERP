@@ -14,7 +14,7 @@ import { Head, router, usePage } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
 import { VariantProps } from 'class-variance-authority';
 import { Download, Plus, SquarePen } from 'lucide-react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 interface ProductsPageProps {
     app: {
@@ -38,6 +38,14 @@ const breadcrumbs: BreadcrumbItem[] = [
 export default function Products({ products, show }: ProductsPageProps) {
     const { app } = usePage<ProductsPageProps>().props;
     const getInitials = useInitials();
+
+    const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+    const [editDialogOpen, setEditDialogOpen] = useState(false);
+
+    const openEditDialog = (product: Product) => {
+        setSelectedProduct(product);
+        setEditDialogOpen(true);
+    };
 
     useEffect(() => {
         if (show) {
@@ -150,9 +158,7 @@ export default function Products({ products, show }: ProductsPageProps) {
 
                 return (
                     <div className="flex flex-row items-center justify-center gap-x-2">
-                        <EditProductForm product={product}>
-                            <SquarePen className="size-5 cursor-pointer text-primary hover:text-primary/70" />
-                        </EditProductForm>
+                        <SquarePen className="size-5 cursor-pointer text-primary hover:text-primary/70" onClick={() => openEditDialog(product)} />
                         <DeleteProductForm product={product} />
                     </div>
                 );
@@ -166,7 +172,6 @@ export default function Products({ products, show }: ProductsPageProps) {
         { value: 'price', label: 'Price' },
         { value: 'quantity', label: 'Quantity' },
         { value: 'updated_at', label: 'Last Updated' },
-        { value: 'quantity', label: 'Quantity' },
     ];
 
     return (
@@ -201,6 +206,8 @@ export default function Products({ products, show }: ProductsPageProps) {
                 <div>
                     <DataTable columns={columns} data={products} sortableColumns={sortableColumns} show={show} />
                 </div>
+
+                {selectedProduct && <EditProductForm product={selectedProduct} open={editDialogOpen} setOpen={setEditDialogOpen} />}
             </div>
         </AppLayout>
     );

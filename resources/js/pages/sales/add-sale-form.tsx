@@ -31,7 +31,15 @@ export default function AddSaleForm({ products, customers, children }: AddSaleFo
             preserveScroll: true,
             preserveState: true,
             forceFormData: true,
-            onSuccess: () => setOpen(false),
+            onSuccess: () => {
+                setOpen(false);
+                setData({
+                    product_number: '',
+                    customer_number: '',
+                    quantity: 1,
+                    status: 'pending',
+                });
+            }
         });
     };
 

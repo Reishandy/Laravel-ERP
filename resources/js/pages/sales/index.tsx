@@ -1,7 +1,7 @@
 import { DataTable } from '@/components/data-table/data-table';
 import Heading from '@/components/heading';
-import TimestampCell from '@/components/timestamp-cell';
 import PriceCell from '@/components/price-cell';
+import TimestampCell from '@/components/timestamp-cell';
 import { Badge, badgeVariants } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -21,7 +21,7 @@ import { Head, Link, router, usePage } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
 import { VariantProps } from 'class-variance-authority';
 import { Download, MoreHorizontal, Plus, SquarePen } from 'lucide-react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export interface Entry extends Sale {
     product: Product;
@@ -51,6 +51,14 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 export default function Sales({ sales, products, customers, show }: SalesPageProps) {
     const { app } = usePage<SalesPageProps>().props;
+
+    const [selectedSale, setSelectedSale] = useState<Sale | null>(null);
+    const [editDialogOpen, setEditDialogOpen] = useState(false);
+
+    const openEditDialog = (sale: Sale) => {
+        setSelectedSale(sale);
+        setEditDialogOpen(true);
+    };
 
     useEffect(() => {
         if (show) {
@@ -195,10 +203,7 @@ export default function Sales({ sales, products, customers, show }: SalesPagePro
 
                 return (
                     <div className="flex flex-row items-center justify-center gap-x-2">
-                        <EditSaleForm sale={sale} products={products} customers={customers}>
-                            <SquarePen className="size-5 cursor-pointer text-primary hover:text-primary/70" />
-                        </EditSaleForm>
-
+                        <SquarePen className="size-5 cursor-pointer text-primary hover:text-primary/70" onClick={() => openEditDialog(sale)} />
                         <DeleteSaleForm sale={sale} />
                     </div>
                 );
@@ -248,6 +253,10 @@ export default function Sales({ sales, products, customers, show }: SalesPagePro
                 <div>
                     <DataTable columns={columns} data={sales} sortableColumns={sortableColumns} show={show} />
                 </div>
+
+                {selectedSale && (
+                    <EditSaleForm sale={selectedSale} products={products} customers={customers} open={editDialogOpen} setOpen={setEditDialogOpen} />
+                )}
             </div>
         </AppLayout>
     );

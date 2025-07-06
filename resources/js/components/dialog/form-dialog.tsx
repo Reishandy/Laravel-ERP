@@ -25,7 +25,7 @@ import { ReactNode, useState } from 'react';
 interface FormDialogProps {
     title: string;
     description: string;
-    trigger: ReactNode;
+    trigger?: ReactNode;
     formContent: ReactNode;
     formButton: ReactNode;
     open: boolean;

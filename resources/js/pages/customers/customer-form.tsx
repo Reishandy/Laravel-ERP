@@ -12,7 +12,7 @@ interface CustomerFormProps {
         name: string;
         email: string;
         avatar?: File | null;
-        type: 'individual' | 'business';
+        type: string;
     };
     setData: (key: string, value: unknown) => void;
     processing: boolean;
@@ -83,11 +83,7 @@ export default function CustomerForm({ data, setData, processing, errors, submit
 
                         <div className="grid gap-2">
                             <Label htmlFor="type">Type</Label>
-                            <Select
-                                value={data.type}
-                                onValueChange={(value) => setData('type', value)}
-                                disabled={processing}
-                            >
+                            <Select value={data.type} onValueChange={(value) => setData('type', value)} disabled={processing}>
                                 <SelectTrigger className="w-full">
                                     <SelectValue placeholder="Select customer type" />
                                 </SelectTrigger>

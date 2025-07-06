@@ -1,14 +1,16 @@
 import SaleForm from '@/pages/sales/sale-form';
 import { Customer, Product } from '@/types';
 import { useForm } from '@inertiajs/react';
-import { FormEventHandler, ReactNode, useState } from 'react';
+import { FormEventHandler, ReactNode, useEffect } from 'react';
 import { Entry } from '@/pages/sales/index';
 
 interface AddSaleFormProps {
     products: Product[];
     customers: Customer[];
     sale: Entry;
-    children: ReactNode;
+    children?: ReactNode;
+    open: boolean;
+    setOpen: (open: boolean) => void;
 }
 
 type AddSaleForm = {
@@ -18,8 +20,7 @@ type AddSaleForm = {
     status: 'pending' | 'processing' | 'completed';
 };
 
-export default function AddSaleForm({ products, customers, sale, children }: AddSaleFormProps) {
-    const [open, setOpen] = useState(false);
+export default function AddSaleForm({ products, customers, sale, children, open, setOpen }: AddSaleFormProps) {
     const { data, setData, post, processing, errors } = useForm<Required<AddSaleForm>>({
         product_number: sale.product.product_number,
         customer_number: sale.customer.customer_number,
@@ -27,13 +28,30 @@ export default function AddSaleForm({ products, customers, sale, children }: Add
         status: sale.status,
     });
 
+    useEffect(() => {
+        setData({
+            product_number: sale.product.product_number,
+            customer_number: sale.customer.customer_number,
+            quantity: sale.quantity,
+            status: sale.status,
+        });
+    }, [sale]);
+
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
         post(route('sales.store'), {
             preserveScroll: true,
             preserveState: true,
             forceFormData: true,
-            onSuccess: () => setOpen(false),
+            onSuccess: () => {
+                setOpen(false);
+                setData({
+                    product_number: '',
+                    customer_number: '',
+                    quantity: 1,
+                    status: 'pending',
+                });
+            }
         });
     };
 

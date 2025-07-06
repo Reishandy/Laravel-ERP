@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Models\Product;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -27,10 +28,27 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreProductRequest $request)
+    public function store(StoreProductRequest $request): RedirectResponse
     {
-        // TODO: Validate the request on StoreProductRequest
-        dd($request->all());
+        $user = auth()->user();
+
+        // Get latest product number
+        $latestProduct = $user->products()
+            ->orderBy('product_number', 'desc')
+            ->first();
+        $number = (int) explode('-', $latestProduct->product_number)[1] ?? 0;
+        $formattedNumber = 'P-' . str_pad($number + 1, 5, '0', STR_PAD_LEFT);
+
+        $product = $user->products()->create($request->merge([
+            'product_number' => $formattedNumber,
+        ])->all());
+
+        if ($request->hasFile('image')) {
+            $product->image = $request->file('image')->store('images', 'public');
+            $product->save();
+        }
+
+        return redirect()->route('products.index')->with('success', 'Customer created successfully.');
     }
 
     /**
@@ -50,7 +68,7 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateProductRequest $request, Product $product)
+    public function update(UpdateProductRequest $request, Product $product): RedirectResponse
     {
         //
         dd($request->all());
@@ -59,7 +77,7 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Product $product)
+    public function destroy(Product $product): RedirectResponse
     {
         //
         dd($product->product_number);

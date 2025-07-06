@@ -13,7 +13,7 @@ import { Head, router, usePage } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
 import { VariantProps } from 'class-variance-authority';
 import { Download, Plus, SquarePen } from 'lucide-react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import EditCustomerForm from './edit-customer-form';
 
 interface CustomersPageProps {
@@ -38,6 +38,14 @@ const breadcrumbs: BreadcrumbItem[] = [
 export default function Customers({ customers, show }: CustomersPageProps) {
     const { app } = usePage<CustomersPageProps>().props;
     const getInitials = useInitials();
+
+    const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
+    const [editDialogOpen, setEditDialogOpen] = useState(false);
+
+    const openEditDialog = (customer: Customer) => {
+        setSelectedCustomer(customer);
+        setEditDialogOpen(true);
+    };
 
     useEffect(() => {
         if (show) {
@@ -67,7 +75,7 @@ export default function Customers({ customers, show }: CustomersPageProps) {
                 return (
                     <div className="flex flex-row items-center gap-x-2">
                         <Avatar className="h-8 w-8 overflow-hidden">
-                            <AvatarImage src={'/storage/' + customer.image} alt={customer.name} />
+                            <AvatarImage src={'/storage/' + customer.avatar} alt={customer.name} />
                             <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
                                 {getInitials(customer.name)}
                             </AvatarFallback>
@@ -131,9 +139,7 @@ export default function Customers({ customers, show }: CustomersPageProps) {
 
                 return (
                     <div className="flex flex-row items-center justify-center gap-x-2">
-                        <EditCustomerForm customer={customer}>
-                            <SquarePen className="size-5 cursor-pointer text-primary hover:text-primary/70" />
-                        </EditCustomerForm>
+                        <SquarePen className="size-5 cursor-pointer text-primary hover:text-primary/70" onClick={() => openEditDialog(customer)} />
                         <DeleteCustomerForm customer={customer} />
                     </div>
                 );
@@ -182,6 +188,8 @@ export default function Customers({ customers, show }: CustomersPageProps) {
                 <div>
                     <DataTable columns={columns} data={customers} sortableColumns={sortableColumns} show={show} />
                 </div>
+
+                {selectedCustomer && <EditCustomerForm customer={selectedCustomer} open={editDialogOpen} setOpen={setEditDialogOpen} />}
             </div>
         </AppLayout>
     );
