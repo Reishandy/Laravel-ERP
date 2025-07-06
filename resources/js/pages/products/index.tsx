@@ -1,19 +1,20 @@
 import { DataTable } from '@/components/data-table/data-table';
 import Heading from '@/components/heading';
+import TimestampCell from '@/components/timestamp-cell';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge, badgeVariants } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { useInitials } from '@/hooks/use-initials';
 import AppLayout from '@/layouts/app-layout';
+import AddProductForm from '@/pages/products/add-product-form';
+import DeleteProductForm from '@/pages/products/delete-product-form';
+import EditProductForm from '@/pages/products/edit-product-form';
 import { type BreadcrumbItem, Product } from '@/types';
 import { Head, router, usePage } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
 import { VariantProps } from 'class-variance-authority';
 import { Download, Plus, SquarePen } from 'lucide-react';
 import { useEffect } from 'react';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { useInitials } from '@/hooks/use-initials';
-import { Button } from '@/components/ui/button';
-import AddProductForm from '@/pages/products/add-product-form';
-import EditProductForm from '@/pages/products/edit-product-form';
-import DeleteProductForm from '@/pages/products/delete-product-form';
 
 interface ProductsPageProps {
     app: {
@@ -126,6 +127,23 @@ export default function Products({ products, show }: ProductsPageProps) {
             },
         },
         {
+            id: 'updated_at',
+            accessorKey: 'updated_at',
+            header: () => <div className="text-center">Last Updated</div>,
+            cell: ({ row }) => {
+                return (
+                    <TimestampCell
+                        primaryDate={row.getValue('updated_at')}
+                        secondaryDate={row.original.created_at}
+                        locale={app.locale}
+                        timezone={app.timezone}
+                        primaryLabel="Last updated"
+                        secondaryLabel="Created at"
+                    />
+                );
+            },
+        },
+        {
             id: 'actions',
             cell: ({ row }) => {
                 const product = row.original;
@@ -146,6 +164,8 @@ export default function Products({ products, show }: ProductsPageProps) {
         { value: 'product_number', label: 'ID' },
         { value: 'name', label: 'Product Name' },
         { value: 'price', label: 'Price' },
+        { value: 'quantity', label: 'Quantity' },
+        { value: 'updated_at', label: 'Last Updated' },
         { value: 'quantity', label: 'Quantity' },
     ];
 

@@ -1,5 +1,7 @@
 import { DataTable } from '@/components/data-table/data-table';
 import Heading from '@/components/heading';
+import TimestampCell from '@/components/timestamp-cell';
+import PriceCell from '@/components/price-cell';
 import { Badge, badgeVariants } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -10,7 +12,6 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import AppLayout from '@/layouts/app-layout';
 import AddSaleForm from '@/pages/sales/add-sale-form';
 import DeleteSaleForm from '@/pages/sales/delete-sale-form';
@@ -96,47 +97,20 @@ export default function Sales({ sales, products, customers, show }: SalesPagePro
             accessorKey: 'total_price',
             header: () => <div className="text-center">Total</div>,
             cell: ({ row }) => {
-                const price_at_sale: number = row.original.price_at_sale;
-                const price: number = row.original.product.price;
+                const price_at_sale = row.original.price_at_sale;
+                const current_price = row.original.product.price;
                 const quantity: number = row.getValue('quantity');
                 const total_price = parseFloat(row.getValue('total_price'));
-                const formatted = new Intl.NumberFormat(app.locale, {
-                    style: 'currency',
-                    currency: app.currency,
-                }).format(total_price);
 
                 return (
-                    <div className="text-center font-medium">
-                        {total_price !== Math.round((price * quantity + Number.EPSILON) * 100) / 100 ? (
-                            <Tooltip>
-                                <TooltipTrigger asChild>
-                                    <span>
-                                        {formatted}
-                                        <span className="text-xl">*</span>
-                                    </span>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                    <p>Product price has changed since sale.</p>
-                                    <p>
-                                        Price at sale time:{' '}
-                                        {new Intl.NumberFormat(app.locale, {
-                                            style: 'currency',
-                                            currency: app.currency,
-                                        }).format(Math.round((price_at_sale + Number.EPSILON) * 100) / 100)}
-                                    </p>
-                                    <p>
-                                        Current price:{' '}
-                                        {new Intl.NumberFormat(app.locale, {
-                                            style: 'currency',
-                                            currency: app.currency,
-                                        }).format(price)}
-                                    </p>
-                                </TooltipContent>
-                            </Tooltip>
-                        ) : (
-                            <span>{formatted}</span>
-                        )}
-                    </div>
+                    <PriceCell
+                        totalPrice={total_price}
+                        priceAtSale={price_at_sale}
+                        currentPrice={current_price}
+                        quantity={quantity}
+                        locale={app.locale}
+                        currency={app.currency}
+                    />
                 );
             },
         },
@@ -155,48 +129,17 @@ export default function Sales({ sales, products, customers, show }: SalesPagePro
         {
             id: 'created_at',
             accessorKey: 'created_at',
-            header: () => <div className="text-center">Date</div>,
+            header: () => <div className="text-center">Sale Time</div>,
             cell: ({ row }) => {
-                const date = new Date(row.getValue('created_at'));
-                const options: Intl.DateTimeFormatOptions = {
-                    timeZone: app.timezone,
-                    timeZoneName: 'short',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                };
-                const formattedTime = date.toLocaleTimeString(app.locale, options);
-                const match = formattedTime.match(/\b([A-Z]{2,5})\b$/);
-                const abbreviation = match ? match[1] : '';
-
                 return (
-                    <div className="text-center">
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <div className="flex flex-row items-center justify-center gap-x-2">
-                                    <span className="ml-2">
-                                        {date.toLocaleDateString(app.locale, {
-                                            weekday: 'long',
-                                            year: 'numeric',
-                                            month: 'long',
-                                            day: 'numeric',
-                                        })}
-                                    </span>
-                                    -
-                                    <span>
-                                        {date.toLocaleTimeString(app.locale, {
-                                            timeZone: app.timezone,
-                                            hour: '2-digit',
-                                            minute: '2-digit',
-                                        })}{' '}
-                                        {abbreviation}
-                                    </span>
-                                </div>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                                <p>Last updated on {date.toLocaleString(app.locale)}</p>
-                            </TooltipContent>
-                        </Tooltip>
-                    </div>
+                    <TimestampCell
+                        primaryDate={row.getValue('created_at')}
+                        secondaryDate={row.original.updated_at}
+                        locale={app.locale}
+                        timezone={app.timezone}
+                        primaryLabel="Created at"
+                        secondaryLabel="Last updated"
+                    />
                 );
             },
         },
@@ -267,7 +210,7 @@ export default function Sales({ sales, products, customers, show }: SalesPagePro
         { value: 'sale_number', label: 'ID' },
         { value: 'product.name_and_number', label: 'Product' },
         { value: 'customer.name', label: 'Customer' },
-        { value: 'created_at', label: 'Date' },
+        { value: 'created_at', label: 'Sale Time' },
         { value: 'quantity', label: 'Quantity' },
         { value: 'total_price', label: 'Total' },
         { value: 'status', label: 'Status' },

@@ -1,5 +1,6 @@
 import { DataTable } from '@/components/data-table/data-table';
 import Heading from '@/components/heading';
+import TimestampCell from '@/components/timestamp-cell';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge, badgeVariants } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -8,7 +9,7 @@ import AppLayout from '@/layouts/app-layout';
 import AddCustomerForm from '@/pages/customers/add-customer-form';
 import DeleteCustomerForm from '@/pages/customers/delete-customer-form';
 import { type BreadcrumbItem, Customer } from '@/types';
-import { Head, router } from '@inertiajs/react';
+import { Head, router, usePage } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
 import { VariantProps } from 'class-variance-authority';
 import { Download, Plus, SquarePen } from 'lucide-react';
@@ -35,6 +36,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function Customers({ customers, show }: CustomersPageProps) {
+    const { app } = usePage<CustomersPageProps>().props;
     const getInitials = useInitials();
 
     useEffect(() => {
@@ -106,6 +108,23 @@ export default function Customers({ customers, show }: CustomersPageProps) {
             },
         },
         {
+            id: 'updated_at',
+            accessorKey: 'updated_at',
+            header: () => <div className="text-center">Last Updated</div>,
+            cell: ({ row }) => {
+                return (
+                    <TimestampCell
+                        primaryDate={row.getValue('updated_at')}
+                        secondaryDate={row.original.created_at}
+                        locale={app.locale}
+                        timezone={app.timezone}
+                        primaryLabel="Last updated"
+                        secondaryLabel="Created at"
+                    />
+                );
+            },
+        },
+        {
             id: 'actions',
             cell: ({ row }) => {
                 const customer = row.original;
@@ -127,6 +146,7 @@ export default function Customers({ customers, show }: CustomersPageProps) {
         { value: 'name', label: 'Customer Name' },
         { value: 'email', label: 'Contact' },
         { value: 'type', label: 'Type' },
+        { value: 'updated_at', label: 'Last Updated' },
         { value: 'actions', label: 'Actions' },
     ];
 
