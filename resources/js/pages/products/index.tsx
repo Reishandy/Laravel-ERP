@@ -14,6 +14,7 @@ import { useInitials } from '@/hooks/use-initials';
 import { Button } from '@/components/ui/button';
 import AddProductForm from '@/pages/products/add-product-form';
 import EditProductForm from '@/pages/products/edit-product-form';
+import DeleteProductForm from '@/pages/products/delete-product-form';
 
 interface ProductsPageProps {
     app: {
@@ -134,16 +135,7 @@ export default function Products({ products, show }: ProductsPageProps) {
                         <EditProductForm product={product}>
                             <SquarePen className="size-5 cursor-pointer text-primary hover:text-primary/70" />
                         </EditProductForm>
-                        <DeleteDialog
-                            title={`Delete "${product.name}"?`}
-                            description={`Are you sure you want to delete ${product.product_number} "${product.name}"? This action cannot be undone. Related sales will not be deleted.`}
-                            trigger={<Trash className="size-5 cursor-pointer text-destructive hover:text-destructive/70" />}
-                            onDelete={
-                                () => {
-                                    alert('Delete action triggered');
-                                } /* TODO: Implement delete action */
-                            }
-                        />
+                        <DeleteProductForm product={product} />
                     </div>
                 );
             },

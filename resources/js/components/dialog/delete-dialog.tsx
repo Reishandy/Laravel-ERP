@@ -20,13 +20,15 @@ import {
     DrawerTrigger,
 } from '@/components/ui/drawer';
 import { useMediaQuery } from '@/hooks/use-media-query';
-import { ReactNode, useState } from 'react';
+import { FormEventHandler, ReactNode, useState } from 'react';
+import { LoaderCircle } from 'lucide-react';
 
 interface DeleteDialogProps {
     title?: string;
     description?: string;
     trigger: ReactNode;
-    onDelete: () => void;
+    onDelete: FormEventHandler;
+    processing: boolean;
 }
 
 export function DeleteDialog({
@@ -34,6 +36,7 @@ export function DeleteDialog({
     description = 'This action will permanently delete the entry and cannot be undone.',
     trigger,
     onDelete,
+    processing,
 }: DeleteDialogProps) {
     const [open, setOpen] = useState(false);
     const isDesktop = useMediaQuery('(min-width: 640px)');
@@ -52,7 +55,8 @@ export function DeleteDialog({
                             <Button variant="outline">Cancel</Button>
                         </DialogClose>
                         <DialogClose asChild>
-                            <Button variant="destructive" onClick={onDelete}>
+                            <Button variant="destructive" onClick={onDelete} disabled={processing}>
+                                {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
                                 Delete
                             </Button>
                         </DialogClose>
@@ -72,7 +76,8 @@ export function DeleteDialog({
                 </DrawerHeader>
                 <DrawerFooter className="pt-2">
                     <DrawerClose asChild>
-                        <Button variant="destructive" onClick={onDelete}>
+                        <Button variant="destructive" onClick={onDelete} disabled={processing}>
+                            {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
                             Delete
                         </Button>
                     </DrawerClose>
