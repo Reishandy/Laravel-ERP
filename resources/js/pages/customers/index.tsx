@@ -1,17 +1,17 @@
 import { DataTable } from '@/components/data-table/data-table';
 import { DeleteDialog } from '@/components/dialog/delete-dialog';
 import Heading from '@/components/heading';
-import ActionButtons from '@/components/heading-button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge, badgeVariants } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { useInitials } from '@/hooks/use-initials';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem, Customer } from '@/types';
 import { Head, router } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
-import { SquarePen, Trash } from 'lucide-react';
 import { VariantProps } from 'class-variance-authority';
+import { Download, Plus, SquarePen, Trash } from 'lucide-react';
 import { useEffect } from 'react';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { useInitials } from '@/hooks/use-initials';
 
 interface CustomersPageProps {
     app: {
@@ -142,12 +142,23 @@ export default function Customers({ customers, show }: CustomersPageProps) {
                 <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between sm:gap-0">
                     <Heading title="Customers" description="Manage your customers and their details." />
 
-                    <ActionButtons
-                        onExport={() => {
-                            /*TODO*/
-                        }}
-                        addHref="#"
-                    />
+                    <div className="flex flex-row items-center gap-x-4 sm:justify-center">
+                        <Button className="flex items-center gap-x-2">
+                            <Plus className="size-5" />
+                            Add New
+                        </Button>
+
+                        <Button
+                            variant="ghost"
+                            onClick={() => {
+                                alert('TODO');
+                            }}
+                            className="flex items-center gap-x-2 hover:cursor-pointer"
+                        >
+                            <Download className="size-5" />
+                            Export
+                        </Button>
+                    </div>
                 </div>
 
                 <div>
