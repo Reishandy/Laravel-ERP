@@ -1,7 +1,8 @@
+import HighlightCard from '@/components/dashboard/highlight-card';
+import TopCard from '@/components/dashboard/top-card';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
@@ -22,23 +23,71 @@ export default function Dashboard() {
             <div className="grid h-full gap-4 p-8 lg:grid-rows-5">
                 <div className="row-span-1 flex flex-col gap-4 lg:row-span-1 2xl:flex-row">
                     <div className="flex w-full flex-col gap-4 lg:flex-row 2xl:flex-row">
-                        <CardType1Prototype />
-                        <CardType1Prototype />
+                        <HighlightCard
+                            title="Total revenue"
+                            value="$54.000,00"
+                            trend="+20%"
+                            trendDirection="up"
+                            description="Trending up this month"
+                            comparisonText="Last month was $45.000,00"
+                            valueSize="lg" // TODO: Check if the value exceeds 8 letters, then use 'sm' size
+                        />
+                        <HighlightCard
+                            title="Total sales"
+                            value="300"
+                            trend="+20%"
+                            trendDirection="up"
+                            description="Trending up this month"
+                            comparisonText="Last month was 250"
+                            valueSize="lg"
+                        />
                     </div>
                     <div className="flex w-full flex-col gap-4 lg:flex-row 2xl:flex-row">
-                        <CardType1Prototype />
-                        <CardType1Prototype />
+                        <HighlightCard
+                            title="Total customers"
+                            value="120"
+                            trend="+10%"
+                            trendDirection="up"
+                            description="Increasing this month"
+                            comparisonText="Last month was 110"
+                            valueSize="lg"
+                        />
+                        <HighlightCard
+                            title="Total products"
+                            value="90"
+                            trend="-10%"
+                            trendDirection="down"
+                            description="Decreasing this month"
+                            comparisonText="Last month was 100"
+                            valueSize="lg"
+                        />
                     </div>
                 </div>
 
                 <div className="row-span-3">
-                    <div className="grid size-full grid-rows-2 gap-4 lg:grid-rows-4 2xl:grid-cols-4 2xl:grid-rows-2">
-                        <div className="lg:row-span-3 2xl:col-span-3">
-                            <PlaceholderPattern className="size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
+                    <div className="grid size-full grid-rows-2 gap-4 lg:grid-rows-3 2xl:grid-cols-4 2xl:grid-rows-2">
+                        <div className="lg:row-span-2 2xl:col-span-3 2xl:row-span-3">
+                            <CardType3Prototype />
                         </div>
                         <div className="flex size-full flex-col gap-4 lg:flex-row 2xl:row-span-3 2xl:flex-col">
-                            <CardType2Prototype />
-                            <CardType2Prototype />
+                            <TopCard
+                                title="Top Product Sales This Month"
+                                caption="Most sold products in June 2024"
+                                items={[
+                                    { id: 'P-01234', name: 'Washing Machine', badge: { text: 'Top' }, value: 20 },
+                                    { id: 'P-05678', name: 'Refrigerator', value: 15 },
+                                    { id: 'P-09876', name: 'Microwave', value: 10 },
+                                ]}
+                            />
+                            <TopCard
+                                title="Top Customers This Month"
+                                caption="Most active customers in June 2024"
+                                items={[
+                                    { id: 'C-001', name: 'John Doe', badge: { text: 'Top' }, value: 5 },
+                                    { id: 'C-002', name: 'Jane Smith', value: 3 },
+                                    { id: 'C-003', name: 'Alice Johnson', value: 2 },
+                                ]}
+                            />
                         </div>
                     </div>
                 </div>
@@ -52,10 +101,10 @@ export default function Dashboard() {
     );
 }
 
-function CardType1Prototype() {
+function CardType3Prototype() {
     return (
         // border-0 bg-gradient-to-bl from-sidebar via-secondary to-sidebar
-        <Card className="h-fit w-full justify-center rounded-2xl bg-sidebar shadow-lg transition-transform hover:scale-105 hover:shadow-2xl">
+        <Card className="size-full min-w-0 justify-center rounded-2xl bg-sidebar shadow-lg transition-transform hover:shadow-2xl">
             <CardContent className="p-8">
                 <div className="flex flex-col gap-y-4">
                     <div className="flex flex-row items-baseline justify-between">
@@ -64,7 +113,7 @@ function CardType1Prototype() {
                             <TrendingUp /> +20%
                         </Badge>
                     </div>
-                    <span className="text-4xl font-black break-all 2xl:text-2xl">Rp. 12.890.000.000,00</span>
+                    <span className="text-3xl font-black break-all 2xl:text-2xl">Rp. 12.890.000.000,00</span>
                 </div>
             </CardContent>
             <CardFooter>
@@ -75,53 +124,6 @@ function CardType1Prototype() {
                     <span className="text-sm text-muted-foreground">Last month was $2.000.000,00</span>
                 </div>
             </CardFooter>
-        </Card>
-    );
-}
-
-function CardType2Prototype() {
-    return (
-        <Card className="size-full justify-center rounded-2xl border-0 bg-sidebar shadow-lg transition-transform hover:scale-105 hover:shadow-2xl">
-            <CardContent className="p-8">
-                <div className="flex flex-col gap-y-6">
-                    <div className="flex flex-col items-center gap-2">
-                        <TrendingUp className="text-primary" size={32} />
-                        <span className="text-center text-xl font-bold">Top Product Sales This Month</span>
-                    </div>
-                    <Table>
-                        <TableCaption>Most sold products in June 2024</TableCaption>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead className="text-center">ID</TableHead>
-                                <TableHead>Product</TableHead>
-                                <TableHead className="text-end">Sold</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            <TableRow className="transition hover:bg-secondary/30">
-                                <TableCell className="text-center font-semibold">P-01234</TableCell>
-                                <TableCell>
-                                    Washing Machine{' '}
-                                    <Badge className="ml-2" variant="default">
-                                        Top
-                                    </Badge>
-                                </TableCell>
-                                <TableCell className="text-end font-bold">20</TableCell>
-                            </TableRow>
-                            <TableRow className="transition hover:bg-secondary/30">
-                                <TableCell className="text-center font-semibold">P-05678</TableCell>
-                                <TableCell>Refrigerator</TableCell>
-                                <TableCell className="text-end font-bold">15</TableCell>
-                            </TableRow>
-                            <TableRow className="transition hover:bg-secondary/30">
-                                <TableCell className="text-center font-semibold">P-09876</TableCell>
-                                <TableCell>Microwave</TableCell>
-                                <TableCell className="text-end font-bold">10</TableCell>
-                            </TableRow>
-                        </TableBody>
-                    </Table>
-                </div>
-            </CardContent>
         </Card>
     );
 }
