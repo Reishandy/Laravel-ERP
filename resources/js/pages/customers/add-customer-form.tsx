@@ -1,4 +1,4 @@
-import CustomerForm from '@/pages/customers/customer-form';
+import CustomerForm from '@/components/form/customer-form';
 import { useForm } from '@inertiajs/react';
 import { FormEventHandler, ReactNode, useState } from 'react';
 

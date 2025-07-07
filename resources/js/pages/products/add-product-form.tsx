@@ -1,4 +1,4 @@
-import ProductForm from '@/pages/products/product-form';
+import ProductForm from '@/components/form/product-form';
 import { useForm } from '@inertiajs/react';
 import { FormEventHandler, ReactNode, useState } from 'react';
 

@@ -1,4 +1,4 @@
-import SaleForm from '@/pages/sales/sale-form';
+import SaleForm from '@/components/form/sale-form';
 import { Customer, Product } from '@/types';
 import { useForm } from '@inertiajs/react';
 import { FormEventHandler, ReactNode, useState } from 'react';
