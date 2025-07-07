@@ -66,7 +66,7 @@ function SidebarProvider({
     open?: boolean
     onOpenChange?: (open: boolean) => void
 }) {
-    const shouldCollapse = useMediaQuery('(max-width: 1000px)');
+    const shouldCollapse = useMediaQuery('(max-width: 1400px)');
     const isMobile = useIsMobile();
     const [openMobile, setOpenMobile] = React.useState(false);
     const hasCollapsed = useRef(false);
@@ -96,7 +96,6 @@ function SidebarProvider({
             hasCollapsed.current = true;
         }
         if (!shouldCollapse) {
-            setOpen(true)
             hasCollapsed.current = false;
         }
     }, [shouldCollapse, setOpen]);
