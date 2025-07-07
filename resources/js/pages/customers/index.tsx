@@ -27,6 +27,7 @@ interface CustomersPageProps {
         success?: string;
         error?: string;
         description?: string;
+        timestamp?: string;
     }
     customers: Customer[];
     show?: string;
@@ -75,7 +76,7 @@ export default function Customers({ customers, show }: CustomersPageProps) {
                 description: flash.description,
             });
         }
-    }, [flash.success, flash.error, flash.description]);
+    }, [flash.success, flash.error, flash.description, flash.timestamp]);
 
     const columns: ColumnDef<Customer>[] = [
         {

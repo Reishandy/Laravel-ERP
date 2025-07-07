@@ -49,13 +49,15 @@ class SaleController extends Controller
         // Check if the product or customer exists
         if (!$product || !$customer) {
             return redirect()->route('sales.index')->with('error', 'Product or Customer not found.')
-                ->with('description', 'Please check the product and customer numbers.');
+                ->with('description', 'Please check the product and customer numbers.')
+                ->with('timestamp', now()->timestamp); // Not actually used in the response, but included for react state management
         }
 
         // Check if the product has enough stock
         if ($product->quantity < $request->quantity) {
             return redirect()->route('sales.index')->with('error', 'Not enough stock available.')
-                ->with('description', 'Only ' . $product->quantity . ' items available.');
+                ->with('description', 'Only ' . $product->quantity . ' items available.')
+                ->with('timestamp', now()->timestamp);
         }
 
         // Update product stock
@@ -78,7 +80,8 @@ class SaleController extends Controller
         ])->all());
 
         return redirect()->route('sales.index')->with('success', 'Sale created successfully.')
-            ->with('description', $formattedNumber . ' has been created.');
+            ->with('description', $formattedNumber . ' has been created.')
+            ->with('timestamp', now()->timestamp);
     }
 
     /**
@@ -128,7 +131,8 @@ class SaleController extends Controller
 
             // Check if new product has enough stock
             if ($product->quantity < $request->quantity) {
-                return redirect()->route('sales.index')->with('error', 'Not enough stock available.')->with('description', 'Only ' . $product->quantity . ' items available.');
+                return redirect()->route('sales.index')->with('error', 'Not enough stock available.')
+                    ->with('description', 'Only ' . $product->quantity . ' items available.')->with('timestamp', now()->timestamp);
             }
 
             // Deduct from new product's stock
@@ -140,7 +144,8 @@ class SaleController extends Controller
 
             // Check if there's enough stock for an increase
             if ($quantityDifference > 0 && $product->quantity < $quantityDifference) {
-                return redirect()->route('sales.index')->with('error', 'Not enough stock available.')->with('description', 'Only ' . $product->quantity . ' items available.');
+                return redirect()->route('sales.index')->with('error', 'Not enough stock available.')
+                    ->with('description', 'Only ' . $product->quantity . ' items available.')->with('timestamp', now()->timestamp);
             }
 
             // Update stock by the difference (will subtract if positive, add if negative)
@@ -158,7 +163,9 @@ class SaleController extends Controller
             'total_price' => ($productChanged ? $product->price : $sale->price_at_sale) * $request->quantity,
         ]);
 
-        return redirect()->route('sales.index')->with('success', 'Sale updated successfully.')->with('description', $sale->sale_number . ' has been updated.');
+        return redirect()->route('sales.index')->with('success', 'Sale updated successfully.')
+            ->with('description', $sale->sale_number . ' has been updated.')
+            ->with('timestamp', now()->timestamp);
     }
 
     /**
@@ -174,7 +181,9 @@ class SaleController extends Controller
 
         $sale->delete();
 
-        return redirect()->route('sales.index')->with('success', 'Sale deleted successfully')->with('description', $sale->sale_number . ' has been deleted. and stock has been restored.');
+        return redirect()->route('sales.index')->with('success', 'Sale deleted successfully')
+            ->with('description', $sale->sale_number . ' has been deleted. and stock has been restored.')
+            ->with('timestamp', now()->timestamp);
     }
 
     /**
@@ -189,6 +198,7 @@ class SaleController extends Controller
         $sale->update(['status' => $request->status]);
 
         return redirect()->route('sales.index')->with('success', 'Sale status updated successfully.')
-            ->with('description', $sale->sale_number . ' status has been updated to ' . ucfirst($request->status) . '.');
+            ->with('description', $sale->sale_number . ' status has been updated to ' . ucfirst($request->status) . '.')
+            ->with('timestamp', now()->timestamp);
     }
 }

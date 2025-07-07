@@ -48,7 +48,8 @@ class CustomerController extends Controller
         }
 
         return redirect()->route('customers.index')->with('success', 'Customer created successfully.')
-            ->with('description', $formattedNumber . ' has been created.');
+            ->with('description', $formattedNumber . ' has been created.')
+            ->with('timestamp', now()->timestamp);
     }
 
     /**
@@ -93,7 +94,8 @@ class CustomerController extends Controller
         $customer->save();
 
         return redirect()->route('customers.index')->with('success', 'Customer updated successfully.')
-            ->with('description', $customer->customer_number . ' has been updated.');
+            ->with('description', $customer->customer_number . ' has been updated.')
+            ->with('timestamp', now()->timestamp);
     }
 
     /**
@@ -108,6 +110,7 @@ class CustomerController extends Controller
         $customer->delete();
 
         return redirect()->route('customers.index')->with('success', 'Customer deleted successfully.')
-            ->with('description', $customer->customer_number . ' has been deleted.');
+            ->with('description', $customer->customer_number . ' has been deleted.')
+            ->with('timestamp', now()->timestamp);
     }
 }

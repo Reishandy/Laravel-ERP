@@ -50,7 +50,8 @@ class ProductController extends Controller
         }
 
         return redirect()->route('products.index')->with('success', 'Product created successfully.')
-            ->with('description', $formattedNumber . ' has been created.');
+            ->with('description', $formattedNumber . ' has been created.')
+            ->with('timestamp', now()->timestamp);
     }
 
     /**
@@ -96,7 +97,8 @@ class ProductController extends Controller
         $product->save();
 
         return redirect()->route('products.index')->with('success', 'Product updated successfully.')
-            ->with('description', $product->product_number . ' has been updated.');
+            ->with('description', $product->product_number . ' has been updated.')
+            ->with('timestamp', now()->timestamp);
     }
 
     /**
@@ -111,6 +113,7 @@ class ProductController extends Controller
         $product->delete();
 
         return redirect()->route('products.index')->with('success', 'Product deleted successfully.')
-            ->with('description', $product->product_number . ' has been deleted.');
+            ->with('description', $product->product_number . ' has been deleted.')
+            ->with('timestamp', now()->timestamp);
     }
 }

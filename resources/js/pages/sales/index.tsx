@@ -30,6 +30,7 @@ interface SalesPageProps {
         success?: string;
         error?: string;
         description?: string;
+        timestamp?: string;
     };
     sales: Entry[];
     products: Product[];
@@ -79,7 +80,7 @@ export default function Sales({ sales, products, customers, show }: SalesPagePro
                 description: flash.description,
             });
         }
-    }, [flash.success, flash.error, flash.description]);
+    }, [flash.success, flash.error, flash.description, flash.timestamp]);
 
     const columns: ColumnDef<Entry>[] = [
         {

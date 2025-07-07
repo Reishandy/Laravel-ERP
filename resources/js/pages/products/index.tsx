@@ -27,6 +27,7 @@ interface ProductsPageProps {
         success?: string;
         error?: string;
         description?: string;
+        timestamp?: string;
     }
     products: Product[];
     show?: string;
@@ -75,7 +76,7 @@ export default function Products({ products, show }: ProductsPageProps) {
                 description: flash.description,
             });
         }
-    }, [flash.success, flash.error, flash.description]);
+    }, [flash.success, flash.error, flash.description, flash.timestamp]);
 
     const columns: ColumnDef<Product>[] = [
         {
@@ -138,9 +139,8 @@ export default function Products({ products, show }: ProductsPageProps) {
             cell: ({ row }) => {
                 const quantity: number = row.getValue('quantity');
                 const getVariantByQuantity = (quantity: number): VariantProps<typeof badgeVariants>['variant'] => {
-                    if (quantity == 0) return 'destructive';
-                    if (quantity <= 5) return 'secondary';
-                    if (quantity <= 20) return 'outline';
+                    if (quantity <= 5) return 'destructive';
+                    if (quantity <= 20) return 'secondary';
                     return 'outline';
                 };
 
