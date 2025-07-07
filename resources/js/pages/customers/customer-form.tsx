@@ -4,7 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { LoaderCircle } from 'lucide-react';
+import { Ring } from 'ldrs/react';
+import 'ldrs/react/Ring.css';
 import { FormEventHandler, ReactNode } from 'react';
 import { Checkbox } from '@/components/ui/checkbox';
 
@@ -118,7 +119,7 @@ export default function CustomerForm({ data, setData, processing, errors, submit
                 }
                 formButton={
                     <Button disabled={processing} onClick={submit}>
-                        {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
+                        {processing && <Ring size="14" stroke="2" speed="2.5" color="gray" />}
                         Save Customer
                     </Button>
                 }

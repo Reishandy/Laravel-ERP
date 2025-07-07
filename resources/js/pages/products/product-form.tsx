@@ -1,7 +1,8 @@
 import { usePage } from '@inertiajs/react';
 import FormDialog from '@/components/dialog/form-dialog';
 import { Button } from '@/components/ui/button';
-import { LoaderCircle } from 'lucide-react';
+import { Ring } from 'ldrs/react';
+import 'ldrs/react/Ring.css';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import InputError from '@/components/input-error';
@@ -154,7 +155,7 @@ export default function ProductForm({ data, setData, processing, errors, submit,
                 }
                 formButton={
                     <Button disabled={processing} onClick={submit}>
-                        {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
+                        {processing && <Ring size="14" stroke="2" speed="2.5" color="gray" />}
                         Save Product
                     </Button>
                 }

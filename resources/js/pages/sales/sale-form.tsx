@@ -7,7 +7,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select-dialog';
 import { Customer, Product } from '@/types';
-import { LoaderCircle } from 'lucide-react';
+import { Ring } from 'ldrs/react';
+import 'ldrs/react/Ring.css';
 import { FormEventHandler, ReactNode } from 'react';
 
 interface SaleFormProps {
@@ -118,7 +119,7 @@ export default function SaleForm({ products, customers, data, setData, processin
                 }
                 formButton={
                     <Button disabled={processing} onClick={submit}>
-                        {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
+                        {processing && <Ring size="14" stroke="2" speed="2.5" color="gray" />}
                         Save Sale
                     </Button>
                 }

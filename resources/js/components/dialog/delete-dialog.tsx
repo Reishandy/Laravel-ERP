@@ -21,7 +21,8 @@ import {
 } from '@/components/ui/drawer';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { FormEventHandler, ReactNode, useState } from 'react';
-import { LoaderCircle } from 'lucide-react';
+import { Ring } from 'ldrs/react';
+import 'ldrs/react/Ring.css';
 
 interface DeleteDialogProps {
     title?: string;
@@ -59,7 +60,7 @@ export function DeleteDialog({
                         </DialogClose>
                         <DialogClose asChild>
                             <Button variant="destructive" onClick={onDelete} disabled={processing}>
-                                {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
+                                {processing && <Ring size="14" stroke="2" speed="2.5" color="gray" />}
                                 Delete
                             </Button>
                         </DialogClose>
@@ -80,7 +81,7 @@ export function DeleteDialog({
                 <DrawerFooter className="pt-2">
                     <DrawerClose asChild>
                         <Button variant="destructive" onClick={onDelete} disabled={processing}>
-                            {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
+                            {processing && <Ring size="14" stroke="2" speed="2.5" color="gray" />}
                             Delete
                         </Button>
                     </DrawerClose>

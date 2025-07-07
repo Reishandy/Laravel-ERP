@@ -1,6 +1,7 @@
 // Components
 import { Head, useForm } from '@inertiajs/react';
-import { LoaderCircle } from 'lucide-react';
+import { Ring } from 'ldrs/react';
+import 'ldrs/react/Ring.css';
 import { FormEventHandler } from 'react';
 
 import InputError from '@/components/input-error';
@@ -49,7 +50,7 @@ export default function ConfirmPassword() {
 
                     <div className="flex items-center">
                         <Button className="w-full" disabled={processing}>
-                            {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
+                            {processing && <Ring size="14" stroke="2" speed="2.5" color="gray" />}
                             Confirm password
                         </Button>
                     </div>

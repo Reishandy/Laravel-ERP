@@ -1,5 +1,6 @@
 import { Head, useForm } from '@inertiajs/react';
-import { LoaderCircle } from 'lucide-react';
+import { Ring } from 'ldrs/react';
+import 'ldrs/react/Ring.css';
 import { FormEventHandler } from 'react';
 
 import InputError from '@/components/input-error';
@@ -91,7 +92,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                     </div>
 
                     <Button type="submit" className="mt-4 w-full" tabIndex={4} disabled={processing}>
-                        {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
+                        {processing && <Ring size="14" stroke="2" speed="2.5" color="gray" />}
                         Log in
                     </Button>
                 </div>

@@ -1,6 +1,7 @@
 // Components
 import { Head, useForm } from '@inertiajs/react';
-import { LoaderCircle } from 'lucide-react';
+import { Ring } from 'ldrs/react';
+import 'ldrs/react/Ring.css';
 import { FormEventHandler } from 'react';
 
 import TextLink from '@/components/text-link';
@@ -28,7 +29,7 @@ export default function VerifyEmail({ status }: { status?: string }) {
 
             <form onSubmit={submit} className="space-y-6 text-center">
                 <Button disabled={processing} variant="secondary">
-                    {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
+                    {processing && <Ring size="14" stroke="2" speed="2.5" color="gray" />}
                     Resend verification email
                 </Button>
 
