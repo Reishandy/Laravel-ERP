@@ -138,8 +138,9 @@ export default function Products({ products, show }: ProductsPageProps) {
             cell: ({ row }) => {
                 const quantity: number = row.getValue('quantity');
                 const getVariantByQuantity = (quantity: number): VariantProps<typeof badgeVariants>['variant'] => {
-                    if (quantity <= 5) return 'destructive';
-                    if (quantity <= 20) return 'secondary';
+                    if (quantity == 0) return 'destructive';
+                    if (quantity <= 5) return 'secondary';
+                    if (quantity <= 20) return 'outline';
                     return 'outline';
                 };
 
