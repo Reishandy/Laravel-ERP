@@ -17,6 +17,7 @@ class CustomerFactory extends Factory
     public function definition(): array
     {
         static $customerNumber = 1;
+        $createdAt = $this->faker->dateTimeBetween('-3 year');
 
         return [
             'user_id' => 1,
@@ -25,6 +26,8 @@ class CustomerFactory extends Factory
             'email' => $this->faker->unique()->safeEmail,
             'avatar' => null,
             'type' => $this->faker->randomElement(['individual', 'business']),
+            'created_at' => $createdAt,
+            'updated_at' => $this->faker->dateTimeBetween($createdAt),
         ];
     }
 }

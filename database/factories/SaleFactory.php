@@ -20,6 +20,7 @@ class SaleFactory extends Factory
     {
         $product = Product::inRandomOrder()->first();
         $customerId = Customer::inRandomOrder()->value('id');
+        $createdAt = $this->faker->dateTimeBetween('-3 year');
         static $saleNumber = 1;
 
         return [
@@ -33,6 +34,8 @@ class SaleFactory extends Factory
                 return $attributes['price_at_sale'] * $attributes['quantity'];
             },
             'status' => $this->faker->randomElement(['pending', 'processing', 'completed']),
+            'created_at' => $createdAt,
+            'updated_at' => $this->faker->dateTimeBetween($createdAt),
         ];
     }
 }

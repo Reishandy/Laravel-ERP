@@ -17,6 +17,7 @@ class ProductFactory extends Factory
     public function definition(): array
     {
         static $productNumber = 1;
+        $createdAt = $this->faker->dateTimeBetween('-3 year');
 
         return [
             'user_id' => 1,
@@ -26,6 +27,8 @@ class ProductFactory extends Factory
             'image' => null,
             'price' => $this->faker->randomFloat(2, 10, 1000),
             'quantity' => $this->faker->numberBetween(1, 100),
+            'created_at' => $createdAt,
+            'updated_at' => $this->faker->dateTimeBetween($createdAt),
         ];
     }
 }

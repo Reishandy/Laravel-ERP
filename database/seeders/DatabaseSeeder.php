@@ -25,8 +25,8 @@ class DatabaseSeeder extends Seeder
             'password' => 'password',
         ]);
 
-        Customer::factory(50)->create();
+        Customer::factory(150)->create();
         Product::factory(100)->create();
-        Sale::factory(500)->create();
+        Sale::factory(1000)->create();
     }
 }
