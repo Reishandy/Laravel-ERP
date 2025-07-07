@@ -96,7 +96,7 @@ export default function Customers({ customers, show }: CustomersPageProps) {
                 return (
                     <div className="flex flex-row items-center gap-x-2">
                         <Avatar className="h-8 w-8 overflow-hidden">
-                            <AvatarImage src={'/storage/' + customer.avatar} alt={customer.name} />
+                            <AvatarImage src={customer.avatar? `/storage/${customer.avatar}` : undefined} alt={customer.name} />
                             <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
                                 {getInitials(customer.name)}
                             </AvatarFallback>

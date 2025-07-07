@@ -96,7 +96,7 @@ export default function Products({ products, show }: ProductsPageProps) {
                 return (
                     <div className="flex flex-row items-center gap-x-2">
                         <Avatar className="h-8 w-8 overflow-hidden">
-                            <AvatarImage src={'/storage/' + product.image} alt={product.name} />
+                            <AvatarImage src={product.image? `/storage/${product.image}` : undefined} alt={product.name} />
                             <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
                                 {getInitials(product.name)}
                             </AvatarFallback>
