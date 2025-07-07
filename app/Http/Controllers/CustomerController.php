@@ -19,6 +19,8 @@ class CustomerController extends Controller
     {
         return Inertia::render('customers/index', [
             'customers' => Customer::where('user_id', auth()->user()->id)
+                ->with('sales')
+                ->withCount('sales')
                 ->latest()
                 ->get(),
         ]);
@@ -59,6 +61,8 @@ class CustomerController extends Controller
     {
         return Inertia::render('customers/index', [
             'customers' => Customer::where('user_id', auth()->user()->id)
+                ->with('sales')
+                ->withCount('sales')
                 ->latest()
                 ->get(),
             'show' => $customer_number

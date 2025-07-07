@@ -28,7 +28,7 @@ interface ProductsPageProps {
         error?: string;
         description?: string;
         timestamp?: string;
-    }
+    };
     products: Product[];
     show?: string;
 
@@ -96,7 +96,7 @@ export default function Products({ products, show }: ProductsPageProps) {
                 return (
                     <div className="flex flex-row items-center gap-x-2">
                         <Avatar className="h-8 w-8 overflow-hidden">
-                            <AvatarImage src={product.image? `/storage/${product.image}` : undefined} alt={product.name} />
+                            <AvatarImage src={product.image ? `/storage/${product.image}` : undefined} alt={product.name} />
                             <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
                                 {getInitials(product.name)}
                             </AvatarFallback>
@@ -146,13 +146,19 @@ export default function Products({ products, show }: ProductsPageProps) {
 
                 return (
                     <div className="ml-4 flex flex-row items-center justify-end gap-x-2">
-                        <div className="w-full">
-                            <Badge variant={getVariantByQuantity(quantity)} className="text-md w-full font-bold">
-                                {quantity}
-                            </Badge>
-                        </div>
+                        <Badge variant={getVariantByQuantity(quantity)} className="text-md w-full font-bold">
+                            {quantity}
+                        </Badge>
                     </div>
                 );
+            },
+        },
+        {
+            id: 'sales_count',
+            accessorKey: 'sales_count',
+            header: () => <div className="text-center">Sold</div>,
+            cell: ({ row }) => {
+                return <div className="text-center">{row.getValue('sales_count')}</div>;
             },
         },
         {
@@ -192,6 +198,7 @@ export default function Products({ products, show }: ProductsPageProps) {
         { value: 'name', label: 'Product Name' },
         { value: 'price', label: 'Price' },
         { value: 'quantity', label: 'Quantity' },
+        { value: 'sales_count', label: 'Sold' },
         { value: 'updated_at', label: 'Last Updated' },
     ];
 

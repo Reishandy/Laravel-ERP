@@ -14,8 +14,8 @@ import { ColumnDef } from '@tanstack/react-table';
 import { VariantProps } from 'class-variance-authority';
 import { Download, Plus, SquarePen } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import EditCustomerForm from './edit-customer-form';
 import { toast } from 'sonner';
+import EditCustomerForm from './edit-customer-form';
 
 interface CustomersPageProps {
     app: {
@@ -28,7 +28,7 @@ interface CustomersPageProps {
         error?: string;
         description?: string;
         timestamp?: string;
-    }
+    };
     customers: Customer[];
     show?: string;
 
@@ -96,7 +96,7 @@ export default function Customers({ customers, show }: CustomersPageProps) {
                 return (
                     <div className="flex flex-row items-center gap-x-2">
                         <Avatar className="h-8 w-8 overflow-hidden">
-                            <AvatarImage src={customer.avatar? `/storage/${customer.avatar}` : undefined} alt={customer.name} />
+                            <AvatarImage src={customer.avatar ? `/storage/${customer.avatar}` : undefined} alt={customer.name} />
                             <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
                                 {getInitials(customer.name)}
                             </AvatarFallback>
@@ -127,13 +127,19 @@ export default function Customers({ customers, show }: CustomersPageProps) {
 
                 return (
                     <div className="flex flex-row items-center justify-end gap-x-2">
-                        <div className="w-full">
-                            <Badge variant={variantMap[type]} className="text-md w-full font-medium capitalize">
-                                {type}
-                            </Badge>
-                        </div>
+                        <Badge variant={variantMap[type]} className="text-md w-full font-medium capitalize">
+                            {type}
+                        </Badge>
                     </div>
                 );
+            },
+        },
+        {
+            id: 'sales_count',
+            accessorKey: 'sales_count',
+            header: () => <div className="text-center">Sales Count</div>,
+            cell: ({ row }) => {
+                return <div className="text-center">{row.getValue('sales_count')}</div>;
             },
         },
         {
@@ -173,6 +179,7 @@ export default function Customers({ customers, show }: CustomersPageProps) {
         { value: 'name', label: 'Customer Name' },
         { value: 'email', label: 'Contact' },
         { value: 'type', label: 'Type' },
+        { value: 'sales_count', label: 'Sales Count' },
         { value: 'updated_at', label: 'Last Updated' },
         { value: 'actions', label: 'Actions' },
     ];

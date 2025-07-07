@@ -8,9 +8,10 @@ import {
     getCoreRowModel,
     getFilteredRowModel,
     getPaginationRowModel,
-    getSortedRowModel, Row,
+    getSortedRowModel,
+    Row,
     SortingState,
-    useReactTable
+    useReactTable,
 } from '@tanstack/react-table';
 import * as React from 'react';
 
@@ -22,11 +23,12 @@ interface FilterableColumn {
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
     data: TData[];
-    sortableColumns: FilterableColumn[];
+    sortableColumns?: FilterableColumn[];
     show?: string;
+    filter?: boolean
 }
 
-export function DataTable<TData, TValue>({ columns, data, sortableColumns, show }: DataTableProps<TData, TValue>) {
+export function DataTable<TData, TValue>({ columns, data, sortableColumns, show, filter = true }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [globalFilter, setGlobalFilter] = React.useState<string>(show ? show : '');
     const [selectedSortColumn, setSelectedSortColumn] = React.useState<string>('');
@@ -72,22 +74,22 @@ export function DataTable<TData, TValue>({ columns, data, sortableColumns, show 
         <div>
             <div className="flex flex-col justify-between gap-y-2 pb-4 lg:flex-row lg:items-center lg:gap-y-0">
                 {/* Filter */}
-                <DataTableFilter
-                    globalFilterValue={globalFilter}
-                    handleFilterChange={setGlobalFilter}
-                    clearFilter={() => setGlobalFilter('')}
-                />
+                {filter && (
+                    <DataTableFilter globalFilterValue={globalFilter} handleFilterChange={setGlobalFilter} clearFilter={() => setGlobalFilter('')} />
+                )}
 
                 {/* Sort */}
-                <DataTableSort
-                    sortableColumns={sortableColumns}
-                    selectedSortColumn={selectedSortColumn}
-                    setSelectedSortColumn={setSelectedSortColumn}
-                    sortDirection={sortDirection}
-                    setSortDirection={setSortDirection}
-                    handleSortChange={handleSortChange}
-                    clearSort={clearSort}
-                />
+                {sortableColumns && sortableColumns.length > 0 && (
+                    <DataTableSort
+                        sortableColumns={sortableColumns}
+                        selectedSortColumn={selectedSortColumn}
+                        setSelectedSortColumn={setSelectedSortColumn}
+                        sortDirection={sortDirection}
+                        setSortDirection={setSortDirection}
+                        handleSortChange={handleSortChange}
+                        clearSort={clearSort}
+                    />
+                )}
             </div>
 
             {/* Table */}

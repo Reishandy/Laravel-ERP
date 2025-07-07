@@ -6,6 +6,7 @@ use App\Models\Customer;
 use App\Models\Product;
 use App\Models\Sale;
 use App\Models\User;
+
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -22,11 +23,11 @@ class DatabaseSeeder extends Seeder
             'name' => 'Test User',
             'company' => 'Test Company That have a long name',
             'email' => 'test@example.com',
-            'password' => 'password',
+            'password' => 'SUPESecureTEST_password123',
         ]);
 
-        Customer::factory(150)->create();
-        Product::factory(100)->create();
-        Sale::factory(1000)->create();
+        Customer::factory(50)->create();
+        Product::factory(30)->create();
+        Sale::factory(500)->create();
     }
 }

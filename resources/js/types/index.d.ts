@@ -53,6 +53,7 @@ export interface Customer {
     type: "individual" | "business"
     created_at: string;
     updated_at: string;
+    sales_count?: number;
     [key: string]: unknown;
 }
 
@@ -67,6 +68,7 @@ export interface Product {
     quantity: number
     created_at: string;
     updated_at: string;
+    sales_count?: number;
     [key: string]: unknown;
 }
 

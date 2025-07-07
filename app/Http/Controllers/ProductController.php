@@ -20,6 +20,7 @@ class ProductController extends Controller
         return Inertia::render('products/index', [
             'products' => Product::where('user_id', auth()->user()->id)
                 ->with('sales')
+                ->withCount('sales')
                 ->latest()
                 ->get(),
         ]);
@@ -62,6 +63,7 @@ class ProductController extends Controller
         return Inertia::render('products/index', [
             'products' => Product::where('user_id', auth()->user()->id)
                 ->with('sales')
+                ->withCount('sales')
                 ->latest()
                 ->get(),
             'show' => $product_number
