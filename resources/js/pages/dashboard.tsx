@@ -83,9 +83,9 @@ export default function Dashboard() {
                                 title="Top Customers This Month"
                                 caption="Most active customers in June 2024"
                                 items={[
-                                    { id: 'C-001', name: 'John Doe', badge: { text: 'Top' }, value: 5 },
-                                    { id: 'C-002', name: 'Jane Smith', value: 3 },
-                                    { id: 'C-003', name: 'Alice Johnson', value: 2 },
+                                    { id: 'C-00001', name: 'John Doe', badge: { text: 'Top' }, value: 5 },
+                                    { id: 'C-00002', name: 'Jane Smith', value: 3 },
+                                    { id: 'C-00003', name: 'Alice Johnson', value: 2 },
                                 ]}
                             />
                         </div>
