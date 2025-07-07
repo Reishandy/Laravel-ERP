@@ -39,6 +39,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 //  - Modify landing page
 //  - Email verification and reset pass template change
 //  - export to CSV
+//  - dashboard export to PDF
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
