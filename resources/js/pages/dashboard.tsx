@@ -1,3 +1,4 @@
+import { ChartAreaInteractive } from '@/components/dashboard/chart-card';
 import DataTableCard from '@/components/dashboard/data-table-card';
 import HighlightCard from '@/components/dashboard/highlight-card';
 import TopCard from '@/components/dashboard/top-card';
@@ -7,7 +8,6 @@ import TimestampCell from '@/components/timestamp-cell';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge, badgeVariants } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { useInitials } from '@/hooks/use-initials';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import AppLayout from '@/layouts/app-layout';
@@ -16,7 +16,7 @@ import { type BreadcrumbItem, Product } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
 import { VariantProps } from 'class-variance-authority';
-import { AlertCircle, DollarSign, TrendingUp } from 'lucide-react';
+import { AlertCircle, DollarSign } from 'lucide-react';
 
 interface Highlight {
     current: number;
@@ -246,7 +246,7 @@ export default function Dashboard({ sales, products }: DashboardProps) {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />
 
-            <div className="grid h-full gap-4 p-4 grid-auto-rows">
+            <div className="grid-auto-rows grid h-full gap-4 p-4">
                 <div className="row-span-1 flex h-fit flex-col gap-4 lg:row-span-1 2xl:flex-row">
                     <div className="flex w-full flex-col gap-4 lg:flex-row 2xl:flex-row">
                         <HighlightCard
@@ -294,7 +294,7 @@ export default function Dashboard({ sales, products }: DashboardProps) {
                 <div className="row-span-1 2xl:row-span-2">
                     <div className="grid size-full grid-rows-2 gap-4 lg:grid-rows-3 2xl:grid-cols-4 2xl:grid-rows-2">
                         <div className="lg:row-span-2 2xl:col-span-3 2xl:row-span-3">
-                            <CardType3Prototype />
+                            <ChartAreaInteractive />
                         </div>
                         <div className="flex size-full flex-col gap-4 lg:flex-row 2xl:row-span-3 2xl:flex-col">
                             <TopCard
@@ -333,26 +333,10 @@ export default function Dashboard({ sales, products }: DashboardProps) {
 
                 <div className="flex flex-col gap-4 2xl:row-span-1 2xl:flex-row">
                     <DataTableCard
-                        icon={<DollarSign className="h-5 w-5 text-primary" />}
-                        title="Latest Sales"
-                        description="Most recent transactions"
-                        borderClass="border-primary/20"
-                        bgClass="bg-primary/5 dark:bg-primary/10"
-                    >
-                        <DataTable
-                            columns={isBareMinimum ? bareMinimumSalesColumns : shouldReduce ? reducedSalesColumns : salesColumns}
-                            data={sales}
-                            useFilter={false}
-                            usePagination={false}
-                        />
-                    </DataTableCard>
-
-                    <DataTableCard
                         icon={<AlertCircle className="h-5 w-5 text-destructive" />}
                         title="Low Stock Alert"
                         description="Products with 5 or fewer items in inventory"
-                        borderClass="border-destructive/20"
-                        bgClass="bg-destructive/5 dark:bg-destructive/10"
+                        bgClass="bg-destructive/50"
                     >
                         <DataTable
                             columns={isBareMinimum ? bareMinimumProductsColumns : shouldReduce ? reducedProductsColumns : productsColumns}
@@ -361,35 +345,21 @@ export default function Dashboard({ sales, products }: DashboardProps) {
                             usePagination={false}
                         />
                     </DataTableCard>
+                    <DataTableCard
+                        icon={<DollarSign className="h-5 w-5 text-primary" />}
+                        title="Latest Sales"
+                        description="Most recent transactions"
+                        bgClass="bg-sidebar"
+                    >
+                        <DataTable
+                            columns={isBareMinimum ? bareMinimumSalesColumns : shouldReduce ? reducedSalesColumns : salesColumns}
+                            data={sales}
+                            useFilter={false}
+                            usePagination={false}
+                        />
+                    </DataTableCard>
                 </div>
             </div>
         </AppLayout>
-    );
-}
-
-function CardType3Prototype() {
-    return (
-        // border-0 bg-gradient-to-bl from-sidebar via-secondary to-sidebar
-        <Card className="size-full min-w-0 justify-center rounded-2xl bg-sidebar shadow-lg transition-transform hover:shadow-2xl">
-            <CardContent className="p-8">
-                <div className="flex flex-col gap-y-4">
-                    <div className="flex flex-row items-baseline justify-between">
-                        <span className="text-lg text-muted-foreground">Total revenue</span>
-                        <Badge variant="secondary">
-                            <TrendingUp /> +20%
-                        </Badge>
-                    </div>
-                    <span className="text-3xl font-black break-all 2xl:text-2xl">Rp. 12.890.000.000,00</span>
-                </div>
-            </CardContent>
-            <CardFooter>
-                <div className="flex flex-col gap-y-1">
-                    <span className="text-md flex flex-row gap-x-2 text-muted-foreground">
-                        Trending up this month <TrendingUp />
-                    </span>
-                    <span className="text-sm text-muted-foreground">Last month was $2.000.000,00</span>
-                </div>
-            </CardFooter>
-        </Card>
     );
 }

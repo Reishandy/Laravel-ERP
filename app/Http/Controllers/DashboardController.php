@@ -24,6 +24,7 @@ class DashboardController extends Controller
                 ->orderBy('quantity', 'asc')
                 ->take(5)
                 ->get(),
+            // TODO: pass other data
         ]);
     }
 }
