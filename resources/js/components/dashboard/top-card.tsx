@@ -31,7 +31,10 @@ export default function TopCard({
     valueLabel = 'Sold',
 }: TopCardProps) {
     return (
-        <Card className="size-full min-w-0 justify-center rounded-2xl border-0 bg-sidebar shadow-lg transition-transform hover:scale-105 hover:shadow-2xl">
+        <Card
+            style={{ maxWidth: 'calc(100vw - 40px)' }}
+            className="size-full min-w-0 justify-center rounded-2xl border-0 bg-sidebar shadow-lg transition-transform hover:scale-105 hover:shadow-2xl"
+        >
             <CardContent className="p-8">
                 <div className="flex flex-col gap-y-6">
                     <div className="flex flex-col items-center gap-2">

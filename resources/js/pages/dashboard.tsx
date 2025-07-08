@@ -16,7 +16,7 @@ import { type BreadcrumbItem, Product } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
 import { VariantProps } from 'class-variance-authority';
-import { AlertCircle, DollarSign } from 'lucide-react';
+import { AlertCircle, DollarSign, Package, User } from 'lucide-react';
 
 interface Highlight {
     current: number;
@@ -64,18 +64,27 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function Dashboard({ sales, products, revenue, sales_count, customers_count, products_count, top_products, top_customers, chart_data }: DashboardProps) {
+export default function Dashboard({
+    sales,
+    products,
+    revenue,
+    sales_count,
+    customers_count,
+    products_count,
+    top_products,
+    top_customers,
+    chart_data,
+}: DashboardProps) {
     const { app } = usePage<DashboardProps>().props;
     const getInitials = useInitials();
     const shouldReduce = useMediaQuery('(max-width: 850px)');
-    const isBareMinimum = useMediaQuery('(max-width: 490px)');
 
     const currencyFormatter = (value: number): string => {
         return new Intl.NumberFormat(app.locale, {
             style: 'currency',
             currency: app.currency,
         }).format(value);
-    }
+    };
 
     const productsColumns: ColumnDef<Product>[] = [
         {
@@ -102,14 +111,12 @@ export default function Dashboard({ sales, products, revenue, sales_count, custo
                 const product = row.original;
                 return (
                     <div className="flex flex-row items-center justify-start gap-x-2 pl-4">
-                        {!isBareMinimum && (
-                            <Avatar className="h-8 w-8 overflow-hidden">
-                                <AvatarImage src={product.image ? `/storage/${product.image}` : undefined} alt={product.name} />
-                                <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
-                                    {getInitials(product.name)}
-                                </AvatarFallback>
-                            </Avatar>
-                        )}
+                        <Avatar className="h-8 w-8 overflow-hidden">
+                            <AvatarImage src={product.image ? `/storage/${product.image}` : undefined} alt={product.name} />
+                            <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
+                                {getInitials(product.name)}
+                            </AvatarFallback>
+                        </Avatar>
                         <div className="text-start font-medium">{product.name}</div>
                     </div>
                 );
@@ -180,14 +187,12 @@ export default function Dashboard({ sales, products, revenue, sales_count, custo
                 const product = row.original.product;
                 return (
                     <div className="flex flex-row items-center justify-start gap-x-2 pl-4">
-                        {!isBareMinimum && (
-                            <Avatar className="h-8 w-8 overflow-hidden">
-                                <AvatarImage src={product.image ? `/storage/${product.image}` : undefined} alt={product.name} />
-                                <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
-                                    {getInitials(product.name)}
-                                </AvatarFallback>
-                            </Avatar>
-                        )}
+                        <Avatar className="h-8 w-8 overflow-hidden">
+                            <AvatarImage src={product.image ? `/storage/${product.image}` : undefined} alt={product.name} />
+                            <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
+                                {getInitials(product.name)}
+                            </AvatarFallback>
+                        </Avatar>
                         <div className="text-start font-medium">{product.name}</div>
                     </div>
                 );
@@ -245,11 +250,6 @@ export default function Dashboard({ sales, products, revenue, sales_count, custo
     const reducedProductsColumns = productsColumns.filter((column) => column.id !== 'updated_at');
 
     const reducedSalesColumns = salesColumns.filter((column) => column.id !== 'created_at' && column.id !== 'customer.name');
-
-    const bareMinimumProductsColumns = reducedProductsColumns.filter((column) => column.id !== 'product_number');
-
-    const bareMinimumSalesColumns = reducedSalesColumns.filter((column) => column.id !== 'sale_number');
-
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />
@@ -303,13 +303,14 @@ export default function Dashboard({ sales, products, revenue, sales_count, custo
                         <div className="flex size-full flex-col gap-4 lg:flex-row 2xl:row-span-3 2xl:flex-col">
                             <TopCard
                                 title="Top Product Sales This Month"
-                                caption= {`Most sold products in ${top_products.date}`}
+                                caption={`Most sold products in ${top_products.date}`}
                                 nameLabel="Product"
                                 valueLabel="Sold"
                                 items={top_products.items.map((item) => ({
                                     ...item,
                                     link: `/products/${item.id}`,
                                 }))}
+                                icon={Package}
                             />
                             <TopCard
                                 title="Top Customers This Month"
@@ -320,6 +321,7 @@ export default function Dashboard({ sales, products, revenue, sales_count, custo
                                     ...item,
                                     link: `/customers/${item.id}`,
                                 }))}
+                                icon={User}
                             />
                         </div>
                     </div>
@@ -333,7 +335,7 @@ export default function Dashboard({ sales, products, revenue, sales_count, custo
                         bgClass="bg-destructive/50"
                     >
                         <DataTable
-                            columns={isBareMinimum ? bareMinimumProductsColumns : shouldReduce ? reducedProductsColumns : productsColumns}
+                            columns={shouldReduce ? reducedProductsColumns : productsColumns}
                             data={products.filter((product) => product.quantity <= 5)}
                             useFilter={false}
                             usePagination={false}
@@ -345,12 +347,7 @@ export default function Dashboard({ sales, products, revenue, sales_count, custo
                         description="Most recent transactions"
                         bgClass="bg-sidebar"
                     >
-                        <DataTable
-                            columns={isBareMinimum ? bareMinimumSalesColumns : shouldReduce ? reducedSalesColumns : salesColumns}
-                            data={sales}
-                            useFilter={false}
-                            usePagination={false}
-                        />
+                        <DataTable columns={shouldReduce ? reducedSalesColumns : salesColumns} data={sales} useFilter={false} usePagination={false} />
                     </DataTableCard>
                 </div>
             </div>
