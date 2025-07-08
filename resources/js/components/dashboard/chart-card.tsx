@@ -171,9 +171,9 @@ export function ChartCard({ chart_data }: ChartCardProps) {
                                 />
                             }
                         />
-                        <Area dataKey="customers" type={type} fill="url(#fillCustomers)" stroke="var(--color-customers)" stackId="a" />
-                        <Area dataKey="products" type={type} fill="url(#fillProducts)" stroke="var(--color-products)" stackId="a" />
-                        <Area dataKey="sales" type={type} fill="url(#fillSales)" stroke="var(--color-sales)" stackId="a" />
+                        <Area dataKey="customers" type={type} fill="url(#fillCustomers)" stroke="var(--color-customers)" />
+                        <Area dataKey="products" type={type} fill="url(#fillProducts)" stroke="var(--color-products)" />
+                        <Area dataKey="sales" type={type} fill="url(#fillSales)" stroke="var(--color-sales)" />
                         <ChartLegend content={<ChartLegendContent payload={undefined} />} />
                     </AreaChart>
                 </ChartContainer>
