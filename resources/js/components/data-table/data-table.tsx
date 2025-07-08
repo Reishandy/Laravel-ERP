@@ -25,10 +25,18 @@ interface DataTableProps<TData, TValue> {
     data: TData[];
     sortableColumns?: FilterableColumn[];
     show?: string;
-    filter?: boolean
+    useFilter?: boolean;
+    usePagination?: boolean;
 }
 
-export function DataTable<TData, TValue>({ columns, data, sortableColumns, show, filter = true }: DataTableProps<TData, TValue>) {
+export function DataTable<TData, TValue>({
+    columns,
+    data,
+    sortableColumns,
+    show,
+    useFilter = true,
+    usePagination = true,
+}: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [globalFilter, setGlobalFilter] = React.useState<string>(show ? show : '');
     const [selectedSortColumn, setSelectedSortColumn] = React.useState<string>('');
@@ -71,26 +79,32 @@ export function DataTable<TData, TValue>({ columns, data, sortableColumns, show,
     };
 
     return (
-        <div>
-            <div className="flex flex-col justify-between gap-y-2 pb-4 lg:flex-row lg:items-center lg:gap-y-0">
-                {/* Filter */}
-                {filter && (
-                    <DataTableFilter globalFilterValue={globalFilter} handleFilterChange={setGlobalFilter} clearFilter={() => setGlobalFilter('')} />
-                )}
+        <div className="size-full">
+            {useFilter && sortableColumns && sortableColumns.length > 0 && (
+                <div className="flex flex-col justify-between gap-y-2 pb-4 lg:flex-row lg:items-center lg:gap-y-0">
+                    {/* Filter */}
+                    {useFilter && (
+                        <DataTableFilter
+                            globalFilterValue={globalFilter}
+                            handleFilterChange={setGlobalFilter}
+                            clearFilter={() => setGlobalFilter('')}
+                        />
+                    )}
 
-                {/* Sort */}
-                {sortableColumns && sortableColumns.length > 0 && (
-                    <DataTableSort
-                        sortableColumns={sortableColumns}
-                        selectedSortColumn={selectedSortColumn}
-                        setSelectedSortColumn={setSelectedSortColumn}
-                        sortDirection={sortDirection}
-                        setSortDirection={setSortDirection}
-                        handleSortChange={handleSortChange}
-                        clearSort={clearSort}
-                    />
-                )}
-            </div>
+                    {/* Sort */}
+                    {sortableColumns && sortableColumns.length > 0 && (
+                        <DataTableSort
+                            sortableColumns={sortableColumns}
+                            selectedSortColumn={selectedSortColumn}
+                            setSelectedSortColumn={setSelectedSortColumn}
+                            sortDirection={sortDirection}
+                            setSortDirection={setSortDirection}
+                            handleSortChange={handleSortChange}
+                            clearSort={clearSort}
+                        />
+                    )}
+                </div>
+            )}
 
             {/* Table */}
             <div className="rounded-md border">
@@ -129,7 +143,7 @@ export function DataTable<TData, TValue>({ columns, data, sortableColumns, show,
             </div>
 
             {/* Pagination */}
-            {table.getPageCount() > 0 && (
+            {usePagination && table.getPageCount() > 0 && (
                 <DataTablePagination
                     pagination={{
                         pageIndex: pagination.pageIndex,

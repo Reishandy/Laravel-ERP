@@ -2,6 +2,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { LucideIcon, TrendingUp } from 'lucide-react';
+import { router } from '@inertiajs/react';
 
 interface TopCardItem {
     id: string;
@@ -11,6 +12,7 @@ interface TopCardItem {
         variant?: 'default' | 'destructive' | 'outline' | 'secondary';
     };
     value: string | number;
+    link: string;
 }
 
 interface TopCardProps {
@@ -51,7 +53,13 @@ export default function TopCard({
                         </TableHeader>
                         <TableBody>
                             {items.map((item) => (
-                                <TableRow key={item.id} className="transition hover:bg-secondary/30">
+                                <TableRow
+                                    key={item.id}
+                                    onClick={() => {
+                                        router.visit(item.link);
+                                    }}
+                                    className="transition hover:bg-secondary/30 cursor-pointer"
+                                >
                                     <TableCell className="text-center font-semibold">{item.id}</TableCell>
                                     <TableCell>
                                         {item.name}
