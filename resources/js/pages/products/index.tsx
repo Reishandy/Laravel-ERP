@@ -206,7 +206,7 @@ export default function Products({ products, show }: ProductsPageProps) {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Sales" />
 
-            <div className="m-8">
+            <div className="p-4">
                 <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between sm:gap-0">
                     <Heading title="Inventory" description="Manage your products and inventory." />
 

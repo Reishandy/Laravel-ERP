@@ -188,7 +188,7 @@ export default function Customers({ customers, show }: CustomersPageProps) {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Sales" />
 
-            <div className="m-8">
+            <div className="p-4">
                 <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between sm:gap-0">
                     <Heading title="Customers" description="Manage your customers and their details." />
 

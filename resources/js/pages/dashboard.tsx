@@ -246,7 +246,7 @@ export default function Dashboard({ sales, products }: DashboardProps) {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />
 
-            <div className="grid h-full gap-4 p-8 grid-auto-rows">
+            <div className="grid h-full gap-4 p-4 grid-auto-rows">
                 <div className="row-span-1 flex h-fit flex-col gap-4 lg:row-span-1 2xl:flex-row">
                     <div className="flex w-full flex-col gap-4 lg:flex-row 2xl:flex-row">
                         <HighlightCard
