@@ -349,7 +349,7 @@ export default function Dashboard({ sales, products }: DashboardProps) {
 
                     <DataTableCard
                         icon={<AlertCircle className="h-5 w-5 text-destructive" />}
-                        title="Lowest Stock Products"
+                        title="Low Stock Alert"
                         description="Products with 5 or fewer items in inventory"
                         borderClass="border-destructive/20"
                         bgClass="bg-destructive/5 dark:bg-destructive/10"
