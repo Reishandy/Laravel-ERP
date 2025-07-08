@@ -5,6 +5,7 @@ import TimestampCell from '@/components/timestamp-cell';
 import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
 import AddSaleForm from '@/pages/sales/add-sale-form';
+import ChangeStatusForm from '@/pages/sales/change-status-form';
 import DeleteSaleForm from '@/pages/sales/delete-sale-form';
 import EditSaleForm from '@/pages/sales/edit-sale-form';
 import { type BreadcrumbItem, Customer, Product, Sale } from '@/types';
@@ -13,7 +14,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import { Download, Plus, SquarePen } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import ChangeStatusForm from '@/pages/sales/change-status-form';
+import { route } from 'ziggy-js';
 
 export interface Entry extends Sale {
     product: Product;
@@ -214,15 +215,11 @@ export default function Sales({ sales, products, customers, show }: SalesPagePro
                             </Button>
                         </AddSaleForm>
 
-                        <Button
-                            variant="ghost"
-                            onClick={() => {
-                                alert('TODO');
-                            }}
-                            className="flex items-center gap-x-2"
-                        >
-                            <Download className="size-5" />
-                            Export
+                        <Button variant="ghost" asChild>
+                            <a href={route('export', { type: 'sales' })} download target="_blank" rel="noopener" className="flex items-center gap-x-2">
+                                <Download className="size-5" />
+                                Export
+                            </a>
                         </Button>
                     </div>
                 </div>

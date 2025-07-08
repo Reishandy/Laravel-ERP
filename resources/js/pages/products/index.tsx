@@ -16,6 +16,7 @@ import { VariantProps } from 'class-variance-authority';
 import { Download, Plus, SquarePen } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
+import { route } from 'ziggy-js';
 
 interface ProductsPageProps {
     app: {
@@ -218,15 +219,11 @@ export default function Products({ products, show }: ProductsPageProps) {
                             </Button>
                         </AddProductForm>
 
-                        <Button
-                            variant="ghost"
-                            onClick={() => {
-                                alert('TODO');
-                            }}
-                            className="flex items-center gap-x-2"
-                        >
-                            <Download className="size-5" />
-                            Export
+                        <Button variant="ghost" asChild>
+                            <a href={route('export', { type: 'products' })} download target="_blank" rel="noopener" className="flex items-center gap-x-2">
+                                <Download className="size-5" />
+                                Export
+                            </a>
                         </Button>
                     </div>
                 </div>
