@@ -5,7 +5,7 @@ import * as React from 'react';
 
 interface PriceCellProps {
     totalPrice: number;
-    priceAtSale: number;
+    priceAtSale: number | string;
     currentPrice: number;
     quantity: number;
     locale: string;
@@ -22,7 +22,8 @@ function PriceDetails({ totalPrice, priceAtSale, currentPrice, quantity, locale,
         <>
             <p className="font-medium text-muted-foreground">Sale price details:</p>
             <p>Total price: {formatter.format(totalPrice)}</p>
-            <p>Price at sale time: {formatter.format(Math.round((priceAtSale + Number.EPSILON) * 100) / 100)}</p>
+            {/*Ensure priceAtSale is a number, this could happen if the faker generator uses other locale formats*/}
+            <p>Price at sale time: {formatter.format(Math.round((Number(priceAtSale) + Number.EPSILON) * 100) / 100)}</p>
             <p>Current price: {formatter.format(currentPrice)}</p>
             <p>Quantity: {quantity}</p>
         </>
