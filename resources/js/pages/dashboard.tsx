@@ -1,4 +1,4 @@
-import { ChartAreaInteractive } from '@/components/dashboard/chart-card';
+import { Chart, ChartCard } from '@/components/dashboard/chart-card';
 import DataTableCard from '@/components/dashboard/data-table-card';
 import HighlightCard from '@/components/dashboard/highlight-card';
 import TopCard from '@/components/dashboard/top-card';
@@ -52,6 +52,7 @@ interface DashboardProps {
         date: string;
         items: TopItem[];
     };
+    chart_data: Chart[];
 
     [key: string]: unknown;
 }
@@ -63,7 +64,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function Dashboard({ sales, products }: DashboardProps) {
+export default function Dashboard({ sales, products, chart_data }: DashboardProps) {
     const { app } = usePage<DashboardProps>().props;
     const getInitials = useInitials();
     const shouldReduce = useMediaQuery('(max-width: 850px)');
@@ -294,7 +295,7 @@ export default function Dashboard({ sales, products }: DashboardProps) {
                 <div className="row-span-1 2xl:row-span-2">
                     <div className="grid size-full grid-rows-2 gap-4 lg:grid-rows-3 2xl:grid-cols-4 2xl:grid-rows-2">
                         <div className="lg:row-span-2 2xl:col-span-3 2xl:row-span-3">
-                            <ChartAreaInteractive />
+                            <ChartCard chart_data={chart_data} />
                         </div>
                         <div className="flex size-full flex-col gap-4 lg:flex-row 2xl:row-span-3 2xl:flex-col">
                             <TopCard
