@@ -1,9 +1,10 @@
 # Rei's ERP - Enterprise Resource Planning System
 
 ![Rei's ERP Dashboard Preview](/public/images/dashboard.webp "Dashboard Preview")
-*Dashboard overview showing key metrics and visualizations*
 
 Rei's ERP is a comprehensive enterprise resource planning system designed to help businesses manage their sales, inventory, customer relationships, and business analytics in one integrated platform. Built with modern web technologies, it provides an intuitive interface with powerful features for small to medium-sized businesses.
+
+Live Demo: [https://erp.reishandy.my.id](https://erp.reishandy.my.id)
 
 ## Features
 
@@ -35,7 +36,6 @@ Rei's ERP is a comprehensive enterprise resource planning system designed to hel
 
 ### Dashboard
 ![Dashboard Page](/public/images/dashboard.webp "Dashboard")
-*The dashboard provides an overview of business performance with key metrics and visualizations*
 
 - View monthly revenue, sales, customer, and product metrics
 - Identify top-performing products and customers
@@ -44,7 +44,6 @@ Rei's ERP is a comprehensive enterprise resource planning system designed to hel
 
 ### Sales Management
 ![Sales Page](/public/images/sales.webp "Sales Management")
-*Sales management interface showing recent transactions*
 
 - Create new sales transactions with product and customer selection
 - Update sale quantities and status
@@ -53,7 +52,6 @@ Rei's ERP is a comprehensive enterprise resource planning system designed to hel
 
 ### Inventory Management
 ![Products Page](/public/images/products.webp "Inventory Management")
-*Product inventory management with stock level indicators*
 
 - Add new products with images and descriptions
 - Monitor stock levels with color-coded indicators
@@ -62,7 +60,6 @@ Rei's ERP is a comprehensive enterprise resource planning system designed to hel
 
 ### Customer Management
 ![Customers Page](/public/images/products.webp "Customer Management")
-*Customer relationship management interface*
 
 - Maintain customer database with contact information
 - Categorize customers as individuals or businesses
