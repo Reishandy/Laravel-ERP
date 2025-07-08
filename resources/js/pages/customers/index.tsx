@@ -16,6 +16,7 @@ import { Download, Plus, SquarePen } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import EditCustomerForm from './edit-customer-form';
+import { route } from 'ziggy-js';
 
 interface CustomersPageProps {
     app: {
@@ -200,15 +201,11 @@ export default function Customers({ customers, show }: CustomersPageProps) {
                             </Button>
                         </AddCustomerForm>
 
-                        <Button
-                            variant="ghost"
-                            onClick={() => {
-                                alert('TODO');
-                            }}
-                            className="flex items-center gap-x-2"
-                        >
-                            <Download className="size-5" />
-                            Export
+                        <Button variant="ghost" asChild>
+                            <a href={route('export', { type: 'customers' })} download target="_blank" rel="noopener" className="flex items-center gap-x-2">
+                                <Download className="size-5" />
+                                Export
+                            </a>
                         </Button>
                     </div>
                 </div>

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ExportController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SaleController;
 use Illuminate\Support\Facades\Route;
@@ -32,12 +33,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('customers', [CustomerController::class, 'store'])->name('customers.store');
     Route::post('customers/{customer:customer_number}', [CustomerController::class, 'update'])->name('customers.update');
     Route::delete('customers/{customer:customer_number}', [CustomerController::class, 'destroy'])->name('customers.destroy');
+
+    Route::get('export/{type}', [ExportController::class, '__invoke'])->name('export');
 });
 
 // TODO:
 //  - Modify landing page
 //  - Email verification and reset pass template change
-//  - export to CSV
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
