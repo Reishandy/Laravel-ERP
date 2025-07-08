@@ -4,9 +4,9 @@ import { useMediaQuery } from '@/hooks/use-media-query';
 import * as React from 'react';
 
 interface PriceCellProps {
-    totalPrice: number;
+    totalPrice: number | string;
     priceAtSale: number | string;
-    currentPrice: number;
+    currentPrice: number | string;
     quantity: number;
     locale: string;
     currency: string;
@@ -21,10 +21,9 @@ function PriceDetails({ totalPrice, priceAtSale, currentPrice, quantity, locale,
     return (
         <>
             <p className="font-medium text-muted-foreground">Sale price details:</p>
-            <p>Total price: {formatter.format(totalPrice)}</p>
-            {/*Ensure priceAtSale is a number, this could happen if the faker generator uses other locale formats*/}
-            <p>Price at sale time: {formatter.format(Math.round((Number(priceAtSale) + Number.EPSILON) * 100) / 100)}</p>
-            <p>Current price: {formatter.format(currentPrice)}</p>
+            <p>Total price: {formatter.format(Number(totalPrice))}</p>
+            <p>Price at sale time: {formatter.format(Number(priceAtSale))}</p>
+            <p>Current price: {formatter.format(Number(currentPrice))}</p>
             <p>Quantity: {quantity}</p>
         </>
     );
@@ -38,8 +37,8 @@ export default function PriceCell({ totalPrice, priceAtSale, currentPrice, quant
         currency: currency,
     });
 
-    const formattedPrice = formatter.format(totalPrice);
-    const hasChanged = totalPrice !== Math.round((currentPrice * quantity + Number.EPSILON) * 100) / 100;
+    const formattedPrice = formatter.format(Number(totalPrice));
+    const hasChanged = totalPrice !== Math.round((Number(currentPrice) * quantity + Number.EPSILON) * 100) / 100;
 
     return (
         <div className="text-center font-medium">
