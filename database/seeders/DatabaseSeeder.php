@@ -26,8 +26,8 @@ class DatabaseSeeder extends Seeder
             'password' => 'SUPESecureTEST_password123',
         ]);
 
-        Customer::factory(50)->create();
-        Product::factory(30)->create();
-        Sale::factory(500)->create();
+        Customer::factory(200)->create();
+        Product::factory(300)->create();
+        Sale::factory(5000)->create();
     }
 }

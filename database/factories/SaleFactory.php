@@ -20,7 +20,7 @@ class SaleFactory extends Factory
     {
         $product = Product::inRandomOrder()->first();
         $customerId = Customer::inRandomOrder()->value('id');
-        $createdAt = $this->faker->dateTimeBetween('-3 year');
+        $createdAt = $this->faker->dateTimeBetween('-1 year');
         static $saleNumber = 1;
 
         return [
