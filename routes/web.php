@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    return Inertia::render('welcome');
+    return Inertia::render('landing-page');
 })->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -36,9 +36,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('export/{type}', [ExportController::class, '__invoke'])->name('export');
 });
-
-// TODO:
-//  - Modify landing page
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
