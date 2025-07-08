@@ -1,20 +1,22 @@
 import HighlightCard from '@/components/dashboard/highlight-card';
 import TopCard from '@/components/dashboard/top-card';
 import { DataTable } from '@/components/data-table/data-table';
+import PriceCell from '@/components/price-cell';
 import TimestampCell from '@/components/timestamp-cell';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge, badgeVariants } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { useInitials } from '@/hooks/use-initials';
+import { useMediaQuery } from '@/hooks/use-media-query';
 import AppLayout from '@/layouts/app-layout';
+import { Entry } from '@/pages/sales';
 import { type BreadcrumbItem, Product } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
 import { VariantProps } from 'class-variance-authority';
 import { AlertCircle, TrendingUp } from 'lucide-react';
-import PriceCell from '@/components/price-cell';
-import { Entry } from '@/pages/sales';
+import DataTableCard from '@/components/dashboard/data-table-card';
 
 interface DashboardProps {
     app: {
@@ -38,6 +40,8 @@ const breadcrumbs: BreadcrumbItem[] = [
 export default function Dashboard({ sales, products }: DashboardProps) {
     const { app } = usePage<DashboardProps>().props;
     const getInitials = useInitials();
+    const shouldReduce = useMediaQuery('(max-width: 850px)');
+    const isBareMinimum = useMediaQuery('(max-width: 490px)');
 
     const productsColumns: ColumnDef<Product>[] = [
         {
@@ -59,17 +63,19 @@ export default function Dashboard({ sales, products }: DashboardProps) {
         {
             id: 'name',
             accessorKey: 'name',
-            header: () => <div className="text-left">Product Name</div>,
+            header: () => <div className="pl-4 text-start">Product</div>,
             cell: ({ row }) => {
                 const product = row.original;
                 return (
-                    <div className="flex flex-row items-center gap-x-2">
-                        <Avatar className="h-8 w-8 overflow-hidden">
-                            <AvatarImage src={product.image ? `/storage/${product.image}` : undefined} alt={product.name} />
-                            <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
-                                {getInitials(product.name)}
-                            </AvatarFallback>
-                        </Avatar>
+                    <div className="flex flex-row items-center pl-4 justify-start gap-x-2">
+                        {!isBareMinimum && (
+                            <Avatar className="h-8 w-8 overflow-hidden">
+                                <AvatarImage src={product.image ? `/storage/${product.image}` : undefined} alt={product.name} />
+                                <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
+                                    {getInitials(product.name)}
+                                </AvatarFallback>
+                            </Avatar>
+                        )}
                         <div className="text-start font-medium">{product.name}</div>
                     </div>
                 );
@@ -78,7 +84,7 @@ export default function Dashboard({ sales, products }: DashboardProps) {
         {
             id: 'quantity',
             accessorKey: 'quantity',
-            header: () => <div className="text-center">Quantity</div>,
+            header: () => <div className="text-center mr-4">Quantity</div>,
             cell: ({ row }) => {
                 const quantity: number = row.getValue('quantity');
                 const getVariantByQuantity = (quantity: number): VariantProps<typeof badgeVariants>['variant'] => {
@@ -88,7 +94,7 @@ export default function Dashboard({ sales, products }: DashboardProps) {
                 };
 
                 return (
-                    <div className="flex flex-row items-center justify-end gap-x-2">
+                    <div className="flex flex-row items-center justify-end gap-x-2 mr-4">
                         <Badge variant={getVariantByQuantity(quantity)} className="text-md w-full font-bold">
                             {quantity}
                         </Badge>
@@ -133,24 +139,34 @@ export default function Dashboard({ sales, products }: DashboardProps) {
             },
         },
         {
-            id: 'product.name_and_number',
-            accessorKey: 'product.name_and_number',
-            header: () => <div className="pl-4 text-left">Product</div>,
-            accessorFn: (row) => row.product.product_number + ' - ' + row.product.name,
+            id: 'product.name',
+            accessorKey: 'product.name',
+            header: () => <div className="pl-4 text-start">Product</div>,
             cell: ({ row }) => {
+                const product = row.original.product;
                 return (
-                    <Button variant="link" asChild>
-                        <Link href={route('products.show', row.original.product.product_number)}>{row.getValue('product.name_and_number')}</Link>
-                    </Button>
+                    <div className="flex flex-row items-center pl-4 justify-start gap-x-2">
+                        {!isBareMinimum && (
+                            <Avatar className="h-8 w-8 overflow-hidden">
+                                <AvatarImage src={product.image ? `/storage/${product.image}` : undefined} alt={product.name} />
+                                <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
+                                    {getInitials(product.name)}
+                                </AvatarFallback>
+                            </Avatar>
+                        )}
+                        <div className="text-start font-medium">{product.name}</div>
+                    </div>
                 );
             },
         },
         {
-            id: 'quantity',
-            accessorKey: 'quantity',
-            header: () => <div className="text-center">Quantity</div>,
+            id: 'customer.name',
+            accessorKey: 'customer.name',
+            header: () => <div className="pl-4 text-left">Customer</div>,
             cell: ({ row }) => {
-                return <div className="text-center font-bold">{row.getValue('quantity')}</div>;
+                return (
+                    <div className="text-start font-medium">{row.getValue('customer.name')}</div>
+                );
             },
         },
         {
@@ -160,7 +176,7 @@ export default function Dashboard({ sales, products }: DashboardProps) {
             cell: ({ row }) => {
                 const price_at_sale = row.original.price_at_sale;
                 const current_price = row.original.product.price;
-                const quantity: number = row.getValue('quantity');
+                const quantity: number = row.original.quantity;
                 const total_price = parseFloat(row.getValue('total_price'));
 
                 return (
@@ -172,18 +188,6 @@ export default function Dashboard({ sales, products }: DashboardProps) {
                         locale={app.locale}
                         currency={app.currency}
                     />
-                );
-            },
-        },
-        {
-            id: 'customer.name',
-            accessorKey: 'customer.name',
-            header: () => <div className="pl-4 text-left">Customer</div>,
-            cell: ({ row }) => {
-                return (
-                    <Button variant="link" asChild>
-                        <Link href={route('customers.show', row.original.customer.customer_number)}>{row.getValue('customer.name')}</Link>
-                    </Button>
                 );
             },
         },
@@ -206,12 +210,20 @@ export default function Dashboard({ sales, products }: DashboardProps) {
         },
     ];
 
+    const reducedProductsColumns = productsColumns.filter((column) => column.id !== 'updated_at');
+
+    const reducedSalesColumns = salesColumns.filter((column) => column.id !== 'created_at' && column.id !== 'customer.name');
+
+    const bareMinimumProductsColumns = reducedProductsColumns.filter((column) => column.id !== 'product_number');
+
+    const bareMinimumSalesColumns = reducedSalesColumns.filter((column) => column.id !== 'sale_number');
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />
 
-            <div className="grid h-full gap-4 p-8 lg:grid-rows-5">
-                <div className="row-span-1 flex flex-col gap-4 lg:row-span-1 2xl:flex-row">
+            <div className="grid h-full gap-4 p-8 2xl:grid-rows-4">
+                <div className="row-span-1 flex h-fit flex-col gap-4 lg:row-span-1 2xl:flex-row">
                     <div className="flex w-full flex-col gap-4 lg:flex-row 2xl:flex-row">
                         <HighlightCard
                             title="Total revenue"
@@ -254,7 +266,7 @@ export default function Dashboard({ sales, products }: DashboardProps) {
                     </div>
                 </div>
 
-                <div className="row-span-3">
+                <div className="row-span-1 2xl:row-span-3">
                     <div className="grid size-full grid-rows-2 gap-4 lg:grid-rows-3 2xl:grid-cols-4 2xl:grid-rows-2">
                         <div className="lg:row-span-2 2xl:col-span-3 2xl:row-span-3">
                             <CardType3Prototype />
@@ -296,29 +308,36 @@ export default function Dashboard({ sales, products }: DashboardProps) {
                     </div>
                 </div>
 
-                <div className="row-span-2 flex flex-col gap-4 lg:flex-row">
-                    <div className="flex size-full flex-col rounded-2xl border border-destructive/20 bg-destructive/5 p-6 dark:bg-destructive/10">
-                        <div className="mb-4 flex items-center justify-center gap-2">
-                            <AlertCircle className="h-5 w-5 text-destructive" />
-                            <h3 className="text-xl font-bold tracking-tight">Lowest Stock Products</h3>
-                        </div>
-                        <div className="mb-4 text-center text-sm text-muted-foreground">Products with 5 or fewer items in inventory</div>
-                        <div className="rounded-lg bg-background/80 p-2 backdrop-blur-sm">
-                            <DataTable columns={productsColumns} data={products} useFilter={false} usePagination={false} />
-                        </div>
-                    </div>
-                    <div className="flex size-full flex-col rounded-2xl border border-primary/20 bg-primary/5 p-6 dark:bg-primary/10">
-                        <div className="mb-4 flex items-center justify-center gap-2">
-                            <TrendingUp className="h-5 w-5 text-primary" />
-                            <h3 className="text-xl font-bold tracking-tight">Latest Sales</h3>
-                        </div>
-                        <div className="mb-4 text-center text-sm text-muted-foreground">
-                            Most recent transactions
-                        </div>
-                        <div className="rounded-lg bg-background/80 p-2 backdrop-blur-sm">
-                            <DataTable columns={salesColumns} data={sales} useFilter={false} usePagination={false} />
-                        </div>
-                    </div>
+                <div className="row-span-1 flex flex-col gap-4 2xl:flex-row">
+                    <DataTableCard
+                        icon={<TrendingUp className="h-5 w-5 text-primary" />}
+                        title="Latest Sales"
+                        description="Most recent transactions"
+                        borderClass="border-primary/20"
+                        bgClass="bg-primary/5 dark:bg-primary/10"
+                    >
+                        <DataTable
+                            columns={isBareMinimum ? bareMinimumSalesColumns : shouldReduce ? reducedSalesColumns : salesColumns}
+                            data={sales}
+                            useFilter={false}
+                            usePagination={false}
+                        />
+                    </DataTableCard>
+
+                    <DataTableCard
+                        icon={<AlertCircle className="h-5 w-5 text-destructive" />}
+                        title="Lowest Stock Products"
+                        description="Products with 5 or fewer items in inventory"
+                        borderClass="border-destructive/20"
+                        bgClass="bg-destructive/5 dark:bg-destructive/10"
+                    >
+                        <DataTable
+                            columns={isBareMinimum ? bareMinimumProductsColumns : shouldReduce ? reducedProductsColumns : productsColumns}
+                            data={products.filter((product) => product.quantity <= 5)}
+                            useFilter={false}
+                            usePagination={false}
+                        />
+                    </DataTableCard>
                 </div>
             </div>
         </AppLayout>

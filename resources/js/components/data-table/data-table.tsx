@@ -79,7 +79,7 @@ export function DataTable<TData, TValue>({
     };
 
     return (
-        <div className="size-full">
+        <div>
             {useFilter && sortableColumns && sortableColumns.length > 0 && (
                 <div className="flex flex-col justify-between gap-y-2 pb-4 lg:flex-row lg:items-center lg:gap-y-0">
                     {/* Filter */}

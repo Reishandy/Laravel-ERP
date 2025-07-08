@@ -17,7 +17,7 @@ export default function HighlightCard({ title, value, trend, trendDirection = 'u
     const TrendIcon = trendDirection === 'up' ? TrendingUp : TrendingDown;
 
     return (
-        <Card className="size-full min-w-0 justify-center rounded-2xl bg-sidebar shadow-lg transition-transform hover:scale-105 hover:shadow-2xl">
+        <Card className="h-fit w-full min-w-0 justify-center rounded-2xl bg-sidebar shadow-lg transition-transform hover:scale-105 hover:shadow-2xl">
             <CardContent className="p-8">
                 <div className="flex flex-col gap-y-4">
                     <div className="flex flex-row items-baseline justify-between">
