@@ -4,7 +4,7 @@
 
 Rei's ERP is a comprehensive enterprise resource planning system designed to help businesses manage their sales, inventory, customer relationships, and business analytics in one integrated platform. Built with modern web technologies, it provides an intuitive interface with powerful features for small to medium-sized businesses.
 
-Live Demo: [https://erp.reishandy.my.id](https://erp.reishandy.my.id)
+Live Demo: [https://erp.reishandy.my.id](https://erp.reishandy.my.id) (WARNING!! This is very slow)
 
 ## Features
 
