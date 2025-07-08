@@ -1,3 +1,4 @@
+import DataTableCard from '@/components/dashboard/data-table-card';
 import HighlightCard from '@/components/dashboard/highlight-card';
 import TopCard from '@/components/dashboard/top-card';
 import { DataTable } from '@/components/data-table/data-table';
@@ -16,7 +17,20 @@ import { Head, Link, usePage } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
 import { VariantProps } from 'class-variance-authority';
 import { AlertCircle, TrendingUp } from 'lucide-react';
-import DataTableCard from '@/components/dashboard/data-table-card';
+
+interface Highlight {
+    current: number;
+    previous: number;
+    trend: string;
+    trend_direction: 'up' | 'down';
+}
+
+interface TopItem {
+    id: string;
+    name: string;
+    value: number | string;
+    link: string;
+}
 
 interface DashboardProps {
     app: {
@@ -26,6 +40,18 @@ interface DashboardProps {
     };
     sales: Entry[];
     products: Product[];
+    revenue: Highlight;
+    sales_count: Highlight;
+    customers_count: Highlight;
+    products_count: Highlight;
+    top_products: {
+        date: string;
+        items: TopItem[];
+    }
+    top_customers: {
+        date: string;
+        items: TopItem[];
+    };
 
     [key: string]: unknown;
 }
@@ -67,7 +93,7 @@ export default function Dashboard({ sales, products }: DashboardProps) {
             cell: ({ row }) => {
                 const product = row.original;
                 return (
-                    <div className="flex flex-row items-center pl-4 justify-start gap-x-2">
+                    <div className="flex flex-row items-center justify-start gap-x-2 pl-4">
                         {!isBareMinimum && (
                             <Avatar className="h-8 w-8 overflow-hidden">
                                 <AvatarImage src={product.image ? `/storage/${product.image}` : undefined} alt={product.name} />
@@ -84,7 +110,7 @@ export default function Dashboard({ sales, products }: DashboardProps) {
         {
             id: 'quantity',
             accessorKey: 'quantity',
-            header: () => <div className="text-center mr-4">Quantity</div>,
+            header: () => <div className="mr-4 text-center">Quantity</div>,
             cell: ({ row }) => {
                 const quantity: number = row.getValue('quantity');
                 const getVariantByQuantity = (quantity: number): VariantProps<typeof badgeVariants>['variant'] => {
@@ -94,7 +120,7 @@ export default function Dashboard({ sales, products }: DashboardProps) {
                 };
 
                 return (
-                    <div className="flex flex-row items-center justify-end gap-x-2 mr-4">
+                    <div className="mr-4 flex flex-row items-center justify-end gap-x-2">
                         <Badge variant={getVariantByQuantity(quantity)} className="text-md w-full font-bold">
                             {quantity}
                         </Badge>
@@ -145,7 +171,7 @@ export default function Dashboard({ sales, products }: DashboardProps) {
             cell: ({ row }) => {
                 const product = row.original.product;
                 return (
-                    <div className="flex flex-row items-center pl-4 justify-start gap-x-2">
+                    <div className="flex flex-row items-center justify-start gap-x-2 pl-4">
                         {!isBareMinimum && (
                             <Avatar className="h-8 w-8 overflow-hidden">
                                 <AvatarImage src={product.image ? `/storage/${product.image}` : undefined} alt={product.name} />
@@ -164,9 +190,7 @@ export default function Dashboard({ sales, products }: DashboardProps) {
             accessorKey: 'customer.name',
             header: () => <div className="pl-4 text-left">Customer</div>,
             cell: ({ row }) => {
-                return (
-                    <div className="text-start font-medium">{row.getValue('customer.name')}</div>
-                );
+                return <div className="text-start font-medium">{row.getValue('customer.name')}</div>;
             },
         },
         {
@@ -279,7 +303,6 @@ export default function Dashboard({ sales, products }: DashboardProps) {
                                     {
                                         id: 'P-01234',
                                         name: 'Washing Machine',
-                                        badge: { text: 'Top' },
                                         value: 20,
                                         link: '/products/C-00001',
                                     },
@@ -296,7 +319,6 @@ export default function Dashboard({ sales, products }: DashboardProps) {
                                     {
                                         id: 'C-00001',
                                         name: 'John Doe',
-                                        badge: { text: 'Top' },
                                         value: 5,
                                         link: '/customers/C-00001',
                                     },

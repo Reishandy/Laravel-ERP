@@ -1,16 +1,12 @@
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { LucideIcon, TrendingUp } from 'lucide-react';
 import { router } from '@inertiajs/react';
+import { LucideIcon, TrendingUp } from 'lucide-react';
 
 interface TopCardItem {
     id: string;
     name: string;
-    badge?: {
-        text: string;
-        variant?: 'default' | 'destructive' | 'outline' | 'secondary';
-    };
     value: string | number;
     link: string;
 }
@@ -52,20 +48,20 @@ export default function TopCard({
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {items.map((item) => (
+                            {items.map((item, idx) => (
                                 <TableRow
                                     key={item.id}
                                     onClick={() => {
                                         router.visit(item.link);
                                     }}
-                                    className="transition hover:bg-secondary/30 cursor-pointer"
+                                    className="cursor-pointer transition hover:bg-secondary/30"
                                 >
                                     <TableCell className="text-center font-semibold">{item.id}</TableCell>
                                     <TableCell>
                                         {item.name}
-                                        {item.badge && (
-                                            <Badge className="ml-2" variant={item.badge.variant || 'default'}>
-                                                {item.badge.text}
+                                        {idx === 0 && (
+                                            <Badge className="ml-2" variant={'secondary'}>
+                                                Top
                                             </Badge>
                                         )}
                                     </TableCell>
