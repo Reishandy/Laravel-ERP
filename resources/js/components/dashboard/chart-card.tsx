@@ -21,26 +21,26 @@ const chartConfig = {
         label: 'Performance',
     },
     sales: {
-        label: 'Sales',
+        label: 'New Sales',
         color: 'var(--chart-1)',
     },
     products: {
-        label: 'Products',
+        label: 'New Products',
         color: 'var(--chart-2)',
     },
     customers: {
-        label: 'Customers',
+        label: 'New Customers',
         color: 'var(--chart-3)',
     },
 } satisfies ChartConfig;
 
 export function ChartCard({ chart_data }: ChartCardProps) {
-    const [timeRange, setTimeRange] = React.useState<string>('7d');
-    const [type, setType] = React.useState<string>('monotone');
+    const [timeRange, setTimeRange] = React.useState('30d');
+    const [type, setType] = React.useState('monotone');
 
     const filteredData = chart_data.filter((item) => {
         const date = new Date(item.date);
-        const referenceDate = new Date('2025-07-08'); // TODO: change to now
+        const referenceDate = new Date();
         let daysToSubtract = 7;
         switch (timeRange) {
             case '365d':

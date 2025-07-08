@@ -64,11 +64,18 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function Dashboard({ sales, products, chart_data }: DashboardProps) {
+export default function Dashboard({ sales, products, revenue, sales_count, customers_count, products_count, top_products, top_customers, chart_data }: DashboardProps) {
     const { app } = usePage<DashboardProps>().props;
     const getInitials = useInitials();
     const shouldReduce = useMediaQuery('(max-width: 850px)');
     const isBareMinimum = useMediaQuery('(max-width: 490px)');
+
+    const currencyFormatter = (value: number): string => {
+        return new Intl.NumberFormat(app.locale, {
+            style: 'currency',
+            currency: app.currency,
+        }).format(value);
+    }
 
     const productsColumns: ColumnDef<Product>[] = [
         {
@@ -251,43 +258,39 @@ export default function Dashboard({ sales, products, chart_data }: DashboardProp
                 <div className="row-span-1 flex h-fit flex-col gap-4 lg:row-span-1 2xl:flex-row">
                     <div className="flex w-full flex-col gap-4 lg:flex-row 2xl:flex-row">
                         <HighlightCard
-                            title="Total revenue"
-                            value="$54.000,00"
-                            trend="+20%"
-                            trendDirection="up"
-                            description="Trending up this month"
-                            comparisonText="Last month was $45.000,00"
-                            valueSize="lg" // TODO: Check if the value exceeds 8 letters, then use 'sm' size
+                            title="Total revenue this month"
+                            value={currencyFormatter(revenue.current)}
+                            trend={revenue.trend}
+                            trendDirection={revenue.trend_direction}
+                            description={`Trending ${revenue.trend_direction} this month`}
+                            comparisonText={`Last month was ${currencyFormatter(revenue.previous)}`}
                         />
                         <HighlightCard
-                            title="Total sales"
-                            value="300"
-                            trend="+20%"
-                            trendDirection="up"
-                            description="Trending up this month"
-                            comparisonText="Last month was 250"
-                            valueSize="lg"
+                            title="Total sales this month"
+                            value={sales_count.current}
+                            trend={sales_count.trend}
+                            trendDirection={sales_count.trend_direction}
+                            description={`Trending ${sales_count.trend_direction} this month`}
+                            comparisonText={`Last month was ${sales_count.previous}`}
                         />
                     </div>
 
                     <div className="flex w-full flex-col gap-4 lg:flex-row 2xl:flex-row">
                         <HighlightCard
-                            title="Total customers"
-                            value="120"
-                            trend="+10%"
-                            trendDirection="up"
-                            description="Increasing this month"
-                            comparisonText="Last month was 110"
-                            valueSize="lg"
+                            title="New customers this month"
+                            value={customers_count.current}
+                            trend={customers_count.trend}
+                            trendDirection={customers_count.trend_direction}
+                            description={`Trending ${customers_count.trend_direction} this month`}
+                            comparisonText={`Last month was ${customers_count.previous}`}
                         />
                         <HighlightCard
-                            title="Total products"
-                            value="90"
-                            trend="-10%"
-                            trendDirection="down"
-                            description="Decreasing this month"
-                            comparisonText="Last month was 100"
-                            valueSize="lg"
+                            title="New products this month"
+                            value={products_count.current}
+                            trend={products_count.trend}
+                            trendDirection={products_count.trend_direction}
+                            description={`Trending ${products_count.trend_direction} this month`}
+                            comparisonText={`Last month was ${products_count.previous}`}
                         />
                     </div>
                 </div>
@@ -300,33 +303,23 @@ export default function Dashboard({ sales, products, chart_data }: DashboardProp
                         <div className="flex size-full flex-col gap-4 lg:flex-row 2xl:row-span-3 2xl:flex-col">
                             <TopCard
                                 title="Top Product Sales This Month"
-                                caption="Most sold products in June 2024"
-                                items={[
-                                    {
-                                        id: 'P-01234',
-                                        name: 'Washing Machine',
-                                        value: 20,
-                                        link: '/products/C-00001',
-                                    },
-                                    { id: 'P-05678', name: 'Refrigerator', value: 15, link: '/products/C-00001' },
-                                    { id: 'P-09876', name: 'Microwave', value: 10, link: '/products/C-00001' },
-                                ]}
+                                caption= {`Most sold products in ${top_products.date}`}
+                                nameLabel="Product"
+                                valueLabel="Sold"
+                                items={top_products.items.map((item) => ({
+                                    ...item,
+                                    link: `/products/${item.id}`,
+                                }))}
                             />
                             <TopCard
                                 title="Top Customers This Month"
-                                caption="Most active customers in June 2024"
+                                caption={`Most active customers in ${top_customers.date}`}
                                 nameLabel="Customer"
-                                valueLabel="Total"
-                                items={[
-                                    {
-                                        id: 'C-00001',
-                                        name: 'John Doe',
-                                        value: 5,
-                                        link: '/customers/C-00001',
-                                    },
-                                    { id: 'C-00002', name: 'Jane Smith', value: 3, link: '/customers/C-00002' },
-                                    { id: 'C-00003', name: 'Alice Johnson', value: 2, link: '/customers/C-00003' },
-                                ]}
+                                valueLabel="Purchases"
+                                items={top_customers.items.map((item) => ({
+                                    ...item,
+                                    link: `/customers/${item.id}`,
+                                }))}
                             />
                         </div>
                     </div>
