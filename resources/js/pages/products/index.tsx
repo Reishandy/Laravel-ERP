@@ -186,7 +186,7 @@ export default function Products({ products, show }: ProductsPageProps) {
 
                 return (
                     <div className="flex flex-row items-center justify-center gap-x-2">
-                        <SquarePen className="size-5 cursor-pointer text-primary hover:text-primary/70" onClick={() => openEditDialog(product)} />
+                        <SquarePen className="size-5 cursor-pointer text-primary hover:text-primary/70 active:scale-95 transition-transform duration-300" onClick={() => openEditDialog(product)} />
                         <DeleteProductForm product={product} />
                     </div>
                 );

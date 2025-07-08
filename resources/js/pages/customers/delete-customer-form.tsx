@@ -32,7 +32,7 @@ export default function DeleteCustomerForm({ customer }: DeleteCustomerFormProps
         <DeleteDialog
             title={`Delete "${customer.name}"?`}
             description={`Are you sure you want to delete ${customer.customer_number} "${customer.name}"? This action cannot be undone. Related sales will not be deleted.`}
-            trigger={<Trash className="size-5 cursor-pointer text-destructive hover:text-destructive/70" />}
+            trigger={<Trash className="size-5 cursor-pointer text-destructive hover:text-destructive/70 active:scale-95 transition-transform duration-300" />}
             onDelete={submit}
             processing={processing}
             open={open}

@@ -181,7 +181,7 @@ export default function Sales({ sales, products, customers, show }: SalesPagePro
 
                 return (
                     <div className="flex flex-row items-center justify-center gap-x-2">
-                        <SquarePen className="size-5 cursor-pointer text-primary hover:text-primary/70" onClick={() => openEditDialog(sale)} />
+                        <SquarePen className="size-5 cursor-pointer text-primary hover:text-primary/70 active:scale-95 transition-transform duration-300" onClick={() => openEditDialog(sale)} />
                         <DeleteSaleForm sale={sale} />
                     </div>
                 );

@@ -167,7 +167,7 @@ export default function Customers({ customers, show }: CustomersPageProps) {
 
                 return (
                     <div className="flex flex-row items-center justify-center gap-x-2">
-                        <SquarePen className="size-5 cursor-pointer text-primary hover:text-primary/70" onClick={() => openEditDialog(customer)} />
+                        <SquarePen className="size-5 cursor-pointer text-primary hover:text-primary/70 active:scale-95 transition-transform duration-300" onClick={() => openEditDialog(customer)} />
                         <DeleteCustomerForm customer={customer} />
                     </div>
                 );
