@@ -39,7 +39,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 // TODO:
 //  - Modify landing page
-//  - Email verification and reset pass template change
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
