@@ -16,7 +16,7 @@ import { type BreadcrumbItem, Product } from '@/types';
 import { Head, Link, usePage } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
 import { VariantProps } from 'class-variance-authority';
-import { AlertCircle, TrendingUp } from 'lucide-react';
+import { AlertCircle, DollarSign, TrendingUp } from 'lucide-react';
 
 interface Highlight {
     current: number;
@@ -47,7 +47,7 @@ interface DashboardProps {
     top_products: {
         date: string;
         items: TopItem[];
-    }
+    };
     top_customers: {
         date: string;
         items: TopItem[];
@@ -246,7 +246,7 @@ export default function Dashboard({ sales, products }: DashboardProps) {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />
 
-            <div className="grid h-full gap-4 p-8 2xl:grid-rows-4">
+            <div className="grid h-full gap-4 p-8 grid-auto-rows">
                 <div className="row-span-1 flex h-fit flex-col gap-4 lg:row-span-1 2xl:flex-row">
                     <div className="flex w-full flex-col gap-4 lg:flex-row 2xl:flex-row">
                         <HighlightCard
@@ -268,6 +268,7 @@ export default function Dashboard({ sales, products }: DashboardProps) {
                             valueSize="lg"
                         />
                     </div>
+
                     <div className="flex w-full flex-col gap-4 lg:flex-row 2xl:flex-row">
                         <HighlightCard
                             title="Total customers"
@@ -290,7 +291,7 @@ export default function Dashboard({ sales, products }: DashboardProps) {
                     </div>
                 </div>
 
-                <div className="row-span-1 2xl:row-span-3">
+                <div className="row-span-1 2xl:row-span-2">
                     <div className="grid size-full grid-rows-2 gap-4 lg:grid-rows-3 2xl:grid-cols-4 2xl:grid-rows-2">
                         <div className="lg:row-span-2 2xl:col-span-3 2xl:row-span-3">
                             <CardType3Prototype />
@@ -330,9 +331,9 @@ export default function Dashboard({ sales, products }: DashboardProps) {
                     </div>
                 </div>
 
-                <div className="row-span-1 flex flex-col gap-4 2xl:flex-row">
+                <div className="flex flex-col gap-4 2xl:row-span-1 2xl:flex-row">
                     <DataTableCard
-                        icon={<TrendingUp className="h-5 w-5 text-primary" />}
+                        icon={<DollarSign className="h-5 w-5 text-primary" />}
                         title="Latest Sales"
                         description="Most recent transactions"
                         borderClass="border-primary/20"
