@@ -78,7 +78,7 @@ Live Demo: [https://erp.reishandy.my.id](https://erp.reishandy.my.id) (WARNING!!
 ## Technology Stack
 
 ### Backend
-- **PHP 8.1+** with **Laravel 10** framework
+- **PHP 8.2+** with **Laravel 12** framework
 - **MySQL** database
 - **Inertia.js** for server-client communication
 - File storage with **Laravel Filesystem**
@@ -100,7 +100,7 @@ Live Demo: [https://erp.reishandy.my.id](https://erp.reishandy.my.id) (WARNING!!
 ## Installation
 
 ### Prerequisites
-- PHP 8.1+
+- PHP 8.2+
 - Composer
 - Node.js 18+
 - MySQL 8.0+
@@ -109,8 +109,8 @@ Live Demo: [https://erp.reishandy.my.id](https://erp.reishandy.my.id) (WARNING!!
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/Reishandy/erp-system.git
-   cd erp-system
+   git clone https://github.com/Reishandy/Laravel-ERP
+   cd Laravel-ERP
    ```
 
 2. Install PHP dependencies:
